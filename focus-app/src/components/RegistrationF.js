@@ -10,19 +10,41 @@ const Register =()=>{
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault(); //prevents the browser reloading the page while submiting the registration form
 
-        //Register the user with Email and password
-        createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+        try {
+            // Step 1: Register the user with Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            console.log("User registered: ", user);
+            console.log("User registered with Firebase:", user);
 
-        })  
-        .catch((error) => {
+            // Step 2: Send user data to backend
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    userName: user.uid, // Firebase UID
+                    password, // needs to be encrypted
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message);
+            } else {
+                alert(result.error);
+            }
+        } catch (error) {
             console.error("Error registering user:", error.message);
             alert("Registration failed: " + error.message);
-          });
+        }
     };
 
     return(
