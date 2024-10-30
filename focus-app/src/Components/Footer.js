@@ -4,9 +4,13 @@ import '../CSSFolders/Footer.css';
 const Footer = () => {
   return (
     <footer className="footer">
-      <p>About           PrivacyPolicy </p>
+      <p>
+        <span className="about">About</span>
+        <span className="privacy">PrivacyPolicy</span>
+      </p>
     </footer> 
   );
 };
+
 
 export default Footer;

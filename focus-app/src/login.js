@@ -37,6 +37,7 @@ const Login = (props) => {
       return;
     }
 
+    handleAccountSign()
     // Authentication calls will be made here...
   };
 
@@ -51,6 +52,11 @@ const Login = (props) => {
   const handleAccountRegistration = () => {
     navigate('/registration');
   };
+  const handleAccountSign = () =>{
+    alert('Sign In Clicked');
+    setEmail('');
+    setPassword('');
+  }
 
   return (
     <div className="mainContainer">
@@ -80,7 +86,8 @@ const Login = (props) => {
             onChange={(ev) => setPassword(ev.target.value)}
             className="inputBox"
           />
-             <i class="fa-solid fa-lock toggle_password" onclick="togglePasswordVisibility(this)"></i>
+          
+            <i class="fa-solid fa-lock toggle_password"></i>
           <label className="errorLabel">{passwordError}</label>
           <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
         </div>
@@ -97,8 +104,8 @@ const Login = (props) => {
             Register
           </span>
         </p>
-        <p className="googleSignInText" onClick={handleGoogleSignIn}>Sign In With</p>
-        <img src={Googlelogo} alt="GoogleLogo" className="google-logo" /> {/* Logo image */}
+        <p className="googleSignInText" >Sign In With</p>
+        <img src={Googlelogo} onClick={handleGoogleSignIn} alt="GoogleLogo" className="google-logo" /> {/* Logo image */}
 
       </div>
 

@@ -2,8 +2,8 @@
 .titleContainer div {
     padding-top: 100px;         /* Apply 60px padding to the top */
     font-weight: bold;          /* Make the text bold */
-    font-size: 24px;           /* Adjust font size as needed */
-    color: #2c3e50;            /* Optional: text color */
+    font-size: 24px;            /* Adjust font size as needed */
+    color: #2c3e50;             /* Optional: text color */
 }
 
 .inputContainer input {
@@ -16,49 +16,53 @@
     outline: none; 
 }
 
-.inputContainer label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: #2c3e50;
-    font-size: 16px;
-    pointer-events: none;             /* Makes label unclickable */
-    transition: 0.2s ease all;        /* Smooth transition */
-  }
-  .inputButton {
+/* Style for error messages */
+.errorLabel {
+    color: red;
+    font-size: 12px; /* Adjust the size as needed */
+    margin-top: 4px;
+    display: block; /* Ensures the label is on a new line */
+    transition: 0.2s ease all;
+}
+
+.inputButton {
     padding: 10px 2px;
     border-radius: 20px;
     background-color: #8AAEC6;
     cursor: pointer;
-    width:300px;
-  }
-  
- .forgotPasswordText {
-  text-decoration: underline;
-  color: #2c3e50;
-  font-size: 14px;
-  margin-top: 5px;
-  margin-left: 0; /* Aligns with left edge of container */
+    width: 300px;
 }
 
-  .clickableRegister{
+.forgotPasswordText {
+    text-decoration: underline;
+    color: #2c3e50;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.clickableRegister {
     text-decoration: underline;  /* Adds the underline */
-  }
-  .googleSignInText {
+}
+
+.googleSignInText {
     display: flex;
-    align-items: center;
-    color: #2c3e50;      /* Customize the text color */
-    font-size: 16px;     /* Adjust font size as needed */
-    cursor: pointer;
-  }
-  
+    flex-direction: row;
+}
+
 .googleSignInText::before,
 .googleSignInText::after {
-  content: "";               /* Empty content to render the line */
-  flex: 1;                   /* Makes the lines flexible to fill space */
-  height: 1px;               /* Line thickness */
-  background-color: #8AAEC6; /* Line color */
-  margin: 0 10px;            /* Space between the line and text */
+    content: "";
+    flex: 1 1;
+    border-bottom: 1px solid;
+    margin: auto;
+    color: #8AAEC6;
+
+}
+.googleSignInText::before{
+    margin-right: 10px;
+}
+.googleSignInText::after{
+    margin-left: 10px;
 }
 .google-logo {
     max-height: 30px;          /* Set a maximum height for the logo */
