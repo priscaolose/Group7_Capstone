@@ -1,0 +1,14 @@
+/* src/CSSFolders/Header.css */
+.header {
+    display: flex;              /* Use flexbox for layout */
+    align-items: center;       /* Center items vertically */
+    justify-content: space-between; /* Space between items */
+    background-color: #E2EAF1; /* Light background color */
+    padding: 5px 0px;         /* Reduced padding */
+    height: 40px;
+}
+
+.header-logo {
+    max-height: 70px;         /* Set a maximum height for the logo */
+    max-width: 100%;          /* Ensure it scales proportionally */
+}
