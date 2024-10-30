@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
+import './CSSFolders/Login.css'; 
+import Googlelogo from './Images/googleLogo.png'; 
 
 const Login = (props) => {
   const [email, setEmail] = useState('');
@@ -66,8 +68,10 @@ const Login = (props) => {
             onChange={(ev) => setEmail(ev.target.value)}
             className="inputBox"
           />
+          <i className="fas fa-envelope"></i> {/* Envelope icon */}
           <label className="errorLabel">{emailError}</label>
         </div>
+        
         <br />
         <div className="inputContainer">
           <input
@@ -76,13 +80,17 @@ const Login = (props) => {
             onChange={(ev) => setPassword(ev.target.value)}
             className="inputBox"
           />
+             <i class="fa-solid fa-lock toggle_password" onclick="togglePasswordVisibility(this)"></i>
           <label className="errorLabel">{passwordError}</label>
+          <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
         </div>
-        <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
+
+
         <br />
-        <div className="inputContainer">
+        <div className="inputButtonContainer">
           <input className="inputButton" type="button" onClick={onButtonClick} value="Sign in" />
         </div>
+        
         <p className="registerText">
           Don't have an account?{' '}
           <span className="clickableRegister" onClick={handleAccountRegistration}>
@@ -90,6 +98,8 @@ const Login = (props) => {
           </span>
         </p>
         <p className="googleSignInText" onClick={handleGoogleSignIn}>Sign In With</p>
+        <img src={Googlelogo} alt="GoogleLogo" className="google-logo" /> {/* Logo image */}
+
       </div>
 
       <Footer /> {/* Footer Component */}
