@@ -3,15 +3,16 @@ import { ref, set, push } from 'firebase/database';
 
 export default async function handler(req, res) {
   if(req.method === 'POST') {
-    const { fistName, lastName, email, userName, password } = req.body;
+    const { firstName, lastName, email, userName, phonenumber, password } = req.body;
     const userRef = push(ref(db, 'Users'));
 
     try {
       set(userRef, {
-        fistName,
+        firstName,
         lastName,
         userName,
         email,
+        phonenumber,
         password,
       });
   
