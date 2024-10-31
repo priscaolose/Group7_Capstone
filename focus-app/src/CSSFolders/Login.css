@@ -1,22 +1,70 @@
 /* src/components/Header.css or your specific CSS file */
+
 .titleContainer div {
     padding-top: 100px;         /* Apply 60px padding to the top */
     font-weight: bold;          /* Make the text bold */
     font-size: 24px;            /* Adjust font size as needed */
     color: #2c3e50;             /* Optional: text color */
 }
+/* Centering the form on the page */
 
-.inputContainer input {
-    padding: 5px 2px; 
-    border-bottom: 1px solid #2c3e50;  /* Bottom border only */
-    font-size: 20px;
-    margin-left: 2px;
-    width: 300px;   
-    opacity: 0.8;
-    outline: none; 
+.loginForm{
+    background: #ffffff;
+    padding: 100px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 50px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+.loginFormHeading{
+    font-size: 50px;
+    margin-bottom: 15px;
+    color: #333;
+}
+.inputContainer {
+    display: flex;
+    flex-direction: column; 
+    font-size: 24px; 
+    margin-bottom: 10px; 
+    color: #101418;  
 }
 
-/* Style for error messages */
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputBox {
+    flex: 1;
+    padding: 8px; /* Adjust as needed */
+    font-size: 16px; /* Adjust as needed */
+}
+
+.icon {
+    position: absolute;
+    right: 10px; /* Adjust the position as needed */
+    font-size: 20px; /* Adjust as needed */
+    color: #101418; /* Match the color */
+}
+
+
+
+.loginForm input {
+    width: 100%; /* Full width */
+    padding: 10px;/* Space inside the input/button */
+    margin: 18px 0; /* Space between elements */
+    border: none;
+    border-bottom: 2px solid #8aadd2;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-weight: 200;
+    color: #101418; 
+}
 .errorLabel {
     color: red;
     font-size: 12px; /* Adjust the size as needed */
@@ -26,18 +74,28 @@
 }
 
 .inputButton {
-    padding: 10px 2px;
+    padding: 10px 1px;
     border-radius: 20px;
     background-color: #8AAEC6;
     cursor: pointer;
     width: 300px;
+    font-size: 16px;
 }
+
 
 .forgotPasswordText {
     text-decoration: underline;
     color: #2c3e50;
-    font-size: 14px;
-    margin-top: 5px;
+    font-size: 20px;
+    margin-top: 0px;         /* Adjust to reduce space */
+    margin-bottom: 0px;        /* Remove extra space below */
+    text-align: right;            /* Align text to the left */
+}
+
+.inputButtonContainer {
+    margin-top: 0px;         /* Adjust to reduce space */
+    display: flex;
+    justify-content: center; /* Center-align the button */
 }
 
 .clickableRegister {

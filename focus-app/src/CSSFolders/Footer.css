@@ -1,15 +1,15 @@
 /* src/index.css or your global CSS file */
 .footer {
+    width: 100vw; /* Viewport width to cover the screen */
+    margin: 0; /* Remove any margins */
+    padding: 5px 0; /* Adjust as needed */
     background-color: #8AAEC6;
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 5px 0px;         /* Reduced padding */
+    display: flex;
     height: 40px;
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Centers content vertically */
-  }
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Ensure it isn’t affected by other positioning */
+}
  
   
   .footer .about {

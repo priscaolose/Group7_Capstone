@@ -62,38 +62,38 @@ const Login = (props) => {
     <div className="mainContainer">
       <Header /> {/* Header Component */}
       
-      <div className="contentContainer">
-        <div className="titleContainer">
-          <div>Welcome Back</div>
-        </div>
+      <div className="loginForm">
+          <div className = "loginFormHeading">Welcome Back </div>
         <br />
         <div className="inputContainer">
-          <input
+    <div className="inputWrapper">
+        <input
             value={email}
             placeholder="Email"
             onChange={(ev) => setEmail(ev.target.value)}
             className="inputBox"
-          />
-          <i className="fas fa-envelope"></i> {/* Envelope icon */}
-          <label className="errorLabel">{emailError}</label>
-        </div>
-        
-        <br />
-        <div className="inputContainer">
-          <input
+        />
+        <i className="fas fa-envelope icon"></i> {/* Envelope icon */}
+    </div>
+    <label className="errorLabel">{emailError}</label>
+</div>
+
+<div className="inputContainer">
+    <div className="inputWrapper">
+        <input
             value={password}
             placeholder="Password"
             onChange={(ev) => setPassword(ev.target.value)}
             className="inputBox"
-          />
-          
-            <i class="fa-solid fa-lock toggle_password"></i>
-          <label className="errorLabel">{passwordError}</label>
-          <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
-        </div>
+        />
+        <i className="fa-solid fa-lock icon"></i> {/* Lock icon */}
+    </div>
+    <label className="errorLabel">{passwordError}</label>
+    <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
+</div>
 
 
-        <br />
+
         <div className="inputButtonContainer">
           <input className="inputButton" type="button" onClick={onButtonClick} value="Sign in" />
         </div>
