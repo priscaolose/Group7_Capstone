@@ -1,5 +1,5 @@
 import React from 'react';
-import FocusComponent from './HomeComponent';
+import HomeComponent from './HomeComponent';
 
 function App() {
   return (
