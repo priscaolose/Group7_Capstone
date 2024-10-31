@@ -1,0 +1,86 @@
+/* Register.css */
+
+/* Centering the form on the page */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff /* Light background color */
+}
+
+.register-form {
+    background: #ffffff;
+    padding: 100px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 50px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.register-form .heading {
+    font-size: 50px;
+    margin-bottom: 15px;
+    color: #333;
+}
+.register-form .caption {
+    font-size: 30px;
+    font-weight: 100;
+}
+
+.input-label {
+    display: flex;
+    flex-direction: column; 
+    font-size: 24px; 
+    margin-bottom: 10px; 
+    color: #101418; 
+}
+
+
+.register-form input {
+    width: 100%; /* Full width */
+    padding: 10px;/* Space inside the input/button */
+    margin: 18px 0; /* Space between elements */
+    border: none;
+    border-bottom: 2px solid #8aadd2;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-weight: 200;
+    color: #101418; 
+}
+
+.register-form button {
+    width: 100%;
+    padding: 10px;
+    background-color:#8aadd2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-form button:hover {
+    background-color: #89939E;
+}
+
+.success-message {
+    margin-top: 15px;
+    color: green;
+    font-weight: bold;
+}
+
+/* Responsive styling */
+@media (max-width: 500px) {
+    .register-form {
+        padding: 15px;
+        width: 90%;
+    }
+}
