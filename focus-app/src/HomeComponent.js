@@ -1,6 +1,9 @@
-import React from 'react';
+// src/FocusComponent.js
 
-const HomeCompnent = () => {
+import React from 'react';
+import './HomeComponent.css';
+
+const FocusComponent = () => {
   return (
     <div style={{ width: '100%', height: '100%', background: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: '138px' }}>
       <div style={{ width: 1440, padding: 32, background: '#E2EAF1', borderBottom: '1px #D9D9D9 solid', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 24 }}>
