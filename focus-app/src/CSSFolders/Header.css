@@ -1,7 +1,8 @@
 /* src/CSSFolders/Header.css */
 .header {
     background-color: #E2EAF1; /* Light background color */
-    display: flex;              /* Use flexbox for layout */
+    display: flex;    
+              /* Use flexbox for layout */
     align-items: center;       /* Center items vertically */
     justify-content: space-between; /* Space between items */
     padding: 5px 0px;         /* Reduced padding */

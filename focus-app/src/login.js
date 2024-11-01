@@ -10,6 +10,8 @@ const Login = (props) => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [isLocked, setIsLocked] = useState(true);
+
 
   const navigate = useNavigate();
 
@@ -57,6 +59,12 @@ const Login = (props) => {
     setEmail('');
     setPassword('');
   }
+  const handlePasswordIconClick = () => {
+    /**only be able to toggle if the password is not null */
+    if (password !== '' ){
+        setIsLocked(!isLocked);
+    }
+  }
 
   return (
     <div className="mainContainer">
@@ -73,7 +81,7 @@ const Login = (props) => {
             onChange={(ev) => setEmail(ev.target.value)}
             className="inputBox"
         />
-        <i className="fas fa-envelope icon"></i> {/* Envelope icon */}
+        <i className="fas fa-envelope icon" ></i> {/* Envelope icon */}
     </div>
     <label className="errorLabel">{emailError}</label>
 </div>
@@ -85,14 +93,18 @@ const Login = (props) => {
             placeholder="Password"
             onChange={(ev) => setPassword(ev.target.value)}
             className="inputBox"
+            type={isLocked ? "password" : "text"} // Toggle input type for visibility
         />
-        <i className="fa-solid fa-lock icon"></i> {/* Lock icon */}
+        
+        <i
+          className={`fa-solid ${isLocked ? 'fa-lock' : 'fa-lock-open'} icon`}
+          onClick={handlePasswordIconClick}
+        ></i>
+
     </div>
     <label className="errorLabel">{passwordError}</label>
     <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
 </div>
-
-
 
         <div className="inputButtonContainer">
           <input className="inputButton" type="button" onClick={onButtonClick} value="Sign in" />

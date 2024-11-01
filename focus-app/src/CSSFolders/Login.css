@@ -1,23 +1,33 @@
 /* src/components/Header.css or your specific CSS file */
 
+.body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
 .titleContainer div {
     padding-top: 100px;         /* Apply 60px padding to the top */
     font-weight: bold;          /* Make the text bold */
     font-size: 24px;            /* Adjust font size as needed */
     color: #2c3e50;             /* Optional: text color */
 }
-/* Centering the form on the page */
 
-.loginForm{
+.loginForm {
     background: #ffffff;
     padding: 100px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 50px;
-    height: 100%;
+    margin: 90px auto; /* Center the form */
+    height: auto; /* Change from 100% to auto for flexible height */
     box-sizing: border-box;
     text-align: center;
+    max-width: 600px; /* Set a max width for better control */
+    width: 100%; /* Use full width up to the max width */
+    align-items: center;
 }
+
 .loginFormHeading{
     font-size: 50px;
     margin-bottom: 15px;
