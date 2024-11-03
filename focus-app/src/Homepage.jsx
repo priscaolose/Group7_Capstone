@@ -1,41 +1,204 @@
-// src/Homepage.jsx
-import React from 'react';
-import './Homepage.css'; 
-import logo from './img/logo-4-processed-1.png'; // Adjust the import path as needed
+// HomePage.jsx
+import React, { useState, useEffect } from 'react';
+import logo from './img/logo.png';
 import focusImage from './img/FOCUS.png'; 
 
-const Homepage = () => {
-  return (
-    <div className="desktop">
-      <header className="header">
-        <img className="logo" src={logo} alt="Logo" />
-        <div className="navigation-pill-list">
-          <div className="navigation-pill"></div>
-        </div>
-      </header>
-      <div className="main-section">
-        <div className="group">
-            <p className="text-wrapper">welcome to the evolution of</p>
-            
-            <img className="FOCUS" src={focusImage} alt="Focus" />
-            <p className="div" id="slogan">In a world of frenzy, let’s find our focus.</p>
-          <div className="overlap-group">
-            <a href="main.html">
-              <button className="button">
-                <div className="state-layer">
-                  <div className="label-text">Get started</div>
+const HomePage = () => {
+    const [buttonText, setButtonText] = useState("Let's Get Started");
+    const [showMessage, setShowMessage] = useState(false);
+    const [headerVisible, setHeaderVisible] = useState(false);
+    const [textVisible, setTextVisible] = useState(false);
+    const [buttonVisible, setButtonVisible] = useState(false); // State for button visibility
+
+    useEffect(() => {
+        // Show header text after delay
+        const timer = setTimeout(() => {
+            setHeaderVisible(true);
+        }, 500); // Delay before header text appears
+
+        const textTimer = setTimeout(() => {
+            setTextVisible(true); // Show body text after another delay
+        }, 1500); // Delay before body text appears
+
+        const buttonTimer = setTimeout(() => {
+            setButtonVisible(true); // Show button after another delay
+        }, 2500); // Delay before button appears
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(textTimer);
+            clearTimeout(buttonTimer);
+        };
+    }, []);
+
+    const handleClick = () => {
+        setButtonText('Getting Started...');
+        setShowMessage(true);
+    };
+
+    return (
+        <div style={styles.pageContainer}>
+            <header style={styles.header}>
+                <div style={styles.logoContainer}>
+                    <img className="logo" src={logo} alt="Logo" style={styles.logo} />
                 </div>
-              </button>
-            </a>
-          </div>
-          
+            </header>
+            <main style={styles.content}>
+            {headerVisible && (
+                        <h2 style={styles.headerText}>Welcome to the Evolution of</h2>
+                    )}
+                <img 
+                    className="FOCUS" 
+                    src={focusImage} 
+                    alt="Focus" 
+                    style={styles.centerImage} 
+                />
+                {textVisible && (
+                    <p style={styles.simplifyText}>Simplify Your Tasks, Achieve Your Goals.</p>
+                )}
+                {buttonVisible && ( // Render button only when buttonVisible is true
+                    <button 
+                        style={styles.centerButton} 
+                        onClick={handleClick}
+                    >
+                        {buttonText}
+                    </button>
+                )}
+                {showMessage && <p style={styles.messageText}>Great choice! Let’s make progress together.</p>}
+            </main>
+            <footer style={styles.footer}>
+                <p>&copy; 2024 Focus. All rights reserved.</p>
+            </footer>
         </div>
-        <footer className="footer">
-          <p>2024 Focus. All rights reserved.</p>
-        </footer>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default Homepage;
+const styles = {
+    pageContainer: {
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'white', // Solid white background
+    },
+    header: {
+        backgroundColor: '#e2e9f1',
+        color: 'white',
+        padding: '10px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    logoContainer: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    logo: {
+        height: '40px',
+    },
+    content: {
+        flex: 1,
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center'
+    },
+    headerText: {
+        color: '#093966',
+        textAlign: 'center',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: '50px',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 'normal',
+        letterSpacing: '12.8px',
+        opacity: 0,
+        transform: 'translateX(-50px)',
+        animation: 'header-fade-in 1s forwards' // Animation for the header text
+    },
+    simplifyText: {
+        color: '#000',
+        textAlign: 'center',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: '32px',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 'normal',
+        letterSpacing: '6.4px',
+        marginTop: '60px',
+        marginBottom: '20px',
+        opacity: 0,
+        transform: 'translateX(-50px)',
+        animation: 'text-fade-in 1s forwards 1s' // Animation for the body text
+    },
+    centerImage: {
+        width: '900px',
+        height: 'auto',
+        marginBottom: '20px',
+        opacity: 0,
+        transform: 'translateX(50px)',
+        animation: 'image-fade-in 1s forwards 1.5s' // Animation for the image
+    },
+    centerButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '281px',
+        height: '50px',
+        backgroundColor: '#e2eaf1',
+        borderRadius: '10px',
+        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+        color: 'black', // Change text color to match your theme
+        border: 'none', // Remove border
+        cursor: 'pointer',
+        transition: 'background-color 0.3s, transform 0.2s',
+        fontFamily: 'Poppins, sans-serif',
+        fontSize: '20px',
+        opacity: 0,
+        transform: 'translateY(50px)', // Start from the bottom
+        animation: 'button-slide-in 1s forwards 2s' 
+    },
+    messageText: {
+        marginTop: '20px',
+        fontSize: '24px',
+        color: 'black',
+        fontFamily: 'Poppins, sans-serif'
+    },
+    footer: {
+        backgroundColor: '#8AAEC6',
+        color: 'black',
+        padding: '5px 0',
+        textAlign: 'center',
+        width: '100%',
+        position: 'fixed',
+        bottom: 0
+    }
+};
+
+// Add CSS animations
+const stylesSheet = document.styleSheets[0];
+stylesSheet.insertRule(`
+    @keyframes header-fade-in {
+        0% { opacity: 0; transform: translateX(-50px); }
+        100% { opacity: 1; transform: translateX(0); }
+`, stylesSheet.cssRules.length);
+
+stylesSheet.insertRule(`
+    @keyframes text-fade-in {
+        0% { opacity: 0; transform: translateX(-50px); }
+        100% { opacity: 1; transform: translateX(0); }
+`, stylesSheet.cssRules.length);
+
+stylesSheet.insertRule(`
+    @keyframes image-fade-in {
+        0% { opacity: 0; transform: translateX(50px); }
+        100% { opacity: 1; transform: translateX(0); }
+`, stylesSheet.cssRules.length);
+
+stylesSheet.insertRule(`
+    @keyframes button-slide-in {
+        0% { opacity: 0; transform: translateY(50px); }
+        100% { opacity: 1; transform: translateY(0); }
+`, stylesSheet.cssRules.length);
+
+export default HomePage;
