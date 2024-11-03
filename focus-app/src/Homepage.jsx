@@ -96,6 +96,7 @@ const styles = {
     },
     content: {
         flex: 1,
+        marginTop: '50px',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
@@ -121,7 +122,7 @@ const styles = {
         fontFamily: 'Poppins, sans-serif',
         fontSize: '32px',
         fontStyle: 'normal',
-        fontWeight: 400,
+        fontWeight: 200,
         lineHeight: 'normal',
         letterSpacing: '6.4px',
         marginTop: '60px',
