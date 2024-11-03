@@ -8,21 +8,20 @@ const HomePage = () => {
     const [showMessage, setShowMessage] = useState(false);
     const [headerVisible, setHeaderVisible] = useState(false);
     const [textVisible, setTextVisible] = useState(false);
-    const [buttonVisible, setButtonVisible] = useState(false); // State for button visibility
+    const [buttonVisible, setButtonVisible] = useState(false);
 
     useEffect(() => {
-        // Show header text after delay
         const timer = setTimeout(() => {
             setHeaderVisible(true);
-        }, 500); // Delay before header text appears
+        }, 500);
 
         const textTimer = setTimeout(() => {
-            setTextVisible(true); // Show body text after another delay
-        }, 1500); // Delay before body text appears
+            setTextVisible(true);
+        }, 1500);
 
         const buttonTimer = setTimeout(() => {
-            setButtonVisible(true); // Show button after another delay
-        }, 2500); // Delay before button appears
+            setButtonVisible(true);
+        }, 2500);
 
         return () => {
             clearTimeout(timer);
@@ -44,9 +43,9 @@ const HomePage = () => {
                 </div>
             </header>
             <main style={styles.content}>
-            {headerVisible && (
-                        <h2 style={styles.headerText}>Welcome to the Evolution of</h2>
-                    )}
+                {headerVisible && (
+                    <h2 style={styles.headerText}>Welcome to the Evolution of</h2>
+                )}
                 <img 
                     className="FOCUS" 
                     src={focusImage} 
@@ -56,7 +55,7 @@ const HomePage = () => {
                 {textVisible && (
                     <p style={styles.simplifyText}>Simplify Your Tasks, Achieve Your Goals.</p>
                 )}
-                {buttonVisible && ( // Render button only when buttonVisible is true
+                {buttonVisible && (
                     <button 
                         style={styles.centerButton} 
                         onClick={handleClick}
@@ -78,7 +77,7 @@ const styles = {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'white', // Solid white background
+        backgroundColor: 'white',
     },
     header: {
         backgroundColor: '#e2e9f1',
@@ -114,7 +113,7 @@ const styles = {
         letterSpacing: '12.8px',
         opacity: 0,
         transform: 'translateX(-50px)',
-        animation: 'header-fade-in 1s forwards' // Animation for the header text
+        animation: 'header-fade-in 1s forwards'
     },
     simplifyText: {
         color: '#000',
@@ -129,7 +128,7 @@ const styles = {
         marginBottom: '20px',
         opacity: 0,
         transform: 'translateX(-50px)',
-        animation: 'text-fade-in 1s forwards 1s' // Animation for the body text
+        animation: 'text-fade-in 1s forwards 1s'
     },
     centerImage: {
         width: '900px',
@@ -137,7 +136,7 @@ const styles = {
         marginBottom: '20px',
         opacity: 0,
         transform: 'translateX(50px)',
-        animation: 'image-fade-in 1s forwards 1.5s' // Animation for the image
+        animation: 'image-fade-in 1s forwards 1.5s'
     },
     centerButton: {
         display: 'flex',
@@ -148,14 +147,14 @@ const styles = {
         backgroundColor: '#e2eaf1',
         borderRadius: '10px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-        color: 'black', // Change text color to match your theme
-        border: 'none', // Remove border
+        color: 'black',
+        border: 'none',
         cursor: 'pointer',
         transition: 'background-color 0.3s, transform 0.2s',
         fontFamily: 'Poppins, sans-serif',
         fontSize: '20px',
         opacity: 0,
-        transform: 'translateY(50px)', // Start from the bottom
+        transform: 'translateY(50px)',
         animation: 'button-slide-in 1s forwards 2s' 
     },
     messageText: {
@@ -175,7 +174,6 @@ const styles = {
     }
 };
 
-// Add CSS animations
 const stylesSheet = document.styleSheets[0];
 stylesSheet.insertRule(`
     @keyframes header-fade-in {
