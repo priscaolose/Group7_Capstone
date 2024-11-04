@@ -22,12 +22,10 @@ const Register =()=>{
             console.log("User registered with Firebase:", user);
 
             // Step 2: Send user data to backend
-            const token = user && (await user.getIdToken());
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     firstName,
