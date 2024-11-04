@@ -11,7 +11,9 @@ export default async function handler(req, res) {
         firstName,
         lastName,
         email,
+        userName,
         phonenumber,
+        password,
       });
   
       res.json({ message: 'User registered!' });
