@@ -9,12 +9,12 @@ export default async function handler(req, res) {
 
     try {
       userRef.set({
-        firstName,
-        lastName,
-        userName,
-        email,
-        phonenumber,
-        password,
+        firstName : firstName,
+        lastName : lastName,
+        userName : userName,
+        email : email,
+        phonenumber : phonenumber,
+        password : password,
       });
   
       res.json({ message: 'User registered!' });
