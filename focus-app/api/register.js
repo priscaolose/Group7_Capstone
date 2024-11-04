@@ -1,13 +1,14 @@
 import { db } from '../src/firebase-config';
-import { ref, set, push } from 'firebase/database';
+//import { ref, set, push } from 'firebase/database';
 
 export default async function handler(req, res) {
   if(req.method === 'POST') {
     const { firstName, lastName, email, userName, phonenumber, password } = req.body;
-    const userRef = push(ref(db, 'Users'));
+    const ref = db.ref('server/saving-data/fireblog');
+    const userRef = ref.child('Users');
 
     try {
-      set(userRef, {
+      userRef.set({
         firstName,
         lastName,
         userName,
