@@ -4,7 +4,7 @@ import { ref, set, push } from 'firebase/database';
 export default async function handler(req, res) {
   if(req.method === 'POST') {
     const { firstName, lastName, email, userName, phonenumber, password } = req.body;
-    const userRef = push(ref(db, 'Users'));
+    const userRef = push(ref(db, 'Users/'));
 
     try {
       await set(userRef, {
