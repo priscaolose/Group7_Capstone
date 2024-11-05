@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from './firebase/firebaseAuth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword,fetchSignInMethodsForEmail} from 'firebase/auth';
 import './CSSFolders/Registration.css'; 
 import Header from './Components/Header';
 import Footer from './Components/Footer';
@@ -21,16 +21,6 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    const handleAccountSign = () => {
-        alert('Sign Up Clicked');
-        setEmail('');
-        setPassword('');
-        setLastName('');
-        setFirstName('');
-        setPhone('');
-        setSuccessMessage('');
-    };
-
     const isValidPhoneNumber = (phoneNumber) => {
         const regex = /^\+?1?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
         return regex.test(phoneNumber);
@@ -42,7 +32,7 @@ const Register = () => {
         }
     };
 
-    const onButtonClick = () => {
+    const onButtonClick = (e) => {
         // Clear previous error messages
         setErrors({}); 
 
@@ -81,14 +71,29 @@ const Register = () => {
             setErrors(newErrors); // Set all errors at once
             return; // Exit the function if there are errors
         }
-
-        handleAccountSign(); // Call this only after validation checks
+        handleRegister(e);
     };
 
+    // Separate function to check email
+    const checkIfEmailExists = async (email) => {
+        try {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        return methods.length > 0;
+        } catch (error) {
+        console.error("Error checking email:", error);
+        throw error;
+        }
+    };
+    
     const handleGoogleSignUp = async () => {
         try {
-            const user = await signUpWithGoogle();
-            if (user) {
+            const result = await signUpWithGoogle();
+            const emailExists = await checkIfEmailExists(result.user.email);
+            if (emailExists) {
+                alert('Email already exists. Please sign in instead.');
+                navigate('/login'); // Navigate to login or desired route after successful sign-in
+            }
+            if (result.user) {
                 alert('Signed Up With Google Clicked');
                 navigate('/home'); // Navigate to home or desired route after successful sign-in
             }
@@ -96,44 +101,46 @@ const Register = () => {
             console.error("Error during Google Sign-Up:", error);
         }
     };
-    
-    const handleRegister = async (e) => {
-        e.preventDefault(); // Prevents the browser from reloading the page while submitting the registration form
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+   
 
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    email,
-                    phone,
-                    userName: user.uid,
-                    password,
-                }),
-            });
+// Update your client-side handler to match
+const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        // ... Firebase auth code ...
 
-            const result = await response.json();
-            if (response.ok) {
-                setSuccessMessage('Registration successful!');
-                setFirstName('');
-                setLastName('');
-                setEmail('');
-                setPhone('');
-                setPassword('');
-            } else {
-                alert(result.error);
-            }
-        } catch (error) {
-            console.error("Error registering user:", error.message);
-            alert("Registration failed: " + error.message);
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                email,
+                userName: user.uid,
+                phonenumber: phone, // Note: match the field name with server
+                password,
+            }),
+        });
+
+        // First check if response is ok
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Registration failed');
         }
-    };
+
+        const result = await response.json();
+        setSuccessMessage(result.message);
+        // ... clear forms ...
+
+    } catch (error) {
+        console.error("Error registering user:", error);
+        alert(error.message);
+    }
+};
 
     return (
         <div className="mainContainer">
@@ -141,7 +148,7 @@ const Register = () => {
             <div className='register-form'>
                 <h1 className='heading'> Hi There!</h1>
                 <h2 className='caption'> Create an Account</h2>
-                <form onSubmit={handleRegister}>
+                <form onSubmit={(e) => { e.preventDefault(); onButtonClick(); }}>
                     <div className='input-label'> 
                         <div className="inputWrapper">
                             <input
@@ -155,7 +162,6 @@ const Register = () => {
                         </div>
                         <label className="errorLabel">{errors.firstName}</label>
                     </div>
-
                     <div className='input-label'>
                         <div className="inputWrapper">
                             <input
@@ -207,22 +213,20 @@ const Register = () => {
                                 type={isLocked ? "password" : "text"}
                                 required
                             />
-                            <i
-                                className={`fa-solid ${isLocked ? 'fa-lock' : 'fa-lock-open'} icon`}
+                            <i                        
+                                className={`fa-solid ${isLocked ? 'fa-eye-slash' : 'fa-eye'} icon`}
                                 onClick={handlePasswordIconClick}
                             ></i>
                         </div>
                         <label className="errorLabel">{errors.password}</label>
                     </div>
-                    <div className="inputButtonContainer">
                         <input className="inputButton" type="button" onClick={onButtonClick} value="Sign Up" />
-                    </div>
                 </form>
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 <div className="googleSignInContainer">
-    <div className="googleSignInText">Sign Up With</div>
-    <img src={Googlelogo} onClick={handleGoogleSignUp} alt="GoogleLogo" className="google-logo" />
-</div>
+                <div className="googleSignInText">Sign Up With</div>
+                    <img src={Googlelogo} onClick={handleGoogleSignUp} alt="GoogleLogo" className="google-logo" />
+                </div>
 
             </div>
             <Footer />

@@ -2,45 +2,46 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
-import './CSSFolders/Login.css'; 
+import './CSSFolders/Login.css';
 import Googlelogo from './Images/googleLogo.png';
-import { signInWithGoogle } from './firebase/firebaseAuth'; 
+import { signInWithGoogle } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
 
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [isLocked, setIsLocked] = useState(true);
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
 
   const navigate = useNavigate();
 
   const onButtonClick = () => {
-    setEmailError('');
-    setPasswordError('');
+    // Clear previous error messages
+    setErrors({});
+
+    // Create an errors object
+    const newErrors = {};
 
     if (email === '') {
-      setEmailError('Please enter your email');
-      return;
-    }
-
+      newErrors.email = 'Please enter your email';
+    } 
+    
     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      setEmailError('Please enter a valid email');
-      return;
+      newErrors.email = 'Please enter a valid email';
     }
 
     if (password === '') {
-      setPasswordError('Please enter a password');
-      return;
+      newErrors.password = 'Please enter a password';
     }
 
-    if (password.length < 8) {
-      setPasswordError('The password must be 8 characters or longer');
+    // If there are errors, update state and exit
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-
+    
     // Call the handleLogin function with email and password
     handleLogin(email, password);
   };
@@ -51,12 +52,38 @@ const Login = (props) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const user = await signInWithGoogle();
-      if (user) {
-        navigate('/home'); // Navigate to home or desired route after successful sign-in
+      const result = await signInWithGoogle();
+      
+      if (!result?.user?.email) {
+        alert("Failed to get user email");
+        return;
+      }
+  
+      // Check if email exists in your system
+      const emailExists = await checkIfEmailExists(result.user.email);
+      
+      if (emailExists) {
+        // Existing user - proceed to home
+        navigate('/home');
+      } else {
+        // New user - create account first
+        alert("No account found with these details. Sign up here to create an account and get started!");
+        // Optionally pass user data to registration
+        navigate('/registration')
       }
     } catch (error) {
-      console.error("Error during Google Sign-In:", error);
+      alert("Sign in failed. Please try again.");
+    }
+  };
+  
+  // Separate function to check email
+  const checkIfEmailExists = async (email) => {
+    try {
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      return methods.length > 0;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      throw error;
     }
   };
 
@@ -69,29 +96,35 @@ const Login = (props) => {
       setIsLocked(!isLocked);
     }
   }
-  
+
   async function handleLogin(email, password) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log("User logged in:", user);
-      alert("Login successful!");
-      
-      // Optionally navigate or clear inputs after successful login
-      setEmail('');
-      setPassword('');
-      navigate('/home'); // Redirect to home or desired route
+      if (user) {
+        alert('Signed In With Google Clicked');
+        setEmail('');
+        setPassword('');
+        navigate('/home');
+      }
     } catch (error) {
-      console.error("Login failed:", error.message);
-      alert("Login error: " + error.message);
+      if (error.code === 'auth/user-not-found') {
+        alert("No account found with this email.");
+      } else if (error.code === 'auth/wrong-password') {
+        alert("Incorrect password. Please try again.");
+      } else if (error.code === 'auth/too-many-requests') {
+        alert("Too many unsuccessful attempts. Please wait and try again later.");
+      } else {
+        alert("Error logging in:" + error.code);
+      }
     }
   }
 
   return (
     <div className="mainContainer">
-      <Header /> {/* Header Component */}  
+      <Header />
       <div className="loginForm">
-        <h1 className="loginFormHeading">Welcome Back </h1>
+        <h1 className="loginFormHeading">Welcome Back</h1>
         <form onSubmit={(ev) => { ev.preventDefault(); onButtonClick(); }}>
           <div className="inputContainer">
             <div className="inputWrapper">
@@ -99,12 +132,12 @@ const Login = (props) => {
                 value={email}
                 placeholder="Email"
                 onChange={(ev) => setEmail(ev.target.value)}
-                className="inputBox"
+                className={`inputBox ${errors.email ? 'error' : ''}`}
                 required
               />
-              <i className="fas fa-envelope icon"></i> {/* Envelope icon */}
+              <i className="fas fa-envelope icon"></i>
             </div>
-            <label className="errorLabel">{emailError}</label>
+            <div className="errorMessage">{errors.email}</div>
           </div>
 
           <div className="inputContainer">
@@ -113,22 +146,25 @@ const Login = (props) => {
                 value={password}
                 placeholder="Password"
                 onChange={(ev) => setPassword(ev.target.value)}
-                className="inputBox"
-                type={isLocked ? "password" : "text"} // Toggle input type for visibility
+                className={`inputBox ${errors.password ? 'error' : ''}`}
+                type={isLocked ? "password" : "text"}
                 required
               />
               <i
-                className={`fa-solid ${isLocked ? 'fa-lock' : 'fa-lock-open'} icon`}
+                className={`fa-solid ${isLocked ? 'fa-eye-slash' : 'fa-eye'} icon`}
                 onClick={handlePasswordIconClick}
               ></i>
             </div>
-            <label className="errorLabel">{passwordError}</label>
+            <div className="errorMessage">{errors.password}</div>
             <p className="forgotPasswordText" onClick={handleForgotPassword}>Forgot Password?</p>
           </div>
+
+          {errors.login && <div className="errorMessage loginError">{errors.login}</div>}
 
           <div className="inputButtonContainer">
             <input className="inputButton" type="submit" value="Sign in" />
           </div>
+          
           <p className="registerText">
             Don't have an account?{' '}
             <span className="clickableRegister" onClick={handleAccountRegistration}>
@@ -136,12 +172,20 @@ const Login = (props) => {
             </span>
           </p>
         </form>
+        
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        
         <div className="googleSignInContainer">
-        <div className="googleSignInText">Sign In With</div>
-        <img src={Googlelogo} onClick={handleGoogleSignIn} alt="GoogleLogo" className="google-logo" /> {/* Logo image */}
+          <div className="googleSignInText">Sign In With</div>
+          <img 
+            src={Googlelogo} 
+            onClick={handleGoogleSignIn} 
+            alt="GoogleLogo" 
+            className="google-logo"
+          />
         </div>
       </div>
-      <Footer /> {/* Footer Component */}
+      <Footer />
     </div>
   );
 };

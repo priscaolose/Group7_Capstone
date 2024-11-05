@@ -1,4 +1,4 @@
-import { db } from '../src/firebase-config';
+import { db } from '../src/firebase/firebaseConfig';
 import { ref, set, push } from 'firebase/database';
 
 export default async function handler(req, res) {
