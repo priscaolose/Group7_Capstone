@@ -1,6 +1,6 @@
 import express from "express";
-import db from "../firebase/firebaseConfig";
 import { collection, setDoc, doc } from "firebase/firestore";
+const db = require("../firebase/firebaseConfig");
 
 const app = express();
 app.use(express.json()); // Middleware to parse incoming JSON payload
