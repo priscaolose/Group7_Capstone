@@ -1,5 +1,5 @@
 import express from "express";
-import { db } from "/src/firebaseConfig";
+import db from "./src/firebase/firebaseConfig";
 import { collection, setDoc, doc } from "firebase/firestore";
 
 const app = express();
