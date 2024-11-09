@@ -1,7 +1,7 @@
 // src/firebase-config.js
-const { initializeApp } = require("firebase/app");
-const { getAuth, signInWithEmailAndPassword } =  require("firebase/auth");
-const { getFirestore } = require('firebase/firestore');
+import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
