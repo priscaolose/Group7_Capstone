@@ -1,20 +1,30 @@
 import { db } from '../src/firebase-config';
-import { ref, set, push } from 'firebase/database';
+import { collection, setDoc, doc } from 'firebase/firestore';
 
 export default async function handler(req, res) {
   if(req.method === 'POST') {
     const { firstName, lastName, email, userName, phonenumber, password } = req.body;
-    const userRef = push(ref(db, 'Users'));
+    const productsRef = collection(db, 'Users');
 
-    try {
-      set(userRef, {
+    try{
+      await setDoc(doc(productsRef), {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phonenumber: phonenumber,
+        password: password,
+        username: userName,
+      });
+
+    /*try {
+      userRef.set( {
         firstName,
         lastName,
         userName,
         email,
         phonenumber,
         password,
-      });
+      });*/
   
       res.json({ message: 'User registered!' });
     } catch (error)
