@@ -10,16 +10,14 @@ app.post("/api/register", async (req, res) => {
 
   const { firstName, lastName, email, userName, phonenumber, password } =
     req.body;
-  const userRef = collection(db, "Users");
-
   try {
-    await setDoc(doc(userRef), {
-      firstName,
-      lastName,
-      email,
-      phonenumber,
-      password,
+    await db.collection("Users").add({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
       username: userName,
+      phonenumber: phonenumber,
+      password: password,
     });
 
     res.status(200).json({ message: "User registered successfully!" });
