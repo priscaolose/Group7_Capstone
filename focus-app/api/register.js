@@ -1,5 +1,5 @@
 import { db } from "../../src/firebase-config";
-import { collection, setDoc, doc } from "firebase/firestore";
+const { collection, setDoc, doc } = require('firebase/firestore');
 
 export default async function handler(req, res) {
   console.log('CHecking request');
