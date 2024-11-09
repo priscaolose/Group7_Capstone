@@ -1,5 +1,6 @@
 // src/firebase-auth.js
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail 
+} from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import app from './firebaseConfig';
 
@@ -10,19 +11,19 @@ export const signInWithGoogle = async () => {
 
   try {
     const result = await signInWithPopup(auth, provider);
-    // The signed-in user info.
-    const user = result.user;
-    console.log("User Info:", user);
-  } catch (error) {
+        return result
+    } catch (error) {
     console.error("Error during sign-in:", error);
   }
 };
 
 export const signUpWithGoogle = async () => {
   try {
-    await signUpWithGoogle();
+      const result = await signInWithPopup(auth,provider);
+      return result;
   } catch (error) {
-    console.error("Google sign-up failed:", error);
+      console.error('Google sign-up error:', error);
+      throw error;  // Propagate error to handle in calling function
   }
 };
 

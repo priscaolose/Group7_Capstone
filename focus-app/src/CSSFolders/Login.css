@@ -4,7 +4,8 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 0;
+    height: 100%;
+    width: 100%;   
 }
 .mainContainer {
     display: flex;
@@ -14,18 +15,19 @@
 .loginForm {
     flex: 1;
     background: #ffffff;
-    padding: 100px 20px; /* Increase top padding */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 10px auto;
+    padding: 100px 20px; 
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
     box-sizing: border-box;
     text-align: center;
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
 }
+
 .titleContainer div {
     padding-top: 100px;         /* Apply 60px padding to the top */
     font-weight: bold;          /* Make the text bold */
@@ -36,6 +38,7 @@
 
 .loginFormHeading{
     font-size: 32px;
+    margin-top: 10px;
     margin-bottom: 10px;
     color: #333;
 }
@@ -82,13 +85,18 @@
     font-weight: 200;
     color: #101418; 
 }
-.errorLabel {
-    color: red;
-    font-size: 12px; /* Adjust the size as needed */
-    margin-top: 4px;
-    display: block; /* Ensures the label is on a new line */
-    transition: 0.2s ease all;
-}
+.errorMessage {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .loginError {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
 
 .inputButton {
     padding: 8px 1px;
@@ -142,6 +150,13 @@
     flex: 1;
     height: 1px;
     background-color: #8AAEC6;
+}
+.registerText {
+    color: #2c3e50;
+    font-size: 18px;
+    margin-top: 5px;         /* Adjust to reduce space */
+    margin-bottom: 5px;        /* Remove extra space below */
+    text-align: center;            /* Align text to the center */
 }
 
 .googleSignInText::before {

@@ -11,10 +11,10 @@
   padding: 0;
   margin: 0;
   flex-shrink: 0;
+  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 .footer .about,
 .footer .privacy {
   margin-right: 30px;
-  text-decoration: underline;
 }

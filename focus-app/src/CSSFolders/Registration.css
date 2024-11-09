@@ -11,17 +11,20 @@ body, html {
     flex-direction: column;
     height: 100vh;
 }
-
+.errorLabel{
+    color: red;
+    font-size: 12px;
+}
 .register-form {
     flex: 1;
     background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 10px 20px; 
+    border-radius: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 10px auto;
     box-sizing: border-box;
     text-align: center;
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
     overflow-y: auto;
     display: flex;
@@ -30,7 +33,7 @@ body, html {
 
 .register-form .heading {
     font-size: 32px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     color: #333;
 }
 
@@ -44,7 +47,7 @@ body, html {
     display: flex;
     flex-direction: column;
     font-size: 18px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: #101418;
 }
 
@@ -62,12 +65,12 @@ body, html {
 }
 
 .inputButton {
-    padding: 8px 1px;
+    padding: 10px 1px;
     border-radius: 20px;
     background-color: #8AAEC6;
     cursor: pointer;
     width: 200px;
-    font-size: 16px;
+    font-size: 40px;
     margin: 10px auto;
 }
 
@@ -84,7 +87,8 @@ body, html {
     align-items: center;
     width: 100%; /* Make sure the text container takes full width */
     color: #8AAEC6;
-    font-size: 14px;
+    font-size: 18px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
