@@ -1,20 +1,18 @@
 import express from "express";
 import { collection, addDoc } from "firebase/firestore";
-import db from "../src/firebase/firebaseConfig"; // Firebase Firestore instance
+import db from "../src/firebase/firebaseConfig";
 
 const app = express();
-app.use(express.json()); // Middleware to parse incoming JSON payload
+app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
   console.log("Request received");
 
   const { firstName, lastName, email, userName, phonenumber, password } = req.body;
 
-  // Correct usage of Firestore functions
-  const userRef = collection(db); // Get reference to "Users" collection
+  const userRef = collection(db, "Users");
 
   try {
-    // Add a new document to the "Users" collection
     await addDoc(userRef, {
       firstName,
       lastName,
