@@ -1,6 +1,6 @@
 import express from "express";
-import { collection, setDoc, doc } from "firebase/firestore";
-const db = require("../src/firebase/firebaseConfig");
+import { collection, addDoc } from "firebase/firestore";
+import db from "../src/firebase/firebaseConfig"; // Firebase Firestore instance
 
 const app = express();
 app.use(express.json()); // Middleware to parse incoming JSON payload
@@ -10,14 +10,19 @@ app.post("/api/register", async (req, res) => {
 
   const { firstName, lastName, email, userName, phonenumber, password } =
     req.body;
+
+  // Correct usage of Firestore functions
+  const userRef = collection(db, "Users"); // Get reference to "Users" collection
+
   try {
-    await db.collection("Users").add({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
+    // Add a new document to the "Users" collection
+    await addDoc(userRef, {
+      firstName,
+      lastName,
+      email,
+      phonenumber,
+      password,
       username: userName,
-      phonenumber: phonenumber,
-      password: password,
     });
 
     res.status(200).json({ message: "User registered successfully!" });
