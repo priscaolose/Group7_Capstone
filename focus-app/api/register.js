@@ -8,11 +8,10 @@ app.use(express.json()); // Middleware to parse incoming JSON payload
 app.post("/api/register", async (req, res) => {
   console.log("Request received");
 
-  const { firstName, lastName, email, userName, phonenumber, password } =
-    req.body;
+  const { firstName, lastName, email, userName, phonenumber, password } = req.body;
 
   // Correct usage of Firestore functions
-  const userRef = collection(db, "Users"); // Get reference to "Users" collection
+  const userRef = collection(db); // Get reference to "Users" collection
 
   try {
     // Add a new document to the "Users" collection
