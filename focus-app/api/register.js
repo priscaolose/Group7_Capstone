@@ -1,6 +1,6 @@
 import express from "express";
-import { collection, set } from "firebase/firestore";
-import db from "../src/firebase/firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../src/firebase/firebaseConfig";
 
 const app = express();
 app.use(express.json());
@@ -10,10 +10,10 @@ app.post("/api/register", async (req, res) => {
 
   const { firstName, lastName, email, userName, phonenumber, password } = req.body;
 
-  const userRef = db.collection("Users").doc();
+  const userRef = collection(db, "Users");
 
   try {
-    await userRef.set({
+    await addDoc(userRef, {
       firstName,
       lastName,
       email,
