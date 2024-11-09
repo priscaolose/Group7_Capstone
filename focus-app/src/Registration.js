@@ -111,7 +111,7 @@ const handleRegister = async (e) => {
         const user = userCredential.user;
         // ... Firebase auth code ...
 
-        const response = await fetch('/api/register', {
+        const response = await fetch('../api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
