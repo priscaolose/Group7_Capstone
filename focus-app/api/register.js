@@ -9,29 +9,24 @@ app.use(express.json());
 app.post("/api/register", async (req, res) => {
   console.log("Request received");
 
-  const { firstName, lastName, email, userName, phonenumber, password } = req.body;
+  const { firstName, lastName, email, userName, phonenumber, password } =
+    req.body;
 
   // Reference to database
   const userRef = collection(db, "Users");
 
   const saltRounds = 10;
-  let hashpassword;
-
-  // Hash password
-  bcrypt.genSalt(saltRounds, function(err, salt){
-    bcrypt.hash(password, salt, function(err, hash){
-      hashpassword = hash;
-    })
-  })
 
   // Store data
   try {
+    // Hash password
+
     await addDoc(userRef, {
       firstName,
       lastName,
       email,
       phonenumber,
-      hashpassword,
+      password: await bcrypt.hash(password, saltRounds),
       username: userName,
     });
 
