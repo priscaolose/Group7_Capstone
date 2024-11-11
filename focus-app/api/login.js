@@ -1,38 +1,42 @@
-import { db } from '../src/firebase-config';
-import { ref, query, orderByChild, equalTo, get } from 'firebase/database';
+import { db } from "../src/firebase/firebaseConfig";
+import express from "express";
+const bcrypt = require('bcrypt');
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { email, password } = req.body;
+const app = express();
+app.use(express.json());
 
-    try {
-      // Query to find the user by email
-      const emailQuery = query(ref(db, 'Users'), orderByChild('email'), equalTo(email));
-      const emailSnapshot = await get(emailQuery);
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
 
-      // Check if the user exists
-      if (!emailSnapshot.exists()) {
-        return res.json({ error: 'User not found' });
-      }
+  try {
+    // Get a reference to the database
+    const usersRef = db.collection("Users");
 
-      // Get the user data
-      let userData;
-      emailSnapshot.forEach((childSnapshot) => {
-        userData = childSnapshot.val();
-      });
-
-      // Check if the password is correct
-      const passwordMatch = password == userData.password;
-
-      if (!passwordMatch) {
-        return res.json({ error: 'Invalid password' });
-      }
-
-      // Successful login
-      res.json({ message: 'Login successful' });
-    } 
-    catch (error) {
-      res.json({ error: 'Failed to sign in' });
+    // Check if user email is in database
+    const emailSnapshot = await usersRef.where("email", "==", email).get();
+    if (emailSnapshot.empty) {
+      return res.json({ error: "User not found" });
     }
+
+    // Get user data
+    let userData;
+    emailSnapshot.forEach((childSnapshot) => {
+      userData = childSnapshot.val();
+    });
+
+    // Check if password is correct
+    bcrypt.compare(password, userData.password, function(err, result){
+      if(result === false)
+      {
+        return res.json({ error: "Invalid password" });
+      }
+      if(result === true)
+      {
+        res.json({ message: "Login successful" });
+      }
+    });
+
+  } catch (error) {
+    res.json({ error: 'Failed to sign in' });
   }
-}
+});
