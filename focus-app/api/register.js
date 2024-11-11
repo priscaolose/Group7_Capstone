@@ -31,7 +31,7 @@ app.post("/api/register", async (req, res) => {
       lastName,
       email,
       phonenumber,
-      password: hashpassword,
+      hashpassword,
       username: userName,
     });
 
