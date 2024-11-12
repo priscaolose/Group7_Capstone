@@ -40,3 +40,7 @@ app.post("/api/login", async (req, res) => {
     res.json({ error: 'Failed to sign in' });
   }
 });
+
+export default function handler(req, res) {
+  app(req, res);
+}

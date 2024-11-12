@@ -14,6 +14,10 @@ app.get("/login", (req, res) =>{
     res.sendFile("../src/login");
 });
 
-app.get("/dashboard", (req, res) =>{
+app.get("/home", (req, res) =>{
     res.sendFile("../src/dashboard");
 });
+
+export default function handler(req, res) {
+    app(req, res);
+}
