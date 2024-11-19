@@ -15,8 +15,8 @@ function Dashboard() {
      {/* Left Column with Two Items */}
      <Box sx={{ display: 'grid', gridTemplateRows: '1fr', gap: 3 }}>
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ fontSize: '4.5rem', color: '#093966', width: '200px',fontWeight: 'bold'}}>Welcome Back </Typography> 
-          <Typography variant="h6" sx={{ fontSize: '4.5rem', color: '#000000', width: '200px',fontWeight: 'bold', }}>[UserName]</Typography> 
+          <Typography variant="h6" sx={{ fontSize: '2.5rem', color: '#093966', width: '200px',fontWeight: 'bold'}}>Welcome Back </Typography> 
+          <Typography variant="h6" sx={{ fontSize: '2.5rem', color: '#000000', width: '200px',fontWeight: 'bold', }}>[UserName]</Typography> 
         </Paper>
 
         <Paper sx={{ p: 3, height: '550px'}}>
