@@ -35,7 +35,7 @@ function Dashboard() {
          <Box sx={{ p: 2, display: 'grid', gridTemplateRows: '1fr 1fr', gap: 3, textAlign: 'center' }}>
                 {/* Timer */}
                 <Paper sx={{ p: 2 }}>
-                    <Typography variant="h1" sx={{ fontSize: '20rem', fontWeight: 'bold', color: '#093966', paddingTop: '100px'}}>00:00</Typography>
+                    <Typography variant="h1" sx={{ fontSize: '10rem', fontWeight: 'bold', color: '#093966', paddingTop: '100px'}}>00:00</Typography>
                     <Typography variant="h6" sx={{ fontSize: '5rem', color: '#093966', width: "100%"}}>task Name</Typography>
                 </Paper>
 
