@@ -1,9 +1,8 @@
-// App.js
 import React from 'react';
-import HomePage from './Homepage';
+import ManageAccountPage from './ManageAccountPage';
 
 const App = () => {
-    return <HomePage />;
+    return <ManageAccountPage />;
 };
 
 export default App;
