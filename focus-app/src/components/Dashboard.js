@@ -195,7 +195,7 @@ function Dashboard() {
                 padding: '0.5rem',
                 border: '1px solid #ccc',
                 borderRadius: '8px',
-                color: 'white'
+                color: 'black'
               }}
               placeholder="Write your notes here..."
             />
