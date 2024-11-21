@@ -14,11 +14,13 @@ app.get("/api/getUser", async (req, res) =>{
     }
     
     try{
+        console.log("Getting user, userID: " + userID);
         const userRef = doc(db, "Users", userID);
-        if(!userRef.exists){
+        const user = await getDoc(userRef);
+        if(!user.exists()){
             return res.status(404).json({ message: 'User not found' });
         }
-        const user = await getDoc(userRef);
+        console.log("Got user");
 
         const userData = user.data();
 
