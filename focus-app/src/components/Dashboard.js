@@ -1,91 +1,226 @@
-import React from 'react';
-import { Box, Typography, Paper, Button, LinearProgress } from '@mui/material';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; 
+import React, { useState } from 'react';
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  AppBar,
+  Toolbar,
+  useMediaQuery,
+} from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-
-
+//import { useNavigate } from 'react-router-dom'; // For navigation
+import logo from './logo.png';
 
 function Dashboard() {
-    return (
-        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: 2, p: 2, backgroundColor: '#f0f4f8', minHeight: '100vh'}}>
-        
-     {/* Left Column with Two Items */}
-     <Box sx={{ display: 'grid', gridTemplateRows: '1fr', gap: 3 }}>
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ fontSize: '2.5rem', color: '#093966', width: '200px',fontWeight: 'bold'}}>Welcome Back </Typography> 
-          <Typography variant="h6" sx={{ fontSize: '2.5rem', color: '#000000', width: '200px',fontWeight: 'bold', }}>[UserName]</Typography> 
-        </Paper>
+  const UserName = 'User';
+  const isSmallScreen = useMediaQuery('(max-width: 900px)');
+  const [notes, setNotes] = useState('');
+  //const navigate = useNavigate(); // Hook for navigation
 
-        <Paper sx={{ p: 3, height: '550px'}}>
-        <Typography variant="subtitle1" sx={{ fontSize: '4.5rem', color: '#1270B0'}} mt={2}>Today's Tasks</Typography>
-          
-        </Paper>
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateRows: 'auto 1fr auto',
+        gap: 2,
+        backgroundColor: '#f0f4f8',
+        minHeight: '100vh',
+      }}
+    >
+      {/* Header */}
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: '#e2e9f1',
+          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+          marginBottom: '5px',
+        }}
+      >
+        <Toolbar sx={{ justifyContent: 'left' }}>
+          <Box>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                height: '60px',
+                maxHeight: '100%',
+                objectFit: 'contain',
+              }}
+            />
+          </Box>
+        </Toolbar>
+      </AppBar>
 
-        <Paper sx={{ p: 3, height: '300px'}}>
-          <Typography variant="subtitle1" sx={{ fontSize: '4.5rem', color: '#1270B0'}}>Next Up:</Typography>
-          {/* Additional content can go here */}
-        </Paper>
+      {/* Main Content */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: '1fr 2fr 1fr' },
+          gap: 2,
+          p: 2,
+        }}
+      >
+        {/* Left Column */}
+        <Box sx={{ display: 'grid', gap: 3 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: { xs: '7.5rem', md: '6.5rem' },
+                color: '#093966',
+                fontWeight: 'bold',
+                lineHeight: '1.2',
+                textAlign: 'left',
+                paddingTop: '70px',
+              }}
+            >
+              Welcome{'\n'}Back
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: { xs: '3.5rem', md: '4.5rem' },
+                color: '#000',
+                fontWeight: 'bold',
+                mt: 2,
+                textAlign: 'left',
+              }}
+            >
+              {UserName}
+            </Typography>
+          </Paper>
+          <Paper sx={{ p: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: '4rem', color: '#1270B0' }}
+            >
+              Today's Tasks
+            </Typography>
+          </Paper>
+          <Paper sx={{ p: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: '4rem', color: '#1270B0' }}
+            >
+              Next Up:
+            </Typography>
+          </Paper>
+        </Box>
+
+        {/* Center Section */}
+        <Box sx={{ display: 'grid', gap: 3 }}>
+          {/* Timer */}
+          <Paper
+            sx={{
+              p: 3,
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              borderRadius: '16px',
+              backgroundColor: '#f0f4f8',
+              cursor: 'pointer',
+            }}
+            //onClick={() => navigate('/timer')} // Navigate to Timer.js
+          >
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: '7rem', sm: '10rem', md: '12rem' },
+                fontWeight: '300',
+                color: '#093966',
+              }}
+            >
+              00:00
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: { xs: '2rem', sm: '4rem', md: '6rem' },
+                color: '#1270B0',
+              }}
+            >
+              Task Name
+            </Typography>
+          </Paper>
+
+          {/* Calendar */}
+          <Paper
+            sx={{
+              p: 3,
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              borderRadius: '16px',
+              cursor: 'pointer',
+            }}
+            //onClick={() => navigate('/calendar')} // Navigate to Calendar
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar />
+            </LocalizationProvider>
+          </Paper>
+        </Box>
+
+        {/* Right Column */}
+        <Box sx={{ display: 'grid', gap: 3 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, color: '#1270B0' }}
+            >
+              Reminder:
+            </Typography>
+          </Paper>
+          <Paper sx={{ p: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, color: '#1270B0' }}
+            >
+              Notes
+            </Typography>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              style={{
+                width: '100%',
+                height: '200px',
+                fontSize: '1rem',
+                marginTop: '1rem',
+                padding: '0.5rem',
+                border: '1px solid #ccc',
+                borderRadius: '8px',
+              }}
+              placeholder="Write your notes here..."
+            />
+          </Paper>
+        </Box>
       </Box>
 
-
-         {/* Center Section: Timer and Calendar */}
-         <Box sx={{ p: 2, display: 'grid', gridTemplateRows: '1fr 1fr', gap: 3, textAlign: 'center' }}>
-                {/* Timer */}
-                <Paper sx={{ p: 2 }}>
-                    <Typography variant="h1" sx={{ fontSize: '10rem', fontWeight: 'bold', color: '#093966', paddingTop: '100px'}}>00:00</Typography>
-                    <Typography variant="h6" sx={{ fontSize: '5rem', color: '#093966', width: "100%"}}>task Name</Typography>
-                </Paper>
-
-                {/* Calendar */}
-                <Paper sx={{ p: 2 }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box
-                sx={{
-                    paddingTop: '50px',
-                    width: '100%',
-                    //maxWidth: '600px', // Adjust for desired width
-                    mx: 'auto', // Center horizontally
-                }}
-            >
-                <DateCalendar
-                    sx={{
-                        width: '100%',
-                        color: '#00000',
-                        fontSize: '20px',
-                        '.MuiPickersDay-root': { fontSize: '1.5rem'}, // Increase day size
-                        '.MuiTypography-root': { fontSize: '1.5rem' }, // Adjust header font size
-                    }}
-                />
-            </Box>
-        </LocalizationProvider>
-    </Paper>
-          </Box>
-
-  {/* Right Sidebar */}
-
-  <Box sx={{ display: 'grid', gridTemplateRows: '1fr', gap: 3 }}>
-        <Paper sx={{  height: 'auto' }}>
-        <Typography variant="h2" sx={{ color: '#1270B0', fontSize: '2.5rem' }}>reminder: </Typography>
-        </Paper>
-
-        <Paper sx={{ height: '950px'}}>
-        <Typography variant="subtitle1" sx={{ fontSize: '3.5rem', color: '#1270B0'}} mt={2}>Notes</Typography>
-          
-        </Paper>
-        
-  </Box>
-
-
       {/* Footer */}
-      <Box sx={{ gridColumn: 'span 3', textAlign: 'center', mt: 4 }}>
-        <Button href="/about">About</Button>
-        <Button href="/privacy">Privacy Policy</Button>
-      </Box> 
+      <Box
+        sx={{
+          textAlign: 'center',
+          p: 2,
+          backgroundColor: '#093966',
+          color: '#fff',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 3,
+        }}
+      >
+        <Button href="/about" sx={{ color: '#fff' }}>
+          Focus
+        </Button>
+        <Button href="/privacy" sx={{ color: '#fff' }}>
+          
+        </Button>
+      </Box>
     </Box>
-    );
+  );
 }
 
-export default Dashboard
+export default Dashboard;
