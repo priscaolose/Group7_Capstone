@@ -207,18 +207,18 @@ function Dashboard() {
         sx={{
           textAlign: 'center',
           p: 2,
-          backgroundColor: '#093966',
+          backgroundColor: '#8AAEC6',
           color: '#fff',
           display: 'flex',
           justifyContent: 'center',
           gap: 3,
         }}
       >
-        <Button href="/about" sx={{ color: '#fff' }}>
-          Focus
+        <Button href="/about" sx={{ color: '#0000' }}>
+          About
         </Button>
-        <Button href="/privacy" sx={{ color: '#fff' }}>
-          
+        <Button href="/privacy" sx={{ color: '#000' }}>
+          Privacy Policy
         </Button>
       </Box>
     </Box>
