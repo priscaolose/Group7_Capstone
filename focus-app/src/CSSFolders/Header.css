@@ -6,9 +6,34 @@
     padding: 1px; /* Adjusted for simplicity */
     background-color: #e2e9f1;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-    margin-bottom: 5px;
+    margin-bottom: 60px;
 }
 
 .header-logo {
     height: 60px;        /* Ensure it scales proportionally */
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+}
+  
+.navbar li {
+    margin-right: 20px;
+}
+  
+.navbar li button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.inputButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px px;
+    cursor: pointer;
 }

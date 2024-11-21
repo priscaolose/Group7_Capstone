@@ -7,8 +7,9 @@ import Googlelogo from './Images/googleLogo.png';
 import { signInWithGoogle } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
+import { Link } from 'react-router-dom';
 
-const Login = (props) => {
+const Login = ({ login, loggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLocked, setIsLocked] = useState(true);
@@ -67,10 +68,11 @@ const Login = (props) => {
         navigate('/home');
       } else {
         // New user - create account first
-        alert("No account found with these details. Sign up here to create an account and get started!");
-        // Optionally pass user data to registration
-        navigate('/registration')
+        if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
+          window.location.href = "/registration"; // Redirects to the registration page
+        }        
       }
+      login(); // Call the login function passed as a prop to set loggedIn to true      
     } catch (error) {
       alert("Sign in failed. Please try again.");
     }
@@ -105,7 +107,12 @@ const Login = (props) => {
         alert('Signed In With Google Clicked');
         setEmail('');
         setPassword('');
+        login(); // Call the login function passed as a prop to set loggedIn to true      
         navigate('/home');
+  
+      }
+      else{
+        //if user does not have an account, I want them to be redirected to the registration page
       }
     } catch (error) {
       if (error.code === 'auth/user-not-found') {
@@ -114,7 +121,13 @@ const Login = (props) => {
         alert("Incorrect password. Please try again.");
       } else if (error.code === 'auth/too-many-requests') {
         alert("Too many unsuccessful attempts. Please wait and try again later.");
-      } else {
+        //This is just a temporal holder for what i am testing
+      } else if(error.code === 'auth/invalid-credential') {
+        if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
+          window.location.href = "/registration"; // Redirects to the registration page
+        }  
+      }
+      else {
         alert("Error logging in:" + error.code);
       }
     }
