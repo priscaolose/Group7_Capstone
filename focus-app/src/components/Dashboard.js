@@ -26,7 +26,7 @@ function Dashboard() {
         display: 'grid',
         gridTemplateRows: 'auto 1fr auto',
         gap: 2,
-        backgroundColor: '#f0f4f8',
+        backgroundColor: '#fffff',
         minHeight: '100vh',
       }}
     >
@@ -64,13 +64,13 @@ function Dashboard() {
         }}
       >
         {/* Left Column */}
-        <Box sx={{ display: 'grid', gap: 3 }}>
-          <Paper sx={{ p: 3 }}>
+        <Box sx={{ display: 'grid', gap: 3, }}>
+          <Paper sx={{ p: 3, backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)' }}>
             <Typography
               variant="h6"
               sx={{
                 fontSize: { xs: '7.5rem', md: '6.5rem' },
-                color: '#093966',
+                
                 fontWeight: 'bold',
                 lineHeight: '1.2',
                 textAlign: 'left',
@@ -92,7 +92,7 @@ function Dashboard() {
               {UserName}
             </Typography>
           </Paper>
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: 3 , backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)'}}>
             <Typography
               variant="h6"
               sx={{ fontSize: '4rem', color: '#1270B0' }}
@@ -100,7 +100,7 @@ function Dashboard() {
               Today's Tasks
             </Typography>
           </Paper>
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: 3, backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)'}}>
             <Typography
               variant="h6"
               sx={{ fontSize: '4rem', color: '#1270B0' }}
@@ -123,7 +123,7 @@ function Dashboard() {
               justifyContent: 'center',
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
               borderRadius: '16px',
-              backgroundColor: '#f0f4f8',
+              backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
               cursor: 'pointer',
             }}
             //onClick={() => navigate('/timer')} // Navigate to Timer.js
@@ -156,6 +156,7 @@ function Dashboard() {
               boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
               borderRadius: '16px',
               cursor: 'pointer',
+              backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)'
             }}
             //onClick={() => navigate('/calendar')} // Navigate to Calendar
           >
@@ -167,7 +168,7 @@ function Dashboard() {
 
         {/* Right Column */}
         <Box sx={{ display: 'grid', gap: 3 }}>
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: 3, backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)' }}>
             <Typography
               variant="h6"
               sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, color: '#1270B0' }}
@@ -175,7 +176,7 @@ function Dashboard() {
               Reminder:
             </Typography>
           </Paper>
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: 3, backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)' }}>
             <Typography
               variant="h6"
               sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, color: '#1270B0' }}
@@ -193,6 +194,7 @@ function Dashboard() {
                 padding: '0.5rem',
                 border: '1px solid #ccc',
                 borderRadius: '8px',
+                color: 'white'
               }}
               placeholder="Write your notes here..."
             />
