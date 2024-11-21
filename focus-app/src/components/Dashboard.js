@@ -75,6 +75,7 @@ function Dashboard() {
                 lineHeight: '1.2',
                 textAlign: 'left',
                 paddingTop: '70px',
+                color: '#093966'
               }}
             >
               Welcome{'\n'}Back
@@ -214,7 +215,7 @@ function Dashboard() {
           gap: 3,
         }}
       >
-        <Button href="/about" sx={{ color: '#0000' }}>
+        <Button href="/about" sx={{ color: '#000' }}>
           About
         </Button>
         <Button href="/privacy" sx={{ color: '#000' }}>
