@@ -1,34 +1,27 @@
 import React from 'react';
 import logo from '../Images/logo.png'; 
+import Navbar from './navBar'; // Import Navbar component
 import '../CSSFolders/Header.css'; 
 
-const Header = (loggedIn,logout) => {
-  if (loggedIn ) {
+const Header = ({ loggedIn, logout }) => {
+  if (loggedIn === true) {
     return (
       <header className="header">
-             <img src={logo} alt="Logo" className="header-logo" /> {/* Logo image */}
-             <nav className="navbar">
-                <ul>
-                  <li><a href="/dashboard">Dashboard</a></li>
-                  <li><a href="/tasks">Your Tasks</a></li>
-                  <li>
-                  <div className="inputButtonContainer">
-                      <input className="inputButton" type="submit" value="Sign in" />
-                  </div>  
-                    </li>            
-                </ul>
-              </nav>
-        </header>
+        <img src={logo} alt="Logo" className="header-logo" /> 
+        <div className="navAndLogOut"> 
+        <Navbar /> 
+        <input className="logOutButton" type="submit" value="LogOut" onClick={logout} />
+        </div>
+       
+      </header>
     );  
-  }
-  else if (logout) {
+  } else {
     return (
       <header className="header">
-             <img src={logo} alt="Logo" className="header-logo" /> {/* in here i want to have a situation where when they click on it,it shouodl log out*/}
+        <img src={logo} alt="Logo" className="header-logo" />
       </header>
     );  
   }
- 
 };
 
 export default Header;

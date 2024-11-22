@@ -9,12 +9,14 @@ import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
 import { Link } from 'react-router-dom';
 
-const Login = ({ login, loggedIn }) => {
+const Login = ({ login, loggedIn,logout }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
+  console.log("loggedin:",loggedIn)
+  console.log("logout:",logout)
 
   const navigate = useNavigate();
 
@@ -107,9 +109,8 @@ const Login = ({ login, loggedIn }) => {
         alert('Signed In With Google Clicked');
         setEmail('');
         setPassword('');
-        login(); // Call the login function passed as a prop to set loggedIn to true      
         navigate('/home');
-  
+        login(); // Call the login function passed as a prop to set loggedIn to true      
       }
       else{
         //if user does not have an account, I want them to be redirected to the registration page
@@ -135,7 +136,7 @@ const Login = ({ login, loggedIn }) => {
 
   return (
     <div className="mainContainer">
-      <Header />
+    <Header loggedIn={loggedIn} logout={logout}/>
       <div className="loginForm">
         <h1 className="loginFormHeading">Welcome Back</h1>
         <form onSubmit={(ev) => { ev.preventDefault(); onButtonClick(); }}>
