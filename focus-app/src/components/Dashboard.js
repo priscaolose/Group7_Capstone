@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -15,10 +15,28 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import logo from './logo.png';
 
 function Dashboard() {
-  const UserName = 'User';
+  const [UserName, setUserName] = useState('User');
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [notes, setNotes] = useState('');
   //const navigate = useNavigate(); // Hook for navigation
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const userID = 'RW5fePHZRRICIRju5tVp';
+        const response = await fetch(`/api/getUser?userID=${userID}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        setUserName(data.name || 'User'); // Set default if name is missing
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserName();
+  }, []);
 
   return (
     <Box
