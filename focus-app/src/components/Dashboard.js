@@ -12,7 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 //import { useNavigate } from 'react-router-dom'; // For navigation
-import logo from './logo.png';
+
 
 function Dashboard() {
   const [UserName, setUserName] = useState('User');
@@ -39,6 +39,7 @@ function Dashboard() {
   }, []);
 
   return (
+    
     <Box
       sx={{
         display: 'grid',
@@ -46,32 +47,10 @@ function Dashboard() {
         gap: 2,
         backgroundColor: '#fffff',
         minHeight: '100vh',
+        fontFamily: '"Poppins", sans-serif',
       }}
     >
-      {/* Header */}
-      <AppBar
-        position="static"
-        sx={{
-          backgroundColor: '#e2e9f1',
-          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-          marginBottom: '5px',
-        }}
-      >
-        <Toolbar sx={{ justifyContent: 'left' }}>
-          <Box>
-            <img
-              src={logo}
-              alt="Logo"
-              style={{
-                height: '60px',
-                maxHeight: '100%',
-                objectFit: 'contain',
-              }}
-            />
-          </Box>
-        </Toolbar>
-      </AppBar>
-
+     
       {/* Main Content */}
       <Box
         sx={{
@@ -92,7 +71,7 @@ function Dashboard() {
                 fontWeight: 'bold',
                 lineHeight: '1.2',
                 textAlign: 'left',
-                paddingTop: '70px',
+                
                 color: '#093966'
               }}
             >
@@ -221,7 +200,7 @@ function Dashboard() {
         </Box>
       </Box>
 
-      {/* Footer */}
+      {/* Footer
       <Box
         sx={{
           textAlign: 'center',
@@ -239,7 +218,7 @@ function Dashboard() {
         <Button href="/privacy" sx={{ color: '#000' }}>
           Privacy Policy
         </Button>
-      </Box>
+      </Box> */}
     </Box>
   );
 }
