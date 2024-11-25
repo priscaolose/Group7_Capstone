@@ -1,0 +1,203 @@
+/* src/components/Header.css or your specific CSS file */
+
+.body,html {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;   
+}
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.loginForm {
+    flex: 1;
+    background: #ffffff;
+    padding: 100px 20px; 
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    box-sizing: border-box;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.titleContainer div {
+    padding-top: 100px;         /* Apply 60px padding to the top */
+    font-weight: bold;          /* Make the text bold */
+    font-size: 24px;            /* Adjust font size as needed */
+    color: #2c3e50;             /* Optional: text color */
+}
+
+
+.loginFormHeading{
+    font-size: 32px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #101418;
+}
+
+.inputBox {
+    flex: 1;
+    padding: 8px; /* Adjust as needed */
+    font-size: 16px; /* Adjust as needed */
+}
+.inputWrapper {
+    position: relative; /* Needed for absolute positioning of icons */
+    display: flex; /* Aligns input and icon in a row */
+    align-items: center; /* Vertically centers them */
+}
+
+.icon {
+    position: absolute;
+    right: 10px; /* Adjust this value as needed */
+    font-size: 20px; /* Adjust the size as needed */
+    color: #101418; /* Match the color */
+    cursor: pointer; /* Change cursor to pointer for better UX */
+}
+
+
+
+.loginForm input {
+    width: 100%; /* Full width */
+    padding: 10px;/* Space inside the input/button */
+    margin: 18px 0; /* Space between elements */
+    border: none;
+    border-bottom: 2px solid #8aadd2;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-weight: 200;
+    color: #101418; 
+}
+.errorMessage {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .loginError {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+
+.inputButton {
+    padding: 8px 1px;
+    border-radius: 20px;
+    background-color: #8AAEC6;
+    cursor: pointer;
+    width: 200px;
+    font-size: 16px;
+    margin: 10px auto;
+}
+
+.forgotPasswordText {
+    text-decoration: underline;
+    color: #2c3e50;
+    font-size: 20px;
+    margin-top: 0px;         /* Adjust to reduce space */
+    margin-bottom: 0px;        /* Remove extra space below */
+    text-align: right;            /* Align text to the left */
+}
+
+.inputButtonContainer {
+    margin-top: 0px;         /* Adjust to reduce space */
+    display: flex;
+    justify-content: center; /* Center-align the button */
+}
+
+.clickableRegister {
+    text-decoration: underline;  /* Adds the underline */
+}
+
+.googleSignInContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%; /* Control the width of the container */
+    margin: 15px auto; /* Center the container and add some vertical spacing */
+}
+
+.googleSignInText {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Make sure the text container takes full width */
+    color: #8AAEC6;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.googleSignInText::before,
+.googleSignInText::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #8AAEC6;
+}
+.registerText {
+    color: #2c3e50;
+    font-size: 18px;
+    margin-top: 5px;         /* Adjust to reduce space */
+    margin-bottom: 5px;        /* Remove extra space below */
+    text-align: center;            /* Align text to the center */
+}
+
+.googleSignInText::before {
+    margin-right: 15px;
+}
+
+.googleSignInText::after {
+    margin-left: 15px;
+}
+
+.google-logo {
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.google-logo:hover {
+    transform: scale(1.05);
+}
+
+
+/* Responsive styles */
+@media (max-height: 600px) {
+    .loginform {
+        margin: 5px auto;
+        padding: 10px;
+    }
+    
+    .loginform.heading {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+    
+   
+    .input-label {
+        font-size: 16px;
+        margin-bottom: 2px;
+    }
+    
+    .loginform input {
+        padding: 6px;
+        margin: 4px 0;
+    }
+}
