@@ -1,0 +1,28 @@
+/* CSS file */
+.task-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1059a2;
+    text-align: left;
+    margin-bottom: 40px;
+  }
+  
+  .inputButton {
+    padding: 8px 1px;
+    border-radius: 20px;
+    background-color: #8AAEC6;
+    cursor: pointer;
+    width: 200px;
+    font-size: 16px;
+    margin: 10px auto;
+}
+
+.inputButtonContainer {
+    margin-top: 0px;         /* Adjust to reduce space */
+    display: flex;
+    justify-content: center; /* Center-align the button */
+}
+.errorLabel{
+    color: red;
+    font-size: 12px;
+}

@@ -96,7 +96,7 @@ const Register = (login) => {
             }
             if (result.user) {
                 alert('Signed Up With Google Clicked');
-                navigate('/home'); // Navigate to home or desired route after successful sign-in
+                navigate('/addTask'); // Navigate to addTask or desired route after successful sign-in
             }
             login();
         } catch (error) {
@@ -128,7 +128,7 @@ const handleRegister = async (e) => {
         });
 
         // First check if response is ok
-        if (!response.ok) {
+        if(!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error || 'Registration failed');
         }
