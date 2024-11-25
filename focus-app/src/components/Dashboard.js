@@ -120,7 +120,7 @@ function Dashboard() {
                 borderRadius: '16px',
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: isSmallScreen ? 'auto' : '300px', // Adjust height for larger screens
+                height: isSmallScreen ? 'auto' : 'auto', // Adjust height for larger screens
                 padding: '30px', // Padding for a comfortable layout
               }}
             >
@@ -145,7 +145,7 @@ function Dashboard() {
               sx={{
                 p: 3,
                 borderRadius: '16px',
-                background: 'linear-gradient(#FFFF, #E2EAF1)',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 height: 'auto',
               }}
@@ -161,7 +161,7 @@ function Dashboard() {
             <Paper
               sx={{
                 p: 3,
-                background: 'linear-gradient(#FFFF, #E2EAF1)',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               }}
@@ -176,7 +176,7 @@ function Dashboard() {
             <Paper
               sx={{
                 p: 3,
-                background: 'linear-gradient(#FFFF, #E2EAF1)',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               }}
