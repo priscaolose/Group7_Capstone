@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './img/logo.png';
 import focusImage from './img/FOCUS.png'; 
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const [buttonText, setButtonText] = useState("Let's Get Started");
@@ -9,6 +10,8 @@ const HomePage = () => {
     const [headerVisible, setHeaderVisible] = useState(false);
     const [textVisible, setTextVisible] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -31,7 +34,7 @@ const HomePage = () => {
     }, []);
 
     const handleClick = () => {
-        setButtonText('Getting Started...');
+        navigate("/login");
         setShowMessage(true);
     };
 
