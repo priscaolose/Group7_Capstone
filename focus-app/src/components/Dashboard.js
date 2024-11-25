@@ -120,7 +120,7 @@ function Dashboard() {
                 justifyContent: 'center', // Center items vertically
                 alignItems: 'center', // Center items horizontally
                 borderRadius: '16px',
-                background: 'linear-gradient(#FFFF, #E2EAF1)',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 //height: '300px', // Adjust height to fit the desired design
               }}
