@@ -28,11 +28,10 @@ function Dashboard() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '100vh',
-          fontFamily: 'Poppins, sans-serif',
           backgroundColor: '#f9f9f9',
           px: isSmallScreen ? 2 : 4,
           pt: 3,
+          minHeight: '100vh', // Ensure full-height
         }}
       >
         {/* Main Content */}
@@ -65,7 +64,6 @@ function Dashboard() {
                   fontWeight: '500',
                   fontSize: isSmallScreen ? '2.5em' : '3em',
                   padding: '10px'
-                  
                 }}
               >
                 Welcome <br /> Back
@@ -89,7 +87,7 @@ function Dashboard() {
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: '70vh'
+                height: '70vh',
               }}
             >
               <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
@@ -102,7 +100,7 @@ function Dashboard() {
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: '15vh'
+                height: '15vh',
               }}
             >
               <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
@@ -115,14 +113,15 @@ function Dashboard() {
           <Box sx={{ display: 'grid', gap: 3 }}>
             <Paper
               sx={{
-                display: 'flex', 
+                display: 'flex',
                 flexDirection: 'column', // Stack items vertically
                 justifyContent: 'center', // Center items vertically
                 alignItems: 'center', // Center items horizontally
                 borderRadius: '16px',
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                //height: '300px', // Adjust height to fit the desired design
+                height: isSmallScreen ? 'auto' : '300px', // Adjust height for larger screens
+                padding: '30px', // Padding for a comfortable layout
               }}
             >
               <Typography
@@ -148,6 +147,7 @@ function Dashboard() {
                 borderRadius: '16px',
                 background: 'linear-gradient(#FFFF, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                height: 'auto',
               }}
             >
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -187,7 +187,7 @@ function Dashboard() {
                   color: '#1a4e8a',
                   fontSize: '2.5em',
                   mb: 2,
-                  height: '60vh'
+                  height: '60vh', // Adjust height for better spacing
                 }}
               >
                 Notes
@@ -197,7 +197,6 @@ function Dashboard() {
                 onChange={(e) => setNotes(e.target.value)}
                 style={{
                   width: '100%',
-                  //height: '150px',
                   border: '1px solid #ccc',
                   borderRadius: '8px',
                   fontSize: '1rem',
