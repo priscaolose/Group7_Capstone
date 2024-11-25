@@ -13,15 +13,10 @@ app.get("/api/getTask", async (req, res) =>{
         return res.status(400).json({ error: "Missing userID" });
     }
     try{
-        console.log("Testing");
         const tasksRef = collection(db, "Tasks");
-        console.log("Got collection, userID: " + userID);
         const q = query(tasksRef, where('userID', '==', String(userID)), orderBy('dueDate'));
-        console.log("Made query");
         const taskSnapshot = await getDocs(q);
         taskSnapshot.forEach(doc => console.log(doc.data().userID));
-        console.log("got taskSnapshot");
-        console.log("Documents found:", taskSnapshot.size);
         taskSnapshot.docs.forEach(doc => console.log(doc.data()));
 
         if(taskSnapshot.empty){
