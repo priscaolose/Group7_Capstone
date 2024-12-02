@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -9,6 +9,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { auth } from '../firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 // Create a theme with custom typography
 const theme = createTheme({
@@ -18,9 +20,22 @@ const theme = createTheme({
 });
 
 function Dashboard() {
-  const UserName = 'Antonette';
+  //const UserName = 'Antonette';
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [notes, setNotes] = useState('');
+  const [user, setUser] = useState(null); //to store logged in user
+
+  useEffect(() => { 
+    const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
+      if (loggedInUser) {
+        setUser(loggedInUser);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe(); //cleanup the listener when the component is unmounted
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -28,7 +43,7 @@ function Dashboard() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#f9f9f9',
+          backgroundColor: '#ffff',
           px: isSmallScreen ? 2 : 4,
           pt: 3,
           minHeight: '100vh', // Ensure full-height
@@ -63,6 +78,7 @@ function Dashboard() {
                   color: '#1a4e8a',
                   fontWeight: '500',
                   fontSize: isSmallScreen ? '2.5em' : '3em',
+                  fontFamily: '"Poppins", sans-serif',
                   padding: '10px'
                 }}
               >
@@ -77,7 +93,7 @@ function Dashboard() {
                   fontWeight: 'bold'
                 }}
               >
-                {UserName}
+                {user ? user.displayName : ''}
               </Typography>
             </Paper>
             {/* Tasks Section */}
@@ -136,9 +152,9 @@ function Dashboard() {
               </Typography>
               <Typography
                 variant="subtitle1"
-                sx={{ color: '#1a4e8a', fontSize: isSmallScreen ? '3em' : '3.5em' }}
+                sx={{ color: '#1a4e8a', fontFamily: '"Poppins", sans-serif', fontSize: isSmallScreen ? '3em' : '3.5em' }}
               >
-                task Name
+                task name
               </Typography>
             </Paper>
             <Paper
