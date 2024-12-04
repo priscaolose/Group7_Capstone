@@ -8,7 +8,7 @@ import { signInWithGoogle } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
 import { Link } from 'react-router-dom';
-
+//i could have the userID as the email that was login in with
 const Login = ({ login, loggedIn,logout }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

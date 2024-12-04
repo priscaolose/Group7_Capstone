@@ -5,6 +5,7 @@ import './CSSFolders/AddTask.css';
 import { useNavigate } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
+import { addTask} from './Api/createTask';
 
 const AddTask = ({ email }) => {
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
@@ -76,6 +77,13 @@ const AddTask = ({ email }) => {
       description: '',
       dueDate: '',
     });
+
+    alert(email)
+    // Add task to Firestore
+    addTask("bernicechiaha@gmail.com", task.title,task.description, task.dueDate, new Date());
+
+    // Navigate back to dashboard
+    navigate('/dashboard');
 
     // Add your task submission logic here
     console.log('Task to be added:', task);

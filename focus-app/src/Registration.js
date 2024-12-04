@@ -9,7 +9,7 @@ import { signUpWithGoogle } from './firebase/firebaseAuth';
 import { useNavigate } from 'react-router-dom';
 
 
-const Register = (login) => {
+const Register = ({login}) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -72,7 +72,7 @@ const Register = (login) => {
             return; // Exit the function if there are errors
         }
         handleRegister(e);
-        login(); // Call the login function passed as a prop to set loggedIn to true      
+        login(); // Call the login function passed as a prop to set loggedIn to true  
     };
 
     // Separate function to check email
@@ -95,8 +95,9 @@ const Register = (login) => {
                 navigate('/login'); // Navigate to login or desired route after successful sign-in
             }
             if (result.user) {
-                alert('Signed Up With Google Clicked');
-                navigate('/addTask'); // Navigate to addTask or desired route after successful sign-in
+                alert('Signed Up With Google Clicked-');
+                navigate('/addTask', { state: { email: result.user.email } });
+               // navigate('/addTask'); // Navigate to addTask or desired route after successful sign-in
             }
             login();
         } catch (error) {
@@ -135,6 +136,7 @@ const handleRegister = async (e) => {
 
         const result = await response.json();
         setSuccessMessage(result.message);
+        navigate('/addTask', { state: { email: user.email } });
 
     } catch (error) {
         console.error("Error registering user:", error);
