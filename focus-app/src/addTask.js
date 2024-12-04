@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 import { addTask} from './Api/createTask';
 
-const AddTask = ({ email }) => {
+const AddTask = () => {
+  const location = useLocation();
+  const email = location.state?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
@@ -78,9 +80,8 @@ const AddTask = ({ email }) => {
       dueDate: '',
     });
 
-    alert(email)
     // Add task to Firestore
-    addTask("bernicechiaha@gmail.com", task.title,task.description, task.dueDate, new Date());
+    addTask(email, task.title,task.description, task.dueDate, new Date());
 
     // Navigate back to dashboard
     navigate('/dashboard');

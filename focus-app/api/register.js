@@ -20,7 +20,6 @@ app.post("/api/register", async (req, res) => {
   // Store data
   try {
     // Hash password
-
     await addDoc(userRef, {
       firstName,
       lastName,

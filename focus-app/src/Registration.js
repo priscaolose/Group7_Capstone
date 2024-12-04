@@ -9,7 +9,7 @@ import { signUpWithGoogle } from './firebase/firebaseAuth';
 import { useNavigate } from 'react-router-dom';
 
 
-const Register = ({login}) => {
+const Register = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -72,7 +72,6 @@ const Register = ({login}) => {
             return; // Exit the function if there are errors
         }
         handleRegister(e);
-        login(); // Call the login function passed as a prop to set loggedIn to true  
     };
 
     // Separate function to check email
@@ -90,21 +89,24 @@ const Register = ({login}) => {
         try {
             const result = await signUpWithGoogle();
             const emailExists = await checkIfEmailExists(result.user.email);
+            //const email = result.user.email;  // Capture the email first
             if (emailExists) {
                 alert('Email already exists. Please sign in instead.');
                 navigate('/login'); // Navigate to login or desired route after successful sign-in
             }
             if (result.user) {
-                alert('Signed Up With Google Clicked-');
+                alert('Signed Up With Google Clicked',result.user.email);
+                console.log('Signed Up With Google Clicked',result.user.email);
+                //navigate('/login'); // Navigate to login
                 navigate('/addTask', { state: { email: result.user.email } });
-               // navigate('/addTask'); // Navigate to addTask or desired route after successful sign-in
+               // navigate('/addTask'); // Navigate to home or desired route after successful sign-in
             }
-            login();
         } catch (error) {
-          console.error("Error during Google Sign-Up:", error);
+            console.error("Error during Google Sign-Up:", error);
         }
     };
    
+
 // Update your client-side handler to match
 const handleRegister = async (e) => {
     e.preventDefault();
@@ -129,14 +131,14 @@ const handleRegister = async (e) => {
         });
 
         // First check if response is ok
-        if(!response.ok) {
+        if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error || 'Registration failed');
         }
 
         const result = await response.json();
         setSuccessMessage(result.message);
-        navigate('/addTask', { state: { email: user.email } });
+        // ... clear forms ...
 
     } catch (error) {
         console.error("Error registering user:", error);
