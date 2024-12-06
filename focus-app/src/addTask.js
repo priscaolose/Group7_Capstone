@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from './Components/Header';
+import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
 import { useNavigate,useLocation } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography }
 import { Clear } from '@mui/icons-material';
 import { addTask} from './Api/createTask';
 
-const AddTask = () => {
+const AddTask = ({ loggedIn, logout }) => {
   const location = useLocation();
   const email = location.state?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
@@ -95,7 +95,7 @@ const AddTask = () => {
     <Box sx={{ flexGrow: 1 }}>
       {/* Header */}
       <Grid2 xs={12}>
-        <Header />
+      <Header2 />
       </Grid2>
 
       <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh">

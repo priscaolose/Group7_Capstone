@@ -29,7 +29,7 @@ function App() {
           />
           <Route path="/login" element={<Login login={login} loggedIn={loggedIn} logout={logout}/>} />
           <Route path="/registration" element={<Registration login={login} />} />
-          <Route path="/addtask" element={<AddTask />} />
+          <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout}/>} />
         </Routes>
       </BrowserRouter>
     </div>
