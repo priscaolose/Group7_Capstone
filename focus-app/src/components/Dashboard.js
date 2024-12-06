@@ -28,6 +28,7 @@ function Dashboard() {
   useEffect(() => { 
     const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
       if (loggedInUser) {
+        console.log(loggedInUser);
         setUser(loggedInUser);
       } else {
         setUser(null);
@@ -93,7 +94,10 @@ function Dashboard() {
                   fontWeight: 'bold'
                 }}
               >
-                {user ? user.displayName : ''}
+                {
+                  user ? user.email : "Guest"
+                }
+                {/*user ? user.displayName || "User" : "Guest"}*/}
               </Typography>
             </Paper>
             {/* Tasks Section */}
