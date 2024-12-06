@@ -89,13 +89,17 @@ const Register = () => {
         try {
             const result = await signUpWithGoogle();
             const emailExists = await checkIfEmailExists(result.user.email);
+            //const email = result.user.email;  // Capture the email first
             if (emailExists) {
                 alert('Email already exists. Please sign in instead.');
                 navigate('/login'); // Navigate to login or desired route after successful sign-in
             }
             if (result.user) {
-                alert('Signed Up With Google Clicked');
-                navigate('/home'); // Navigate to home or desired route after successful sign-in
+                alert('Signed Up With Google Clicked',result.user.email);
+                console.log('Signed Up With Google Clicked',result.user.email);
+                //navigate('/login'); // Navigate to login
+                navigate('/addTask', { state: { email: result.user.email } });
+               // navigate('/addTask'); // Navigate to home or desired route after successful sign-in
             }
         } catch (error) {
             console.error("Error during Google Sign-Up:", error);
@@ -133,6 +137,7 @@ const handleRegister = async (e) => {
         }
 
         const result = await response.json();
+        navigate('/addTask', { state: { email:user.email } });
         setSuccessMessage(result.message);
         // ... clear forms ...
 

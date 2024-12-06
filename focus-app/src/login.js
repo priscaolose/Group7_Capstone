@@ -7,13 +7,16 @@ import Googlelogo from './Images/googleLogo.png';
 import { signInWithGoogle } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
-
-const Login = (props) => {
+import { Link } from 'react-router-dom';
+//i could have the userID as the email that was login in with
+const Login = ({ login, loggedIn,logout }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
+  console.log("loggedin:",loggedIn)
+  console.log("logout:",logout)
 
   const navigate = useNavigate();
 
@@ -67,10 +70,11 @@ const Login = (props) => {
         navigate('/home');
       } else {
         // New user - create account first
-        alert("No account found with these details. Sign up here to create an account and get started!");
-        // Optionally pass user data to registration
-        navigate('/registration')
+        if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
+          window.location.href = "/registration"; // Redirects to the registration page
+        }        
       }
+      login(); // Call the login function passed as a prop to set loggedIn to true      
     } catch (error) {
       alert("Sign in failed. Please try again.");
     }
@@ -106,6 +110,10 @@ const Login = (props) => {
         setEmail('');
         setPassword('');
         navigate('/home');
+        login(); // Call the login function passed as a prop to set loggedIn to true      
+      }
+      else{
+        //if user does not have an account, I want them to be redirected to the registration page
       }
     } catch (error) {
       if (error.code === 'auth/user-not-found') {
@@ -114,7 +122,13 @@ const Login = (props) => {
         alert("Incorrect password. Please try again.");
       } else if (error.code === 'auth/too-many-requests') {
         alert("Too many unsuccessful attempts. Please wait and try again later.");
-      } else {
+        //This is just a temporal holder for what i am testing
+      } else if(error.code === 'auth/invalid-credential') {
+        if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
+          window.location.href = "/registration"; // Redirects to the registration page
+        }  
+      }
+      else {
         alert("Error logging in:" + error.code);
       }
     }
@@ -122,7 +136,7 @@ const Login = (props) => {
 
   return (
     <div className="mainContainer">
-      <Header />
+    <Header loggedIn={loggedIn} logout={logout}/>
       <div className="loginForm">
         <h1 className="loginFormHeading">Welcome Back</h1>
         <form onSubmit={(ev) => { ev.preventDefault(); onButtonClick(); }}>
