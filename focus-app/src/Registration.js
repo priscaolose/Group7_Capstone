@@ -96,7 +96,6 @@ const Register = () => {
                 navigate('/login'); // Navigate to login or desired route after successful sign-in
             }
             if (result.user) {
-                alert('Signed Up With Google Clicked',result.user.email);
                 console.log('Signed Up With Google Clicked',result.user.email);
                 await storeUserInDatabase(result.user);
                 navigate('/addTask', { state: { email: result.user.email } });
