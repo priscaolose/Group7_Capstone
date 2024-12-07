@@ -1,7 +1,7 @@
 import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
-const StoreUserInDatabase = async (user, navigate) => {
+const StoreUserInDatabase = async (user) => {
   const usersRef = collection(db, "Users");
   const q = query(usersRef, where("displayName", "==", user.displayName));
 
@@ -10,7 +10,6 @@ const StoreUserInDatabase = async (user, navigate) => {
     if (!querySnapshot.empty) {
       // If there is a user with the same name, throw an error
       alert(`A user with the name ${user.email} already exists.`);
-      navigate('/login');  // Navigate to login or desired route
       throw new Error(`A user with the name "${user.displayName}" already exists.`);
     }
 
