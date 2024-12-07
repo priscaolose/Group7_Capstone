@@ -5,8 +5,7 @@ import './CSSFolders/Registration.css';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Googlelogo from './Images/googleLogo.png';
-import { signUpWithGoogle  } from './firebase/firebaseAuth'; 
-import  storeUserInDatabase from './firebase/storeGoogleSignup'; 
+import {  handleGoogleSignUp  } from './firebase/firebaseAuth'; 
 import { useNavigate } from 'react-router-dom';
 
 
@@ -85,12 +84,11 @@ const Register = () => {
         throw error;
         }
     };
-    
+    /*
     const handleGoogleSignUp = async () => {
         try {
             const result = await signUpWithGoogle();
             const emailExists = await checkIfEmailExists(result.user.email);
-            //const email = result.user.email;  // Capture the email first
             if (emailExists) {
                 alert('Email already exists. Please sign in instead.');
                 navigate('/login'); // Navigate to login or desired route after successful sign-in
@@ -104,7 +102,7 @@ const Register = () => {
             console.error("Error during Google Sign-Up:", error);
         }
     };
-   
+   */
 
 // Update your client-side handler to match
 const handleRegister = async (e) => {
