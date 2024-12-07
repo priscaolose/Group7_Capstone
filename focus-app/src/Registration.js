@@ -5,8 +5,8 @@ import './CSSFolders/Registration.css';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Googlelogo from './Images/googleLogo.png';
-import { signUpWithGoogle,storeUserInDatabase  } from './firebase/firebaseAuth'; 
-
+import { signUpWithGoogle  } from './firebase/firebaseAuth'; 
+import  storeUserInDatabase from './firebase/storeGoogleSignup'; 
 import { useNavigate } from 'react-router-dom';
 
 
