@@ -5,7 +5,8 @@ import './CSSFolders/Registration.css';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Googlelogo from './Images/googleLogo.png';
-import { signUpWithGoogle } from './firebase/firebaseAuth'; 
+import { signUpWithGoogle,storeUserInDatabase  } from './firebase/firebaseAuth'; 
+
 import { useNavigate } from 'react-router-dom';
 
 
@@ -97,9 +98,8 @@ const Register = () => {
             if (result.user) {
                 alert('Signed Up With Google Clicked',result.user.email);
                 console.log('Signed Up With Google Clicked',result.user.email);
-                //navigate('/login'); // Navigate to login
+                await storeUserInDatabase(result.user);
                 navigate('/addTask', { state: { email: result.user.email } });
-               // navigate('/addTask'); // Navigate to home or desired route after successful sign-in
             }
         } catch (error) {
             console.error("Error during Google Sign-Up:", error);
@@ -139,7 +139,6 @@ const handleRegister = async (e) => {
         const result = await response.json();
         navigate('/addTask', { state: { email:user.email } });
         setSuccessMessage(result.message);
-        // ... clear forms ...
 
     } catch (error) {
         console.error("Error registering user:", error);
