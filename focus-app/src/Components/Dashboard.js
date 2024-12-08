@@ -13,6 +13,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { auth } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useLocation } from 'react-router-dom'; // Import useLocation for accessing state
 
 // Custom Theme
 const theme = createTheme({
@@ -39,6 +40,7 @@ const theme = createTheme({
 });
 
 function Dashboard() {
+  const location = useLocation(); // Access location state
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [user, setUser] = useState(null);
 
@@ -103,7 +105,7 @@ function Dashboard() {
                   textAlign: 'left',
                 }}
               >
-                {user ? user.email : 'Guest'}
+                {user ? userFirstName : 'Guest'}
               </Typography>
             </Paper>
 

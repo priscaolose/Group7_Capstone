@@ -137,7 +137,7 @@ const handleRegister = async (e) => {
         }
 
         const result = await response.json();
-        navigate('/addTask', { state: { email:user.email } });
+        navigate('/addTask', { state: { email:user.email, firstName: firstName } });
         setSuccessMessage(result.message);
         // ... clear forms ...
 
