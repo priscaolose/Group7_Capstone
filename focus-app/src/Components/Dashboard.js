@@ -14,16 +14,33 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { auth } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 
-// Create a theme with custom typography
+// Custom Theme
 const theme = createTheme({
   typography: {
-    fontFamily: '"Poppins", sans-serif',
+    fontFamily: '"Roboto", sans-serif',
+    h5: {
+      fontWeight: 600,
+    },
+    h6: {
+      fontWeight: 500,
+    },
+    body1: {
+      fontWeight: 400,
+    },
+  },
+  palette: {
+    primary: {
+      main: '#1a73e8',
+    },
+    background: {
+      default: '#f4f6f8',
+    },
   },
 });
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
-  const [user, setUser] = useState(null); // To store logged-in user
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
@@ -34,7 +51,7 @@ function Dashboard() {
       }
     });
 
-    return () => unsubscribe(); // Cleanup the listener when the component is unmounted
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -44,55 +61,43 @@ function Dashboard() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#ffff',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
           px: isSmallScreen ? 2 : 4,
-          pt: 3,
-          minHeight: '100vh', // Ensure full-height
-          maxWidth: '1200px', // Limit width for better readability
-          margin: '0 auto', // Center content
+          py: 3,
+          backgroundColor: theme.palette.background.default,
         }}
       >
         {/* Main Content */}
         <Box
           sx={{
-            flex: 1,
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, // Balance columns
-            gap: 3,
-            py: 3,
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gap: 4,
+            maxWidth: '1200px',
+            width: '100%',
           }}
         >
           {/* Left Column */}
-          <Box sx={{ display: 'grid', gap: 3 }}>
+          <Box sx={{ display: 'grid', gap: 4 }}>
             {/* Welcome Section */}
             <Paper
               sx={{
-                height: '20vh',
                 p: 3,
-                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                textAlign: 'left',
               }}
             >
+              <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
+                Welcome Back
+              </Typography>
               <Typography
                 variant="h5"
                 sx={{
-                  color: '#1a4e8a',
-                  fontWeight: '500',
-                  fontSize: isSmallScreen ? '1.5em' : '2em',
-                  fontFamily: '"Poppins", sans-serif',
-                  padding: '10px',
-                }}
-              >
-                Welcome <br /> Back
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
                   mt: 1,
-                  color: '#1a4e8a',
-                  fontSize: isSmallScreen ? '3em' : '4.5em',
+                  color: '#333',
                   fontWeight: 'bold',
                 }}
               >
@@ -104,50 +109,47 @@ function Dashboard() {
             <Paper
               sx={{
                 p: 3,
-                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                minHeight: '70vh', // Increased height for content
-                overflow: 'auto', // Enable scrolling
+                minHeight: '50vh',
               }}
             >
-              <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
+              <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
                 Today's Tasks
               </Typography>
             </Paper>
           </Box>
 
           {/* Center Column */}
-          <Box sx={{ display: 'grid', gap: 3 }}>
+          <Box sx={{ display: 'grid', gap: 4 }}>
             <Paper
               sx={{
                 display: 'flex',
-                flexDirection: 'column', // Stack items vertically
-                justifyContent: 'center', // Center items vertically
-                alignItems: 'center', // Center items horizontally
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
                 borderRadius: '16px',
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: isSmallScreen ? 'auto' : 'auto', // Adjust height for larger screens
-                padding: '30px', // Padding for a comfortable layout
+                p: 4,
               }}
             >
               <Typography
-                variant="h2"
+                variant="h3"
                 sx={{
-                  color: '#1a4e8a',
+                  color: '#333',
                   fontWeight: '300',
-                  fontSize: isSmallScreen ? '6em' : '8em',
                 }}
               >
                 00:00
               </Typography>
               <Typography
-                variant="subtitle1"
+                variant="body1"
                 sx={{
-                  color: '#1a4e8a',
-                  fontFamily: '"Poppins", sans-serif',
-                  fontSize: isSmallScreen ? '3em' : '3.5em',
+                  color: theme.palette.primary.main,
+                  fontSize: '1.25rem',
+                  mt: 2,
                 }}
               >
                 Add task here
@@ -159,7 +161,6 @@ function Dashboard() {
                 borderRadius: '16px',
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: 'auto',
               }}
             >
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -169,36 +170,47 @@ function Dashboard() {
           </Box>
 
           {/* Right Column */}
-          <Box sx={{ display: 'grid', gap: 3 }}>
+          <Box sx={{ display: 'grid', gap: 4 }}>
             <Paper
               sx={{
                 p: 3,
-                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               }}
             >
-              <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: theme.palette.primary.main,
+                }}
+              >
                 Reminder:
               </Typography>
-              <Typography variant="body1" sx={{ fontSize: '2rem', color: '#333', paddingTop: '25px' }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: '#333',
+                  mt: 1,
+                  lineHeight: 1.5,
+                }}
+              >
                 It's always a great time to take the first step.
               </Typography>
             </Paper>
             <Paper
               sx={{
                 p: 3,
-                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
+                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: '60vh', // Adjust height for better spacing
+                minHeight: '50vh',
               }}
             >
               <Typography
                 variant="h6"
                 sx={{
-                  color: '#1a4e8a',
-                  fontSize: '2.5em',
+                  color: theme.palette.primary.main,
                   mb: 2,
                 }}
               >
