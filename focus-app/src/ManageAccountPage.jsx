@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import logo from './img/logo.png';
-import focusImage from './img/FOCUS.png'; 
-
 
 const ManageAccountPage = () => {
     const [formVisible, setFormVisible] = useState(false);
+    const [selectedField, setSelectedField] = useState('');
+    const [newValue, setNewValue] = useState('');
+    const [confirmValue, setConfirmValue] = useState('');
     const [message, setMessage] = useState('');
     const [formData, setFormData] = useState({
         username: '',
@@ -20,14 +21,46 @@ const ManageAccountPage = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    const handleFieldSelection = (field) => {
+        setSelectedField(field);
+        setNewValue('');
+        setConfirmValue('');
+        setMessage('');
+    };
+
+    const handleInputChange = (e, type) => {
+        const value = e.target.value;
+        if (type === 'new') {
+            setNewValue(value);
+        } else {
+            setConfirmValue(value);
+        }
     };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        setMessage('Your account details have been updated!');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (newValue === '' || confirmValue === '') {
+            setMessage('Please fill out both fields.');
+            return;
+        }
+
+        if (selectedField === 'email' && !emailRegex.test(newValue)) {
+            setMessage('Please enter a valid email address.');
+            return;
+        }
+
+        if (newValue !== confirmValue) {
+            setMessage('The information provided does not match. Please try again.');
+            return;
+        }
+
+        setFormData((prevData) => ({ ...prevData, [selectedField]: newValue }));
+        setMessage(`Your ${selectedField} has been successfully updated!`);
+        setNewValue('');
+        setConfirmValue('');
     };
 
     return (
@@ -38,42 +71,41 @@ const ManageAccountPage = () => {
                 </div>
             </header>
             <main style={styles.content}>
+                <h1 style={styles.heading}>Manage Account Details</h1>
+                <p style={styles.description}>
+                    Select the detail you want to update and provide the new account details. Confirm the new account details to save changes.
+                </p>
                 {formVisible ? (
-                    <form style={styles.form} onSubmit={handleFormSubmit}>
-                        <label style={styles.label}>
-                            Username:
-                            <input
-                                type="text"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleInputChange}
-                                style={styles.input}
-                            />
-                        </label>
-                        <label style={styles.label}>
-                            Email:
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                style={styles.input}
-                            />
-                        </label>
-                        <label style={styles.label}>
-                            Password:
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                style={styles.input}
-                            />
-                        </label>
-                        <button type="submit" style={styles.button}>
-                            Update Account
-                        </button>
-                    </form>
+                    <div style={styles.box}>
+                        <div style={styles.selectionContainer}>
+                            <button style={styles.button} onClick={() => handleFieldSelection('username')}>Update Username</button>
+                            <button style={styles.button} onClick={() => handleFieldSelection('email')}>Update Email</button>
+                            <button style={styles.button} onClick={() => handleFieldSelection('password')}>Update Password</button>
+                        </div>
+                        {selectedField && (
+                            <form style={styles.form} onSubmit={handleFormSubmit}>
+                                <label style={styles.label}>
+                                    New {selectedField.charAt(0).toUpperCase() + selectedField.slice(1)}:
+                                    <input
+                                        type={selectedField === 'password' ? 'password' : 'text'}
+                                        value={newValue}
+                                        onChange={(e) => handleInputChange(e, 'new')}
+                                        style={styles.input}
+                                    />
+                                </label>
+                                <label style={styles.label}>
+                                    Confirm {selectedField.charAt(0).toUpperCase() + selectedField.slice(1)}:
+                                    <input
+                                        type={selectedField === 'password' ? 'password' : 'text'}
+                                        value={confirmValue}
+                                        onChange={(e) => handleInputChange(e, 'confirm')}
+                                        style={styles.input}
+                                    />
+                                </label>
+                                <button type="submit" style={styles.submitButton}>Save Changes</button>
+                            </form>
+                        )}
+                    </div>
                 ) : (
                     <p style={styles.loadingText}>Loading...</p>
                 )}
@@ -95,40 +127,10 @@ const styles = {
     },
     header: {
         backgroundColor: '#e2e9f1',
-        color: 'white',
         padding: '10px 20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    logoContainer: {
-        display: 'flex',
-        alignItems: 'center'
     },
     logo: {
         height: '40px',
-    },
-    content: {
-        flex: 1,
-        marginTop: '50px',
-        padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center'
-    },
-    headerText: {
-        color: '#093966',
-        textAlign: 'center',
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '50px',
-        fontStyle: 'normal',
-        fontWeight: 400,
-        lineHeight: 'normal',
-        letterSpacing: '12.8px',
-        opacity: 0,
-        transform: 'translateX(-50px)',
-        animation: 'header-fade-in 1s forwards'
     },
     content: {
         flex: 1,
@@ -136,19 +138,45 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    heading: {
+        fontSize: '24px',
+        marginBottom: '10px',
+    },
+    description: {
+        fontSize: '16px',
+        marginBottom: '20px',
+        textAlign: 'center',
+    },
+    box: {
+        width: '100%',
+        maxWidth: '400px',
         padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#f9f9f9',
+    },
+    selectionContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+    },
+    button: {
+        padding: '10px',
+        fontSize: '16px',
+        backgroundColor: '#e2eaf1',
+        borderRadius: '5px',
+        border: 'none',
+        cursor: 'pointer',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px',
-        width: '100%',
-        maxWidth: '400px',
+        gap: '10px',
+        marginTop: '20px',
     },
     label: {
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '16px',
-        fontWeight: 'bold',
+        fontSize: '14px',
     },
     input: {
         width: '100%',
@@ -157,29 +185,19 @@ const styles = {
         borderRadius: '5px',
         border: '1px solid #ccc',
     },
-    button: {
+    submitButton: {
         padding: '10px',
-        fontSize: '18px',
-        backgroundColor: '#e2eaf1',
-        borderRadius: '10px',
+        fontSize: '16px',
+        backgroundColor: '#093966',
+        color: 'white',
+        borderRadius: '5px',
         border: 'none',
         cursor: 'pointer',
-        transition: 'background-color 0.3s',
-        fontFamily: 'Poppins, sans-serif',
-    },
-    buttonHover: {
-        backgroundColor: '#d1dbe1',
-    },
-    loadingText: {
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '20px',
-        color: '#093966',
     },
     messageText: {
         marginTop: '20px',
-        fontSize: '18px',
+        fontSize: '16px',
         color: '#093966',
-        fontFamily: 'Poppins, sans-serif',
     },
     footer: {
         backgroundColor: '#8AAEC6',
