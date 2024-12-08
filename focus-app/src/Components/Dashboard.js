@@ -51,6 +51,8 @@ function Dashboard() {
           px: isSmallScreen ? 2 : 4,
           pt: 3,
           minHeight: '100vh', // Ensure full-height
+          maxWidth: '1200px', // Limit width for better readability
+          margin: '0 auto', // Center content
         }}
       >
         {/* Main Content */}
@@ -58,7 +60,7 @@ function Dashboard() {
           sx={{
             flex: 1,
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 2fr 1fr' },
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, //Balance columns
             gap: 3,
             py: 3,
           }}
@@ -81,7 +83,7 @@ function Dashboard() {
                 sx={{
                   color: '#1a4e8a',
                   fontWeight: '500',
-                  fontSize: isSmallScreen ? '2.5em' : '3em',
+                  fontSize: isSmallScreen ? '1.5em' : '2em',
                   fontFamily: '"Poppins", sans-serif',
                   padding: '10px'
                 }}
@@ -110,7 +112,7 @@ function Dashboard() {
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: '70vh',
+                minHeight : '15vh', //Dynamic height
               }}
             >
               <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
@@ -152,7 +154,7 @@ function Dashboard() {
                 sx={{
                   color: '#1a4e8a',
                   fontWeight: '300',
-                  fontSize: isSmallScreen ? '16em' : '20em',
+                  fontSize: isSmallScreen ? '6em' : '8em',
                 }}
               >
                 00:00
@@ -161,7 +163,7 @@ function Dashboard() {
                 variant="subtitle1"
                 sx={{ color: '#1a4e8a', fontFamily: '"Poppins", sans-serif', fontSize: isSmallScreen ? '3em' : '3.5em' }}
               >
-                task name
+                add task here
               </Typography>
             </Paper>
             <Paper
