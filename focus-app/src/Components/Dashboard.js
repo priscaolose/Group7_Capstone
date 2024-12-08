@@ -22,22 +22,19 @@ const theme = createTheme({
 });
 
 function Dashboard() {
-  //const UserName = 'Antonette';
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
-  const [notes, setNotes] = useState('');
-  const [user, setUser] = useState(null); //to store logged in user
+  const [user, setUser] = useState(null); // To store logged-in user
 
-  useEffect(() => { 
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
       if (loggedInUser) {
-        console.log(loggedInUser);
         setUser(loggedInUser);
       } else {
         setUser(null);
       }
     });
 
-    return () => unsubscribe(); //cleanup the listener when the component is unmounted
+    return () => unsubscribe(); // Cleanup the listener when the component is unmounted
   }, []);
 
   return (
@@ -60,7 +57,7 @@ function Dashboard() {
           sx={{
             flex: 1,
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, //Balance columns
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, // Balance columns
             gap: 3,
             py: 3,
           }}
@@ -85,7 +82,7 @@ function Dashboard() {
                   fontWeight: '500',
                   fontSize: isSmallScreen ? '1.5em' : '2em',
                   fontFamily: '"Poppins", sans-serif',
-                  padding: '10px'
+                  padding: '10px',
                 }}
               >
                 Welcome <br /> Back
@@ -96,40 +93,26 @@ function Dashboard() {
                   mt: 1,
                   color: '#1a4e8a',
                   fontSize: isSmallScreen ? '3em' : '4.5em',
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
                 }}
               >
-                {
-                  user ? user.email : "Guest"
-                }
-                {/*user ? user.displayName || "User" : "Guest"}*/}
+                {user ? user.email : 'Guest'}
               </Typography>
             </Paper>
-            {/* Tasks Section */}
+
+            {/* Today's Tasks Section */}
             <Paper
               sx={{
                 p: 3,
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                minHeight : '15vh', //Dynamic height
+                minHeight: '70vh', // Increased height for content
+                overflow: 'auto', // Enable scrolling
               }}
             >
               <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
                 Today's Tasks
-              </Typography>
-            </Paper>
-            <Paper
-              sx={{
-                p: 3,
-                background: 'linear-gradient(#FFF1F1, #E2EAF1)',
-                borderRadius: '16px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                height: '15vh',
-              }}
-            >
-              <Typography variant="h6" sx={{ color: '#1a4e8a', fontSize: '2.5em' }}>
-                Next Up:
               </Typography>
             </Paper>
           </Box>
@@ -161,9 +144,13 @@ function Dashboard() {
               </Typography>
               <Typography
                 variant="subtitle1"
-                sx={{ color: '#1a4e8a', fontFamily: '"Poppins", sans-serif', fontSize: isSmallScreen ? '3em' : '3.5em' }}
+                sx={{
+                  color: '#1a4e8a',
+                  fontFamily: '"Poppins", sans-serif',
+                  fontSize: isSmallScreen ? '3em' : '3.5em',
+                }}
               >
-                add task here
+                Add task here
               </Typography>
             </Paper>
             <Paper
@@ -204,6 +191,7 @@ function Dashboard() {
                 background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                height: '60vh', // Adjust height for better spacing
               }}
             >
               <Typography
@@ -212,24 +200,10 @@ function Dashboard() {
                   color: '#1a4e8a',
                   fontSize: '2.5em',
                   mb: 2,
-                  height: '60vh', // Adjust height for better spacing
                 }}
               >
                 Notes
               </Typography>
-              {/* <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                style={{
-                  width: '100%',
-                  border: '1px solid #ccc',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  fontFamily: '"Poppins", sans-serif',
-                  padding: '8px',
-                }}
-                placeholder="Write your notes here..."
-              /> */}
             </Paper>
           </Box>
         </Box>
