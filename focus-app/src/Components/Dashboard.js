@@ -30,7 +30,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#1a73e8',
+      main: '#1a73e8', // the blue you had before
     },
     background: {
       default: '#f4f6f8',
@@ -62,11 +62,12 @@ function Dashboard() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-start', // Adjust to start from the top
           minHeight: '100vh',
           px: isSmallScreen ? 2 : 4,
-          py: 3,
-          backgroundColor: theme.palette.background.default,
+          py: 1,
+          backgroundColor: 'white',
+          overflowY: 'auto', // Enables scrolling when content exceeds viewport
         }}
       >
         {/* Main Content */}
@@ -90,7 +91,7 @@ function Dashboard() {
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               }}
             >
-              <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
+              <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 'bold', textAlign: 'left' }}>
                 Welcome Back
               </Typography>
               <Typography
@@ -99,6 +100,7 @@ function Dashboard() {
                   mt: 1,
                   color: '#333',
                   fontWeight: 'bold',
+                  textAlign: 'left',
                 }}
               >
                 {user ? user.email : 'Guest'}
