@@ -3,6 +3,7 @@ import Homepage from './Homepage';
 import Login from './login';
 import Registration from './Registration';
 import AddTask from './addTask';
+import ManageAccount from './ManageAccount'; // Import ManageAccount component
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
@@ -16,7 +17,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<Homepage />} />
           <Route
             path="/"
             element={
@@ -29,9 +30,12 @@ function App() {
               </header>
             }
           />
-          <Route path="/login" element={<Login login={login} loggedIn={loggedIn} logout={logout}/>} />
+          <Route path="/login" element={<Login login={login} loggedIn={loggedIn} logout={logout} />} />
           <Route path="/registration" element={<Registration login={login} />} />
-          <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout}/>} />
+          <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout} />} />
+          
+          {/* Add route for ManageAccount */}
+          <Route path="/manageaccount" element={<ManageAccount />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -42,12 +42,12 @@ const Navbar = () => {
       
       <div className={`navbar-menu ${isOpen ? "is-active" : ""}`}>
         <div className="navbar-end">
-          <Link to="/Account" className="navbar-item" onClick={closeNav}>
+          <Link to="/account" className="navbar-item" onClick={closeNav}>
             <i className="fa-solid fa-user"></i> Account
           </Link>
           
-          <Link to="/Manage tasks" className="navbar-item" onClick={closeNav}>
-            <i className="fa-solid fa-list-check"></i> Manage tasks
+          <Link to="/manageaccount" className="navbar-item" onClick={closeNav}>
+            <i className="fa-solid fa-list-check"></i> Manage Account
           </Link>
           
           <Link to="/logout" className="navbar-item" onClick={closeNav}>
