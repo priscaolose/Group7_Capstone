@@ -15,6 +15,7 @@ import { auth } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useLocation } from 'react-router-dom'; // Import useLocation for accessing state
 
+
 // Custom Theme
 const theme = createTheme({
   typography: {
@@ -42,9 +43,14 @@ const theme = createTheme({
 function Dashboard() {
   const location = useLocation(); // Access location state
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
+  const [userFirstName, setUserFirstName] = useState(null);
   const [user, setUser] = useState(null);
-
+  
   useEffect(() => {
+    if (location.state && location.state.firstName) {
+      setUserFirstName(location.state.firstName); // If navigating from registration, use passed first name
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
       if (loggedInUser) {
         setUser(loggedInUser);
@@ -54,10 +60,10 @@ function Dashboard() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [location.state]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <div className='mainContainer'>
       <Header />
       <Box
         sx={{
@@ -225,7 +231,7 @@ function Dashboard() {
         </Box>
       </Box>
       <Footer />
-    </ThemeProvider>
+    </div>
   );
 }
 
