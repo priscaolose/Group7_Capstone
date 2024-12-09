@@ -1,4 +1,5 @@
 import './App.css';
+import Homepage from './Homepage';
 import Login from './login';
 import Registration from './Registration';
 import AddTask from './addTask';
@@ -15,6 +16,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+        <Route path="/" element={<Homepage />} />
           <Route
             path="/"
             element={
