@@ -1,29 +1,47 @@
 // src/firebase-auth.js
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail 
+} from "firebase/auth";
 import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
-import { useNavigate } from 'react-router-dom';
-import { auth, provider, db } from './firebaseConfig'; // Use values from firebaseConfig
+import app from './firebaseConfig';
+import { auth } from './firebaseConfig'; 
+import { db } from "./firebaseConfig";
 
-// Google sign-in function
+const provider = new GoogleAuthProvider();
+
 export const signInWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(auth, provider);
-    return result; // Returning the result to be used in handleGoogleSignUp
-  } catch (error) {
+      const result = await signInWithPopup(auth, provider);
+      console.log("result.user.email",result.user.email)
+      return result
+    } catch (error) {
     console.error("Error during sign-in:", error);
+  }
+};
+
+export const checkIfEmailExists = async (email) => {
+  try {
+    const usersRef = collection(db, "users");
+
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.log("No user found with email:", email);
+      return false;
+    }
+    else{
+      querySnapshot.forEach((doc) => {
+        console.log("User found:", doc.id, "=>", doc.data());
+      });
+      return true; // Email exists
+    }
+  
+  } catch (error) {
+    console.error("Error checking email existence:", error);
     throw error;
   }
 };
 
-// Check if the email already exists in the database
-const checkIfEmailExists = async (email) => {
-  const usersRef = collection(db, "Users");
-  const q = query(usersRef, where("email", "==", email));
-  const querySnapshot = await getDocs(q);
-  return !querySnapshot.empty; // If not empty, the email exists
-};
-
-// Store the new user in the Firestore database
 const storeUserInDatabase = async (user) => {
   const usersRef = collection(db, "Users");
   const q = query(usersRef, where("displayName", "==", user.displayName));
@@ -31,12 +49,13 @@ const storeUserInDatabase = async (user) => {
   try {
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
-      alert(`A user with the name ${user.displayName} already exists.`);
+      // If there is a user with the same name, throw an error
+      alert(`A user with the Fname ${user.displayName} already exists.`);
       throw new Error(`A user with the name "${user.displayName}" already exists.`);
     }
 
     // Proceed to store the new user if no conflict
-    const userDocRef = doc(db, "Users", user.uid);
+    const userDocRef = doc(db, "Users", user.uid); 
     const userData = {
       uid: user.uid,
       email: user.email,
@@ -48,23 +67,29 @@ const storeUserInDatabase = async (user) => {
 
   } catch (error) {
     console.error("Error storing user data:", error);
-    throw error;
+    throw error;  
   }
 };
 
-// Handle Google sign-up logic, including checking if email exists
-export const handleGoogleSignUp = async () => {
-  const navigate = useNavigate(); // Use navigate inside the component or handler
+export const signUpWithGoogle = async () => {
   try {
-    const result = await signInWithGoogle();
+    const result = await signInWithPopup(auth, provider);
+    return result;
+  } catch (error) {
+    console.error('Google sign-up error:', error);
+    throw error; 
+  }
+};
+
+export const handleGoogleSignUp = async (navigate) => {
+  try {
+    const result = await signUpWithGoogle();
     
-    // Check if the email already exists in the database
     const emailExists = await checkIfEmailExists(result.user.email);
     if (emailExists) {
-      // If email already exists, alert the user and navigate to login
       alert('Email already exists. Please sign in instead.');
-      navigate('/login'); // Redirect to login page
-      return; // Exit the function early
+      navigate('/login'); 
+      return; 
     }
 
     // If the user doesn't exist, store the user in the database
@@ -78,5 +103,4 @@ export const handleGoogleSignUp = async () => {
   }
 };
 
-// Export necessary values
-export { auth, provider };
+export {auth,provider}

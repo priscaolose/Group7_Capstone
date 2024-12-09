@@ -74,6 +74,7 @@ const Register = () => {
         handleRegister(e);
     };
 
+    /*
     // Separate function to check email
     const checkIfEmailExists = async (email) => {
         try {
@@ -84,6 +85,7 @@ const Register = () => {
         throw error;
         }
     };
+    */
     /*
     const handleGoogleSignUp = async () => {
         try {
@@ -226,7 +228,7 @@ const handleRegister = async (e) => {
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 <div className="googleSignInContainer">
                 <div className="googleSignInText">Sign Up With</div>
-                    <img src={Googlelogo} onClick={handleGoogleSignUp} alt="GoogleLogo" className="google-logo" />
+                    <img src={Googlelogo} onClick={() => handleGoogleSignUp(navigate)} alt="GoogleLogo" className="google-logo" />
                 </div>
 
             </div>

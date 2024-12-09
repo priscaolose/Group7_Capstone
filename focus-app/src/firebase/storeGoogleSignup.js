@@ -1,4 +1,4 @@
-import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
+/*import { doc, setDoc, getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
 const StoreUserInDatabase = async (user) => {
@@ -31,3 +31,4 @@ const StoreUserInDatabase = async (user) => {
 };
 
 export default StoreUserInDatabase;
+*/

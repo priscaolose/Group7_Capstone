@@ -4,11 +4,10 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import './CSSFolders/Login.css';
 import Googlelogo from './Images/googleLogo.png';
-import { signInWithGoogle } from './firebase/firebaseAuth';
+import { signInWithGoogle,checkIfEmailExists } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
 import { Link } from 'react-router-dom';
-//i could have the userID as the email that was login in with
 const Login = ({ login, loggedIn,logout }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,9 +43,7 @@ const Login = ({ login, loggedIn,logout }) => {
       setErrors(newErrors);
       return;
     }
-    
-    // Call the handleLogin function with email and password
-    handleLogin(email, password);
+      handleLogin(email, password);
   };
 
   const handleForgotPassword = () => {
@@ -61,10 +58,11 @@ const Login = ({ login, loggedIn,logout }) => {
         alert("Failed to get user email");
         return;
       }
-  
+      console.log("calling the check if email exists")
+      console.log("result?.user?.email",result?.user?.email)
       // Check if email exists in your system
       const emailExists = await checkIfEmailExists(result.user.email);
-      
+      console.log("emailExists",emailExists)
       if (emailExists) {
         // Existing user - proceed to home
         navigate('/addTask', { state: { email: result.user.email } });
@@ -80,16 +78,7 @@ const Login = ({ login, loggedIn,logout }) => {
     }
   };
   
-  // Separate function to check email
-  const checkIfEmailExists = async (email) => {
-    try {
-      const methods = await fetchSignInMethodsForEmail(auth, email);
-      return methods.length > 0;
-    } catch (error) {
-      console.error("Error checking email:", error);
-      throw error;
-    }
-  };
+
 
   const handleAccountRegistration = () => {
     navigate('/registration');
