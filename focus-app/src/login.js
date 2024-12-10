@@ -95,10 +95,10 @@ const Login = ({ login, loggedIn,logout }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       if (user) {
-        alert('Signed In With Google Clicked');
+        alert('Signed In Successfully');
         setEmail('');
         setPassword('');
-        navigate('/home');
+        navigate('/dashboard');
         login(); // Call the login function passed as a prop to set loggedIn to true      
       }
       else{

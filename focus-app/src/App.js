@@ -2,6 +2,7 @@ import './App.css';
 import Homepage from './Homepage';
 import Login from './login';
 import Registration from './Registration';
+import Dashboard from './Components/Dashboard';
 import AddTask from './addTask';
 import ManageAccount from './ManageAccount'; // Import ManageAccount component
 import React, { useState } from 'react';
@@ -32,6 +33,7 @@ function App() {
           />
           <Route path="/login" element={<Login login={login} loggedIn={loggedIn} logout={logout} />} />
           <Route path="/registration" element={<Registration login={login} />} />
+          <Route path="/dashboard" element={<Dashboard loggedIn={loggedIn} logout={logout} />} />
           <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout} />} />
           
           {/* Add route for ManageAccount */}
