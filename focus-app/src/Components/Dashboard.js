@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header2 from './Header2';
 import Footer from './Footer';
-import AddTask from '../addTask';
 import {
   Box,
   Typography,
@@ -14,13 +13,14 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { auth } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-import { useLocation } from 'react-router-dom'; // Import useLocation for accessing state
+import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
+import { db } from '../firebase/firebaseConfig'; // Firestore config
 import { Link } from 'react-router-dom';
 
 // Custom Theme
 const theme = createTheme({
   typography: {
-    fontFamily: '"Poppins", sans-serif', // Use Poppins as the font
+    fontFamily: '"Poppins", sans-serif',
     h5: {
       fontWeight: 600,
     },
@@ -33,7 +33,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#1a73e8', // the blue you had before
+      main: '#1a73e8',
     },
     background: {
       default: '#f4f6f8',
@@ -42,7 +42,6 @@ const theme = createTheme({
 });
 
 function Dashboard() {
-  const location = useLocation(); // Access location state
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [userFirstName, setUserFirstName] = useState(null);
   const [user, setUser] = useState(null);
@@ -50,27 +49,28 @@ function Dashboard() {
   useEffect(() => {
     const fetchUserData = async (userID) => {
       try {
-        const response = await fetch(`/api/getUser?userID=${userID}`);
-        if (response.ok) {
-          const data = await response.json();
-          setUserFirstName(data.name); // Update state with the user's first name
+        const userRef = doc(db, "Users", userID); // Access user document in Firestore
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          setUserFirstName(userDoc.data().firstName); // Set user's first name from Firestore
         } else {
-          console.error('Failed to fetch user data:', response.statusText);
-          setUserFirstName('Guest'); // Fallback if the API call fails
+          console.error("User document not found");
+          setUserFirstName("Guest"); // display for missing first name
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
-        setUserFirstName('Guest'); // Fallback in case of error
+        console.error("Error fetching user data from Firestore:", error);
+        setUserFirstName("Guest"); // display for errors
       }
     };
 
     const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
       if (loggedInUser) {
         setUser(loggedInUser);
-        fetchUserData(loggedInUser.uid); // Fetch user data from the API using the user's ID
+        fetchUserData(loggedInUser.uid); // Fetch user data when logged in
       } else {
         setUser(null);
-        setUserFirstName('Guest');
+        setUserFirstName("Guest");
       }
     });
 
@@ -86,15 +86,14 @@ function Dashboard() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'flex-start', // Adjust to start from the top
+            justifyContent: 'flex-start',
             minHeight: '100vh',
             px: isSmallScreen ? 2 : 4,
             py: 1,
             backgroundColor: 'white',
-            overflowY: 'auto', // Enables scrolling when content exceeds viewport
+            overflowY: 'auto',
           }}
         >
-          {/* Main Content */}
           <Box
             sx={{
               display: 'grid',
@@ -127,7 +126,8 @@ function Dashboard() {
                     textAlign: 'left',
                   }}
                 >
-                  {userFirstName}
+                  {/* display user's first name */}
+                  {userFirstName || "Loading..."} 
                 </Typography>
               </Paper>
 
@@ -144,6 +144,28 @@ function Dashboard() {
                 <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
                   Today's Tasks
                 </Typography>
+                <Typography component="div">
+                <ul style={{ paddingLeft: '1.5rem', margin: 0}}>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                </ul>
+                  </Typography>
               </Paper>
             </Box>
 
@@ -160,10 +182,9 @@ function Dashboard() {
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   p: 4,
                   textDecoration: 'none',
-                
                 }}
-                component={Link} // Link to the Add Task page
-                to= "/addTask" // Route to navigate to  Add Task page
+                component={Link}
+                to="/addTask"
               >
                 <Typography
                   variant="h3"
