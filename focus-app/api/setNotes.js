@@ -1,21 +1,31 @@
-import express from "express";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../src/firebase/firebaseConfig";
+
+
+const express = require("express");
+const { collection, addDoc } = require("firebase/firestore");
+const { db } = require("../src/firebase/firebaseConfig");
 
 const app = express();
+//app.use(cors());
+app.use(express.json());
 
-app.post("/api/setNotes", async (req, res) =>{
-    console.log("request received");
+app.post("/api/setNotes", async (req, res) => {
+    console.log("request received:", req.body);
 
     const { userName, note } = req.body;
+    cons [message, setMessage] = useState("");
 
-    const userRef = collection(db, "Notes");
+    //const userRef = collection(db, "Notes");
+    if (!userName || !note) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
 
     try {
         // Hash password
-        await addDoc(userRef, {
+        await addDoc(collection(db, "Notes"),{
           userName,
-          note
+          note,
+          timeStamp: new Date().toISOString(),
         });
     
         res.status(200).json({ message: "Note added successfully!" });
@@ -25,7 +35,11 @@ app.post("/api/setNotes", async (req, res) =>{
       }
 });
 
-export default function handler(req, res) {
-    app(req, res);
-}
   
+  
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+export default app;

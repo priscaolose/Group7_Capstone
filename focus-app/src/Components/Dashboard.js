@@ -11,9 +11,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link,useLocation} from 'react-router-dom';
-import { useUser } from './context';
-import TextField from '@mui/material/TextField';
+import { auth } from '../firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
+import { db } from '../firebase/firebaseConfig'; // Firestore config
+import { Link } from 'react-router-dom';
 
 // Custom Theme
 const theme = createTheme({
@@ -31,7 +33,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#1059a2',
+      main: '#1a73e8',
     },
     background: {
       default: '#f4f6f8',
@@ -39,19 +41,12 @@ const theme = createTheme({
   },
 });
 
-
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [userFirstName, setUserFirstName] = useState(null);
-  const location = useLocation(); 
-  const email = location.state?.email; 
-  //const [user, setUser] = useState(null);
-  const { user } = useUser();
-  const [currentTime, setCurrentTime] = useState('00:00:00');
-  const [note, setNote] = useState('');
-  const [notesList, setNotesList] = useState([]);
+  const [user, setUser] = useState(null);
 
-  /*useEffect(() => {
+  useEffect(() => {
     const fetchUserData = async (userID) => {
       try {
         const userRef = doc(db, "Users", userID); // Access user document in Firestore
@@ -80,42 +75,7 @@ function Dashboard() {
     });
 
     return () => unsubscribe();
-  }, []);*/
-  useEffect(() => {
-    const updateClock = () => {
-      const today = new Date();
-      let hours = today.getHours();
-      const minutes = checkTime(today.getMinutes());
-      const seconds = checkTime(today.getSeconds());
-
-      hours = checkHour(hours);
-
-      setCurrentTime(`${hours}:${minutes}:${seconds}`);
-  };
-
-  updateClock();
-  const interval = setInterval(updateClock, 1000);
-  return () => clearInterval(interval);
-  }, []); //cleanup on unmount
-
-  function checkTime(i) {
-    return i < 10 ? `0${i}` : i;
-  } // Add a leading zero to single-digit numbers
-
-  function checkHour(hours){ // setting time for 12 hour format
-    return hours > 12 ? hours - 12 : hours;
-  }
-
-  const handleNote = () => {
-    if (note.trim() !== ''){
-      setNotesList([...notesList, note]);
-      setNote('');
-    }
-  };
-
-  const handleDelete = (index) => {
-    setNotesList(notesList.filter((note, i) => i !== index));
-  };
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -150,7 +110,7 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 }}
               >
@@ -167,7 +127,7 @@ function Dashboard() {
                   }}
                 >
                   {/* display user's first name */}
-                  {user?.firstName || "Loading..."} 
+                  {userFirstName || "Loading..."} 
                 </Typography>
               </Paper>
 
@@ -176,13 +136,13 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   minHeight: '50vh',
                 }}
               >
                 <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
-                  Tasks
+                  Today's Tasks
                 </Typography>
                 <Typography component="div">
                 <ul style={{ paddingLeft: '1.5rem', margin: 0}}>
@@ -209,7 +169,7 @@ function Dashboard() {
               </Paper>
             </Box>
 
-            {/* Center Column (Timer Section*/}
+            {/* Center Column */}
             <Box sx={{ display: 'grid', gap: 4 }}>
               <Paper
                 sx={{
@@ -218,52 +178,39 @@ function Dashboard() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   p: 4,
                   textDecoration: 'none',
                 }}
+                component={Link}
+                to="/addTask"
               >
                 <Typography
                   variant="h3"
                   sx={{
                     color: '#333',
-                    fontWeight: 'bold',
+                    fontWeight: '300',
                   }}
                 >
-                  {currentTime}  
+                  00:00
                 </Typography>
                 <Typography
                   variant="body1"
-                  component={Link} to = "/addTask"
-                  state={{ email: email }}
                   sx={{
                     color: theme.palette.primary.main,
                     fontSize: '1.25rem',
                     mt: 2,
                   }}
                 >
-                  add task 
-                </Typography>
-
-                <Typography
-                  variant="body1"
-                  component={Link} to = "/viewTask" 
-                  state={{ email: email }}
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: '1.25rem',
-                    mt: 2,
-                  }}
-                >
-                  view tasks 
+                  Add task here
                 </Typography>
               </Paper>
               <Paper
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 }}
               >
@@ -279,7 +226,7 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 }}
               >
@@ -306,7 +253,7 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   minHeight: '50vh',
                 }}
@@ -314,15 +261,11 @@ function Dashboard() {
                 <Typography
                   variant="h6"
                   sx={{
-                    backgroundColor: "white",
+                    color: theme.palette.primary.main,
                     mb: 2,
                   }}
                 >
                   Notes
-
-                 <Box sx={{ width: "auto", maxWidth: '100%', height: '100'}}>
-                <TextField fullWidth label="Enter notes" id="fullWidth" />
-                </Box>
                 </Typography>
               </Paper>
             </Box>

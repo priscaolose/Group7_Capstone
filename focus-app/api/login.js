@@ -1,43 +1,38 @@
-import { db } from "../src/firebase/firebaseConfig";
+import { db } from "../src/firebase/firebaseConfig.js";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import express from "express";
-const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(express.json());
 
-app.post("/api/login", async (req, res) => {
-  const { email, password } = req.body;
+app.get("/api/login", async (req, res) => {
+  const { email } = req.query;
+  console.log("Request received");
 
   try {
     // Get a reference to the database
-    const usersRef = db.collection("Users");
+    const usersRef = collection(db, "Users");
 
-    // Check if user email is in database
-    const emailSnapshot = await usersRef.where("email", "==", email).get();
+    // Create a query to find documents with the matching email
+    const q = query(usersRef, where("email", "==", email));
+    const emailSnapshot = await getDocs(q);
+    
     if (emailSnapshot.empty) {
       return res.json({ error: "User not found" });
     }
+    console.log("Got user from email");
 
     // Get user data
+    console.log("Getting user");
     let userData;
-    emailSnapshot.forEach((childSnapshot) => {
-      userData = childSnapshot.val();
+    emailSnapshot.forEach((doc) => {
+      userData = doc.data();
     });
-
-    // Check if password is correct
-    bcrypt.compare(password, userData.password, function(err, result){
-      if(result === false)
-      {
-        return res.json({ error: "Invalid password" });
-      }
-      if(result === true)
-      {
-        res.json({ message: "Login successful" });
-      }
-    });
-
+    // Return user first name
+    console.log("Name: " + userData.firstName);
+    res.status(200).json({ name: userData.firstName });
   } catch (error) {
-    res.json({ error: 'Failed to sign in' });
+    res.json({ error: "Failed to sign in:" + error });
   }
 });
 
