@@ -7,7 +7,7 @@ import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography }
 import { Clear } from '@mui/icons-material';
 import { addTask} from './Api/createTask';
 
-const AddTask = ({ loggedIn, logout }) => {
+const EditTask = ({ loggedIn, logout }) => {
   const location = useLocation();
   const email = location.state?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
@@ -49,11 +49,17 @@ const AddTask = ({ loggedIn, logout }) => {
     if (!task.title) {
       newErrors.title = 'Title is required.';
     }
+    if (task.title && task.title.length < 8) {
+      newErrors.title = 'Title must be at least 8 characters';
+    }
     if (task.title && task.title.length > 20) {
         newErrors.title = 'Title must be at less than 20 characters';
       }
     if (!task.description) {
       newErrors.description = 'Task Description is required.';
+    }
+    if (task.description && task.description.length < 15) {
+      newErrors.description = 'Description must be at least 15 characters';
     }
     if (task.description && task.description.length > 150) {
         newErrors.description = 'Description must be less than 150 characters';
@@ -97,7 +103,7 @@ const AddTask = ({ loggedIn, logout }) => {
         {/* Column 1: Task Title and Description */}
         <Grid2 xs={12} md={6} container direction="column" spacing={3}>
           <Grid2 xs={12}>
-            <h4 className="task-title">Add New Task</h4>
+            <h4 className="task-title">Edit Task</h4>
           </Grid2>
 
           {/* Task Name Field */}
@@ -343,4 +349,4 @@ const AddTask = ({ loggedIn, logout }) => {
   );
 };
 
-export default AddTask;
+export default EditTask;

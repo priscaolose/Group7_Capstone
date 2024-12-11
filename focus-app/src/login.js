@@ -60,14 +60,11 @@ const Login = ({ login, loggedIn,logout }) => {
       }
       console.log("calling the check if email exists")
       console.log("result?.user?.email",result?.user?.email)
-      // Check if email exists in your system
       const emailExists = await checkIfEmailExists(result.user.email);
       console.log("emailExists",emailExists)
       if (emailExists) {
-        // Existing user - proceed to home
         navigate('/addTask', { state: { email: result.user.email } });
       } else {
-        // New user - create account first
         if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
           window.location.href = "/registration"; // Redirects to the registration page
         }        
@@ -111,10 +108,9 @@ const Login = ({ login, loggedIn,logout }) => {
         alert("Incorrect password. Please try again.");
       } else if (error.code === 'auth/too-many-requests') {
         alert("Too many unsuccessful attempts. Please wait and try again later.");
-        //This is just a temporal holder for what i am testing
       } else if(error.code === 'auth/invalid-credential') {
         if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
-          window.location.href = "/registration"; // Redirects to the registration page
+          window.location.href = "/registration";
         }  
       }
       else {
