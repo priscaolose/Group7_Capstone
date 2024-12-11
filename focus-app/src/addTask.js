@@ -52,9 +52,6 @@ const AddTask = ({ loggedIn, logout }) => {
     if (task.title && task.title.length > 20) {
         newErrors.title = 'Title must be at less than 20 characters';
       }
-    if (!task.description) {
-      newErrors.description = 'Task Description is required.';
-    }
     if (task.description && task.description.length > 150) {
         newErrors.description = 'Description must be less than 150 characters';
       }
