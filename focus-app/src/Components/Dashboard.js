@@ -203,7 +203,11 @@ function Dashboard() {
                     mt: 2,
                   }}
                 >
-                  Add task here
+                   View Task
+                  <br></br>
+                  ADD TASK
+                  
+
                 </Typography>
               </Paper>
               <Paper

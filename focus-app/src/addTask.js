@@ -6,7 +6,8 @@ import { useNavigate,useLocation } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 import { addTask} from './Api/createTask';
-
+import ColorDropdown from './ColorDropdown'; 
+import PriorityDropdown from './taskPriority';
 const AddTask = ({ loggedIn, logout }) => {
   const location = useLocation();
   const email = location.state?.email;
@@ -19,6 +20,8 @@ const AddTask = ({ loggedIn, logout }) => {
     title: '',
     description: '',
     dueDate: '',
+    category: '',
+    priority: '',
   });
 
   const handleChange = (e) => {
@@ -34,6 +37,8 @@ const AddTask = ({ loggedIn, logout }) => {
       title: '',
       description: '',
       dueDate: '',
+      category: '',
+      priority: '',
     });
     setErrors({});
   };
@@ -69,12 +74,16 @@ const AddTask = ({ loggedIn, logout }) => {
       title: '',
       description: '',
       dueDate: '',
+      category: '',
+      priority: '',
     });
 
     // Add task to Firestore
-    addTask(email, task.title,task.description, task.dueDate, new Date());
-
-    // Navigate back to dashboard
+    addTask(email, task.title,task.description, task.dueDate, new Date(),task.priority,task.priority);
+    console.log("task.priority: " + task.priority)
+    console.log("task.dueDate: " + task.dueDate)
+    
+    // Navigate back to dashboard 
     navigate('/dashboard');
 
     // Add your task submission logic here
@@ -86,249 +95,272 @@ const AddTask = ({ loggedIn, logout }) => {
     <Box sx={{ flexGrow: 1 }}>
       {/* Header */}
       <Grid2 xs={12}>
-      <Header2 />
+        <Header2 />
       </Grid2>
-
+  
       <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh">
-      <form onSubmit={handleSubmit}>
-        {/* Column 1: Task Title and Description */}
-        <Grid2 xs={12} md={6} container direction="column" spacing={3}>
-          <Grid2 xs={12}>
-            <h4 className="task-title">Add New Task</h4>
-          </Grid2>
+        <form onSubmit={handleSubmit}>
+          {/* Column 1: Task Title and Description */}
+          <Grid2 xs={12} md={6} container direction="column" spacing={3}>
+            {/* Heading and Buttons Row */}
+            <Grid2 container alignItems="center" justifyContent="space-between">
+              {/* "Add New Task" Heading */}
+              <Grid2 item>
+                <h4 className="task-title">Add New Task</h4>
+              </Grid2>
+  
+              {/* Buttons Container */}
+              <Grid2 item container spacing={2} justifyContent="flex-end">
+                {/* Cancel Button */}
+                {/* Add Task Button */}
+                <Grid2 item>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    type="submit"
+                    sx={{
+                      padding: '8px 1px',
+                      borderRadius: '10px',
+                      backgroundColor: '#8AAEC6',
+                      cursor: 'pointer',
+                      width: '200px',
+                      fontSize: '16px',
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </Grid2>
 
-          {/* Task Name Field */}
-          
-          <Grid2 xs={12}>
-            <Box sx={{ position: 'relative' }}>
-              {(task.title ||titleIsFocused) && (
-                <Typography
-                  sx={{
-                    position: 'absolute',
-                    top: '-12px',
-                    left: '20px',
-                    backgroundColor: '#FFF1F1',
-                    padding: '0 8px',
-                    color: '#1059a2',
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    zIndex: 1,
-                    transition: 'all 0.2s ease-in-out',
-                  }}
-                >
-                  Task Name
-                </Typography>
-              )}
+                <Grid2 item>
+                  <Button
+                    sx={{
+                      padding: '8px 1px',
+                      borderRadius: '10px',
+                      backgroundColor: '#8AAEC6',
+                      cursor: 'pointer',
+                      width: '200px',
+                      fontSize: '16px',
+                    }}
+                    fullWidth
+                    variant="contained"
+                    type="button"
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                </Grid2>
+  
                 
+              </Grid2>
+            </Grid2>
+  
+            {/* Task Name Field */}
+            <Grid2 xs={12}>
+              <Box sx={{ position: 'relative' }}>
+                {(task.title || titleIsFocused) && (
+                  <Typography
+                    sx={{
+                      position: 'absolute',
+                      top: '-12px',
+                      left: '20px',
+                      backgroundColor: '#FFF1F1',
+                      padding: '0 8px',
+                      color: '#1059a2',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      zIndex: 1,
+                      transition: 'all 0.2s ease-in-out',
+                    }}
+                  >
+                    Task Name
+                  </Typography>
+                )}
+  
+                <TextField
+                  fullWidth
+                  placeholder={!task.title && !titleIsFocused ? 'Task Name' : ''}
+                  name="title"
+                  value={task.title}
+                  onChange={handleChange}
+                  onFocus={() => setTitleIsFocused(true)}
+                  onBlur={() => setTitleIsFocused(false)}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                      background: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
+                    },
+                    '& .MuiInputBase-input': {
+                      padding: '10px',
+                      fontSize: '30px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    },
+                    '& .MuiInputBase-input::placeholder': {
+                      textAlign: 'center',
+                      justifyContent: 'center',
+                      color: '#1059a2',
+                      fontWeight: 'bold',
+                      lineHeight: '3.7',
+                      paddingTop: '30px',
+                    },
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setTask({ title: '' })}>
+                          <Clear sx={{ fontSize: '24px' }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  margin-bottom={5}
+                />
+                {errors.title && <label className="errorLabel">{errors.title}</label>}
+              </Box>
+            </Grid2>
+  
+            {/* Task Description Field with Floating Label */}
+            <Grid2 xs={12}>
+              <Box sx={{ position: 'relative' }}>
+                {(task.description || isFocused) && (
+                  <Typography
+                    sx={{
+                      position: 'absolute',
+                      top: '-12px',
+                      left: '20px',
+                      backgroundColor: '#FFF1F1',
+                      padding: '0 8px',
+                      color: '#1059a2',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      zIndex: 1,
+                      transition: 'all 0.2s ease-in-out',
+                    }}
+                  >
+                    Task Description
+                  </Typography>
+                )}
+  
+                <TextField
+                  fullWidth
+                  placeholder={!task.description && !isFocused ? 'Task Description' : ''}
+                  name="description"
+                  value={task.description}
+                  onChange={handleChange}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  sx={{
+                    marginBottom: '20px',
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                      background: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
+                    },
+                    '& .MuiInputBase-input': {
+                      padding: '30px',
+                      fontSize: '30px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    },
+                    '& .MuiInputBase-input::placeholder': {
+                      textAlign: 'center',
+                      color: '#1059a2',
+                      lineHeight: '3.7',
+                      fontWeight: 'bold',
+                    },
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setTask({ description: '' })}>
+                          <Clear sx={{ fontSize: '24px' }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  multiline
+                  rows={4}
+                  margin-bottom={5}
+                />
+                {errors.description && <label className="errorLabel">{errors.description}</label>}
+              </Box>
+            </Grid2>
+          </Grid2>
+  
+          {/* Column 2: Task Due Date */}
+          <Grid2 xs={12} md={6} container direction="row" spacing={3}>
+            <Grid2 xs={12}>
+              {/* Due Date Field */}
               <TextField
                 fullWidth
-                placeholder={!task.title && !titleIsFocused ? 'Task Name' : ''}
-                name="title"
-                value={task.title}
+                label="Task DueDate"
+                name="dueDate"
+                type="date"
+                value={task.dueDate}
                 onChange={handleChange}
-                onFocus={() => setTitleIsFocused(true)}
-                onBlur={() => setTitleIsFocused(false)}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 sx={{
-                  '& .MuiOutlinedInput-root': {
+                  backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
+                  fontWeight: 'bold',
+                  borderRadius: '10px',
+                  '& .MuiInputBase-root': {
                     borderRadius: '10px',
-                    background: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
+                  },
+                  '& .MuiFormLabel-root': {
+                    color: '#105',
                   },
                   '& .MuiInputBase-input': {
                     padding: '10px',
                     fontSize: '30px',
-                    textAlign: 'center',
-                  },
-                  '& .MuiInputBase-input::placeholder': {
-                    textAlign: 'center', 
-                    justifyContent: 'center',
-                    color: '#1059a2', 
-                    fontWeight: 'bold', 
-                    lineHeight: '3.7', 
-                    paddingTop: '30px', 
                   },
                 }}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
-                    </InputAdornment>
-                  ),
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => setTask({ title: '' })}>
+                      <IconButton onClick={() => setTask({ ...task, dueDate: '' })}>
                         <Clear sx={{ fontSize: '24px' }} />
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
-                margin-bottom={5}
-              />
-              {errors.title && <label className="errorLabel">{errors.title}</label>}
-            </Box>
-          </Grid2>
-
-          {/* Task Description Field with Floating Label */}
-          <Grid2 xs={12}>
-            <Box sx={{ position: 'relative' }}>
-              {(task.description || isFocused) && (
-                <Typography
-                  sx={{
-                    position: 'absolute',
-                    top: '-12px',
-                    left: '20px',
-                    backgroundColor: '#FFF1F1',
-                    padding: '0 8px',
-                    color: '#1059a2',
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    zIndex: 1,
-                    transition: 'all 0.2s ease-in-out',
-                  }}
-                >
-                  Task Description
-                </Typography>
-              )}
-                
-              <TextField
-                fullWidth
-                placeholder={!task.description && !isFocused ? 'Task Description' : ''}
-                name="description"
-                value={task.description}
-                onChange={handleChange}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                sx={{
-                  marginBottom: '20px', // Add spacing below the description
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '10px',
-                    background: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
-                  },
-                  '& .MuiInputBase-input': {
-                    padding: '10px',
-                    fontSize: '30px',
-                    textAlign: 'center',
-                  },
-                  '& .MuiInputBase-input::placeholder': {
-                    textAlign: 'center', 
-                    justifyContent: 'center',
-                    color: '#1059a2', 
-                    fontWeight: 'bold', 
-                    lineHeight: '3.7', 
-                    paddingTop: '30px', 
+                inputProps={{
+                  style: {
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
                   },
                 }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => setTask({ description: '' })}>
-                        <Clear sx={{ fontSize: '24px' }} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                multiline
-                rows={4}
-                margin-bottom={5}
               />
-              {errors.description && <label className="errorLabel">{errors.description}</label>}
-            </Box>
-          </Grid2>
-        </Grid2>
-
-        {/* Column 2: Task Due Date */}
-        <Grid2 xs={12} md={6} container direction="row" spacing={3}>
-          <Grid2 xs={12}>
-            {/* Due Date Field */}
-            <TextField
-              fullWidth
-              label="Task DueDate"
-              name="dueDate"
-              type="date"
-              value={task.dueDate}
-              onChange={handleChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{
-                backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)', 
-                fontWeight: 'bold', 
-                borderRadius: '10px', 
-                '& .MuiInputBase-root': {
-                  borderRadius: '10px', 
-
-                },
-                '& .MuiFormLabel-root': {
-                  color: '#105', 
-                },
-                '& .MuiInputBase-input': {
-                  padding: '10px', 
-                  fontSize: '30px', 
-                },
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setTask({ ...task, dueDate: '' })}>
-                      <Clear sx={{ fontSize: '24px' }} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              inputProps={{
-                style: {
-                  appearance: 'none',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none',
-                },
-              }}
-            />
+            </Grid2>
+            <Grid2 item container spacing={2} justifyContent="flex-end">
+              <Grid2 item>
+                  <ColorDropdown
+                      name="category" 
+                      onChange={handleChange} 
+                  />
+                    </Grid2>
+              <Grid2 item>
+                  <PriorityDropdown  
+                      name="priority" 
+                      onChange={handleChange} 
+                  />
+              </Grid2>
+            </Grid2>
           </Grid2>
 
-          {/* Submit and Cancel Buttons */}
-          <Grid2 xs={12}>
-            <Button
-              fullWidth
-              variant="contained"
-              type="submit"
-              sx={{
-                padding: '8px 1px',
-                borderRadius: '20px',
-                backgroundColor: '#8AAEC6',
-                cursor: 'pointer',
-                width: '200px',
-                fontSize: '16px',
-                margin: '10px auto',
-              }}
-            >
-              Add Task
-            </Button>
-          </Grid2>
-
-          <Grid2 xs={12}>
-            <Button
-              sx={{
-                padding: '8px 1px',
-                borderRadius: '20px',
-                backgroundColor: '#8AAEC6',
-                cursor: 'pointer',
-                width: '200px',
-                fontSize: '16px',
-                margin: '10px auto',
-              }}
-              fullWidth
-              variant="contained" 
-              type="button" 
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-          </Grid2>
-        </Grid2>
         </form>
       </Grid2>
   

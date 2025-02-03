@@ -35,7 +35,8 @@ function App() {
           <Route path="/registration" element={<Registration login={login} />} />
           <Route path="/dashboard" element={<Dashboard loggedIn={loggedIn} logout={logout} />} />
           <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout} />} />
-          
+          <Route path="/editTask" element={<AddTask />} />
+
           {/* Add route for ManageAccount */}
           <Route path="/manageaccount" element={<ManageAccount />} />
         </Routes>

@@ -6,7 +6,7 @@ const db = getFirestore(app);
 
 //add task
 export const addTask = async (userId, taskName,taskDescription,
-  startTime, endTime) => {
+  startTime, endTime,category,priority) => {
   try {
     await addDoc(collection(db, "tasks"), {
       userId,
@@ -15,6 +15,8 @@ export const addTask = async (userId, taskName,taskDescription,
       startTime,
       endTime,
       completed: false,
+      category,
+      priority
     });
   } catch (error) {
       console.error("Error adding task:", error.message);
