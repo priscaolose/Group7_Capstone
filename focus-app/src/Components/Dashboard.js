@@ -16,6 +16,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
 import { db } from '../firebase/firebaseConfig'; // Firestore config
 import { Link } from 'react-router-dom';
+import { useUser } from './context';
 
 // Custom Theme
 const theme = createTheme({
@@ -44,9 +45,10 @@ const theme = createTheme({
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [userFirstName, setUserFirstName] = useState(null);
-  const [user, setUser] = useState(null);
+  //const [user, setUser] = useState(null);
+  const { user } = useUser();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchUserData = async (userID) => {
       try {
         const userRef = doc(db, "Users", userID); // Access user document in Firestore
@@ -75,7 +77,7 @@ function Dashboard() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, []);*/
 
   return (
     <ThemeProvider theme={theme}>
@@ -127,7 +129,7 @@ function Dashboard() {
                   }}
                 >
                   {/* display user's first name */}
-                  {userFirstName || "Loading..."} 
+                  {user?.firstName || "Loading..."} 
                 </Typography>
               </Paper>
 
