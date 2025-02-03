@@ -3,11 +3,12 @@
     display: flex;
     width: 100%;
     padding: 1px;
-    background-color: #e2e9f1;
+    background-color: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 60px;
     align-items: center;
     justify-content: space-between;
+    padding: 0px 20px 0px 20px; /*Adjust the padding based on your design for left and right spacing*/
   }
   
   .header-logo {
