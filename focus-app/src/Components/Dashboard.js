@@ -18,6 +18,8 @@ import { db } from '../firebase/firebaseConfig'; // Firestore config
 import { Link } from 'react-router-dom';
 import { useUser } from './context';
 import TextField from '@mui/material/TextField';
+import { Notes } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // Custom Theme
 const theme = createTheme({
@@ -35,7 +37,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#1d4e56',
+      main: '#1059a2',
     },
     background: {
       default: '#f4f6f8',
@@ -50,6 +52,8 @@ function Dashboard() {
   //const [user, setUser] = useState(null);
   const { user } = useUser();
   const [currentTime, setCurrentTime] = useState('00:00:00');
+  const [note, setNote] = useState('');
+  const [notesList, setNotesList] = useState([]);
 
   /*useEffect(() => {
     const fetchUserData = async (userID) => {
@@ -105,6 +109,17 @@ function Dashboard() {
   function checkHour(hours){ // setting time for 12 hour format
     return hours > 12 ? hours - 12 : hours;
   }
+
+  const handleNote = () => {
+    if (note.trim() !== ''){
+      setNotesList([...notesList, note]);
+      setNote('');
+    }
+  };
+
+  const handleDelete = (index) => {
+    setNotesList(notesList.filter((note, i) => i !== index));
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -301,7 +316,7 @@ function Dashboard() {
                 <Typography
                   variant="h6"
                   sx={{
-                    color: theme.palette.primary.main,
+                    backgroundColor: "white",
                     mb: 2,
                   }}
                 >
