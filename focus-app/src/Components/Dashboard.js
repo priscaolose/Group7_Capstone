@@ -11,15 +11,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { auth } from '../firebase/firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
-import { db } from '../firebase/firebaseConfig'; // Firestore config
 import { Link } from 'react-router-dom';
 import { useUser } from './context';
 import TextField from '@mui/material/TextField';
 import { Notes } from '@mui/icons-material';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 // Custom Theme
 const theme = createTheme({
@@ -48,7 +43,7 @@ const theme = createTheme({
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
-  const [userFirstName, setUserFirstName] = useState(null);
+  //const [userFirstName, setUserFirstName] = useState(null);
   //const [user, setUser] = useState(null);
   const { user } = useUser();
   const [currentTime, setCurrentTime] = useState('00:00:00');
@@ -131,7 +126,7 @@ function Dashboard() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            minHeight: '100vh',
+            minHeight: 'auto',
             px: isSmallScreen ? 2 : 4,
             py: 1,
             backgroundColor: 'white',
@@ -156,6 +151,7 @@ function Dashboard() {
                   borderRadius: '16px',
                   background: 'white',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  borderColor: theme.palette.primary.main,
                 }}
               >
                 <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 'bold', textAlign: 'left' }}>
@@ -185,33 +181,13 @@ function Dashboard() {
                   minHeight: '50vh',
                 }}
               >
-                <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
-                  Tasks
+                <Typography>
+                  <h2>Your Tasks</h2>
                 </Typography>
-                <Typography component="div">
-                <ul style={{ paddingLeft: '1.5rem', margin: 0}}>
-                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
-                  <Typography variant="body1"></Typography>
-                </li>
-                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
-                  <Typography variant="body1"></Typography>
-                </li>
-                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
-                  <Typography variant="body1"></Typography>
-                </li>
-                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
-                  <Typography variant="body1"></Typography>
-                </li>
-                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
-                  <Typography variant="body1"></Typography>
-                </li>
-                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
-                  <Typography variant="body1"></Typography>
-                </li>
-                </ul>
-                  </Typography>
+                
               </Paper>
             </Box>
+      
 
             {/* Center Column (Timer Section*/}
             <Box sx={{ display: 'grid', gap: 4 }}>
@@ -322,7 +298,7 @@ function Dashboard() {
                 >
                   Notes
 
-                 <Box sx={{ width: "auto", maxWidth: '100%', height: '100'}}>
+                <Box>
                 <TextField fullWidth label="Enter notes" id="fullWidth" />
                 </Box>
                 </Typography>
@@ -330,9 +306,10 @@ function Dashboard() {
             </Box>
           </Box>
         </Box>
-        <Footer />
+        <Footer/>
       </div>
     </ThemeProvider>
+
   );
 }
 
