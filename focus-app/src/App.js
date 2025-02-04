@@ -9,6 +9,7 @@ import ManageAccount from "./ManageAccount"; // Import ManageAccount component
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { UserProvider } from "./Components/context";
+import ViewTask from "./viewTask";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -57,6 +58,11 @@ function App() {
 
             <Route path="/editTask" 
               element={< EditTask />} 
+            />
+
+            <Route
+              path="/viewTask"
+              element={< ViewTask />}
             />
 
           </Routes>

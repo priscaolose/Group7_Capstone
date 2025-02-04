@@ -141,7 +141,7 @@ const handleRegister = async (e) => {
         }
 
         const result = await response.json();
-        navigate('/addTask', { state: { email:user.email } });
+        navigate('/dashboard', { state: { email:user.email } });
         setSuccessMessage(result.message);
 
     } catch (error) {

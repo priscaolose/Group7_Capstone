@@ -63,7 +63,7 @@ const Login = ({ login, loggedIn,logout }) => {
       const emailExists = await checkIfEmailExists(result.user.email);
       console.log("emailExists",emailExists)
       if (emailExists) {
-        navigate('/addTask', { state: { email: result.user.email } });
+        navigate('/dashboard', { state: { email: result.user.email } });
       } else {
         if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
           window.location.href = "/registration"; // Redirects to the registration page
