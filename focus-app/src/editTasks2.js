@@ -107,7 +107,7 @@ const EditTask = ({ loggedIn, logout }) => {
             <Grid2 container alignItems="center" justifyContent="space-between">
               {/* "Add New Task" Heading */}
               <Grid2 item>
-                <h4 className="task-title">Edit Task</h4>
+                <h4 className="task-title">Add New Task</h4>
               </Grid2>
   
               {/* Buttons Container */}
@@ -128,7 +128,7 @@ const EditTask = ({ loggedIn, logout }) => {
                       fontSize: '16px',
                     }}
                   >
-                    Save
+                    Confirm
                   </Button>
                 </Grid2>
 

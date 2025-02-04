@@ -4,6 +4,7 @@ import Login from './login';
 import Registration from './Registration';
 import Dashboard from './Components/Dashboard';
 import AddTask from './addTask';
+import EditTask from './editTask'; // Import EditTask component
 import ManageAccount from './ManageAccount'; // Import ManageAccount component
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
@@ -35,7 +36,7 @@ function App() {
           <Route path="/registration" element={<Registration login={login} />} />
           <Route path="/dashboard" element={<Dashboard loggedIn={loggedIn} logout={logout} />} />
           <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout} />} />
-          <Route path="/editTask" element={<AddTask />} />
+          <Route path="/editTask" element={< EditTask />} />
           {/* Add route for ManageAccount */}
           <Route path="/manageaccount" element={<ManageAccount />} />
         </Routes>
