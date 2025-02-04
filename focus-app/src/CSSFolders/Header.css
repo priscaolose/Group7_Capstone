@@ -4,15 +4,16 @@
     width: 100%;
     padding: 1px;
     background-color: #ffffff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow for a dropdown effect */
     margin-bottom: 60px;
     align-items: center;
     justify-content: space-between;
-    padding: 0px 20px 0px 20px; /*Adjust the padding based on your design for left and right spacing*/
+    padding: 0 20px 0px 20px; /*Adjust the padding based on your design for left and right spacing*/
   }
   
   .header-logo {
     height: 60px;
+    
   }
   
   /* Basic navbar styling */

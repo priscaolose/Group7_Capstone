@@ -1,7 +1,7 @@
 // HomePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import logo from './Images/logo.png';
+import logo from './Images/Focus-8.png'; // Import the logo image
 import focusImage from './Images/focus.png';
 
 const HomePage = () => {
@@ -84,19 +84,22 @@ const styles = {
         backgroundColor: 'white',
     },
     header: {
-        backgroundColor: '#e2e9f1',
+        backgroundColor: '#ffffff',
         color: 'white',
-        padding: '10px 20px',
+        padding: '0 20px 0px 20px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        boxShadow: '0 1px 10px rgba(0, 0, 0, 0.1)',
+    
     },
     logoContainer: {
         display: 'flex',
         alignItems: 'center'
     },
     logo: {
-        height: '40px',
+       
+        height: '60px',
     },
     content: {
         flex: 1,
