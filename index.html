@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADHD Focus App</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Welcome to the ADHD Focus App</h1>
+  <button id="openModal">Open Task Details</button>
+  <button onclick="openPopOutWindow()">Open Timer</button>
+
+  <div id="popOutModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Task Details</h2>
+      <p>Focus for 25 minutes!</p>
+      <button>Start Timer</button>
+    </div>
+  </div>
+
+  <script src="ja/script.js"></script>
+</body>
+</html>
