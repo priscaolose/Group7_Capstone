@@ -128,7 +128,7 @@ const EditTask = ({ loggedIn, logout }) => {
                       fontSize: '16px',
                     }}
                   >
-                    Save
+                    Save Changes
                   </Button>
                 </Grid2>
 
