@@ -79,7 +79,8 @@ const AddTask = ({ loggedIn, logout }) => {
     });
 
     // Add task to Firestore
-    addTask(email, task.title,task.description, task.dueDate, new Date(),task.priority,task.priority);
+// Add task to Firestore
+addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
     console.log("task.priority: " + task.priority)
     console.log("task.dueDate: " + task.dueDate)
     
@@ -148,9 +149,7 @@ const AddTask = ({ loggedIn, logout }) => {
                   >
                     Cancel
                   </Button>
-                </Grid2>
-  
-                
+                </Grid2> 
               </Grid2>
             </Grid2>
   

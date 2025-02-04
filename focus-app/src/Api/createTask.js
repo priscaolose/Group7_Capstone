@@ -16,7 +16,7 @@ export const addTask = async (userId, taskName,taskDescription,
       endTime,
       completed: false,
       category,
-      priority
+      priority,
     });
   } catch (error) {
       console.error("Error adding task:", error.message);
@@ -36,7 +36,7 @@ export const getTasks = async (userId) => {
 };
 
 
-//ipdate tasks (ex. mark complete)
+//update tasks (ex. mark complete)
 export const updateTask = async (taskId, updatedData) => {
   try {
     const taskRef = doc(db, "tasks", taskId);

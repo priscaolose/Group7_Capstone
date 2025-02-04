@@ -6,6 +6,8 @@ import { useNavigate,useLocation } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 import { addTask} from './Api/createTask';
+import ColorDropdown from './ColorDropdown'; 
+import PriorityDropdown from './taskPriority';
 
 const EditTask = ({ loggedIn, logout }) => {
   const location = useLocation();
@@ -19,6 +21,8 @@ const EditTask = ({ loggedIn, logout }) => {
     title: '',
     description: '',
     dueDate: '',
+    category: '',
+    priority: '',
   });
 
   const handleChange = (e) => {
@@ -78,6 +82,8 @@ const EditTask = ({ loggedIn, logout }) => {
       title: '',
       description: '',
       dueDate: '',
+      category: '',
+      priority: '',
     });
 
     // Add task to Firestore
