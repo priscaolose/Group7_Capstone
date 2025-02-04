@@ -1,5 +1,5 @@
 import './App.css';
-import Homepage from './Homepage';
+import HomePage from './Homepage';
 import Login from './login';
 import Registration from './Registration';
 import Dashboard from './Components/Dashboard';
@@ -18,7 +18,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<HomePage />} />
           <Route
             path="/"
             element={
@@ -36,7 +36,6 @@ function App() {
           <Route path="/dashboard" element={<Dashboard loggedIn={loggedIn} logout={logout} />} />
           <Route path="/addtask" element={<AddTask loggedIn={loggedIn} logout={logout} />} />
           <Route path="/editTask" element={<AddTask />} />
-
           {/* Add route for ManageAccount */}
           <Route path="/manageaccount" element={<ManageAccount />} />
         </Routes>

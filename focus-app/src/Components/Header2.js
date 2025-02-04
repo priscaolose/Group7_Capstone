@@ -19,7 +19,7 @@ const Header2 = () => {
         src={logo}
         alt="Logo"
         className="header-logo"
-        onClick={() => navigate('/Homepage')} // Navigate to the home page when logo is clicked
+        onClick={() => navigate('/')} // Navigate to the home page when logo is clicked
         style={{ cursor: 'pointer' }} // Optional: Show pointer cursor
       />
       <div className="navAndLogOut">
