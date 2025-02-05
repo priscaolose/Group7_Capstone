@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import logo from './Images/logo.png';
 
 const ManageAccountPage = () => {
-    const [formVisible, setFormVisible] = useState(false);
-    const [selectedField, setSelectedField] = useState('');
-    const [newValue, setNewValue] = useState('');
-    const [confirmValue, setConfirmValue] = useState('');
-    const [message, setMessage] = useState('');
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -14,61 +9,21 @@ const ManageAccountPage = () => {
         email: '',
         password: '',
     });
+    const [message, setMessage] = useState('');
+    const [selectedSection, setSelectedSection] = useState('profile'); // Track selected section
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setFormVisible(true);
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    const handleFieldSelection = (field) => {
-        setSelectedField(field);
-        setNewValue('');
-        setConfirmValue('');
-        setMessage('');
-    };
-
-    const handleInputChange = (e, type) => {
-        const value = e.target.value;
-        if (type === 'new') {
-            setNewValue(value);
-        } else {
-            setConfirmValue(value);
-        }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        setMessage('Your account details have been successfully updated!');
+    };
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\+?[1-9]\d{1,14}$/; // E.164 phone number format
-
-        if (newValue === '' || confirmValue === '') {
-            setMessage('Please fill out both fields.');
-            return;
-        }
-
-        if (selectedField === 'email' && !emailRegex.test(newValue)) {
-            setMessage('Please enter a valid email address.');
-            return;
-        }
-
-        if (selectedField === 'phoneNumber' && !phoneRegex.test(newValue)) {
-            setMessage('Please enter a valid phone number.');
-            return;
-        }
-
-        if (newValue !== confirmValue) {
-            setMessage('The information provided does not match. Please try again.');
-            return;
-        }
-
-        setFormData((prevData) => ({ ...prevData, [selectedField]: newValue }));
-        setMessage(`Your ${selectedField.replace(/([A-Z])/g, ' $1')} has been successfully updated!`);
-        setNewValue('');
-        setConfirmValue('');
+    const handleSidebarClick = (section) => {
+        setSelectedSection(section); // Update the selected section
     };
 
     return (
@@ -78,49 +33,90 @@ const ManageAccountPage = () => {
                     <img className="logo" src={logo} alt="Logo" style={styles.logo} />
                 </div>
             </header>
-            <main style={styles.content}>
-                <h1 style={styles.heading}>Manage Account Details</h1>
-                <p style={styles.description}>
-                    Select the detail you want to update and provide the new account details. Confirm the new account details to save changes.
-                </p>
-                {formVisible ? (
-                    <div style={styles.box}>
-                        <div style={styles.selectionContainer}>
-                            <button style={styles.button} onClick={() => handleFieldSelection('firstName')}>Update First Name</button>
-                            <button style={styles.button} onClick={() => handleFieldSelection('lastName')}>Update Last Name</button>
-                            <button style={styles.button} onClick={() => handleFieldSelection('phoneNumber')}>Update Phone Number</button>
-                            <button style={styles.button} onClick={() => handleFieldSelection('email')}>Update Email</button>
-                            <button style={styles.button} onClick={() => handleFieldSelection('password')}>Update Password</button>
+            <div style={styles.mainContainer}>
+                <aside style={styles.sidebar}>
+                    <h2 style={styles.sidebarTitle}>Account Settings</h2>
+                    <ul style={styles.sidebarList}>
+                        <li 
+                            style={styles.sidebarItem} 
+                            onClick={() => handleSidebarClick('profile')}
+                        >
+                            Profile
+                        </li>
+                        <li 
+                            style={styles.sidebarItem} 
+                            onClick={() => handleSidebarClick('security')}
+                        >
+                            Security
+                        </li>
+                        <li 
+                            style={styles.sidebarItem} 
+                            onClick={() => handleSidebarClick('notifications')}
+                        >
+                            Notifications
+                        </li>
+                        <li 
+                            style={styles.sidebarItem} 
+                            onClick={() => handleSidebarClick('privacy')}
+                        >
+                            Privacy
+                        </li>
+                    </ul>
+                </aside>
+                <main style={styles.content}>
+                    <h1 style={styles.heading}>Manage Account Details</h1>
+                    
+                    {selectedSection === 'profile' && (
+                        <form style={styles.form} onSubmit={handleFormSubmit}>
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>First Name</label>
+                                <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} style={styles.input} />
+                            </div>
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Last Name</label>
+                                <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} style={styles.input} />
+                            </div>
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Phone Number</label>
+                                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} style={styles.input} />
+                            </div>
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Email</label>
+                                <input type="email" name="email" value={formData.email} onChange={handleInputChange} style={styles.input} />
+                            </div>
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Password</label>
+                                <input type="password" name="password" value={formData.password} onChange={handleInputChange} style={styles.input} />
+                            </div>
+                            <button type="submit" style={styles.submitButton}>Save Changes</button>
+                        </form>
+                    )}
+                    
+                    {selectedSection === 'security' && (
+                        <div style={styles.securitySection}>
+                            {/* You can add the security settings form here */}
+                            <p>Change your password or enable two-factor authentication.</p>
                         </div>
-                        {selectedField && (
-                            <form style={styles.form} onSubmit={handleFormSubmit}>
-                                <label style={styles.label}>
-                                    New {selectedField.charAt(0).toUpperCase() + selectedField.slice(1)}:
-                                    <input
-                                        type={selectedField === 'password' ? 'password' : 'text'}
-                                        value={newValue}
-                                        onChange={(e) => handleInputChange(e, 'new')}
-                                        style={styles.input}
-                                    />
-                                </label>
-                                <label style={styles.label}>
-                                    Confirm {selectedField.charAt(0).toUpperCase() + selectedField.slice(1)}:
-                                    <input
-                                        type={selectedField === 'password' ? 'password' : 'text'}
-                                        value={confirmValue}
-                                        onChange={(e) => handleInputChange(e, 'confirm')}
-                                        style={styles.input}
-                                    />
-                                </label>
-                                <button type="submit" style={styles.submitButton}>Save Changes</button>
-                            </form>
-                        )}
-                    </div>
-                ) : (
-                    <p style={styles.loadingText}>Loading...</p>
-                )}
-                {message && <p style={styles.messageText}>{message}</p>}
-            </main>
+                    )}
+                    
+                    {selectedSection === 'notifications' && (
+                        <div style={styles.notificationsSection}>
+                            {/* You can add the notification settings here */}
+                            <p>Choose your notification preferences.</p>
+                        </div>
+                    )}
+                    
+                    {selectedSection === 'privacy' && (
+                        <div style={styles.privacySection}>
+                            {/* You can add privacy settings here */}
+                            <p>Adjust your privacy settings.</p>
+                        </div>
+                    )}
+
+                    {message && <p style={styles.messageText}>{message}</p>}
+                    
+                </main>
+            </div>
             <footer style={styles.footer}>
                 <p>&copy; 2024 Focus. All rights reserved.</p>
             </footer>
@@ -133,96 +129,112 @@ const styles = {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
     },
     header: {
-        backgroundColor: '#e2e9f1',
+        backgroundColor: '#fff',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         padding: '10px 20px',
         display: 'flex',
-        justifyContent: 'flex-start', // Align content to the left
-        alignItems: 'center', // Vertically align
+        justifyContent: 'flex-start',
+        alignItems: 'center',
     },
     logoContainer: {
         display: 'flex',
-        justifyContent: 'flex-start', // Ensure logo container aligns to the left
+        justifyContent: 'flex-start',
     },
     logo: {
         height: '40px',
+    },
+    mainContainer: {
+        display: 'flex',
+        flex: 1,
+    },
+    sidebar: {
+        width: '250px',
+        backgroundColor: '#ffffff',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        padding: '20px',
+    },
+    sidebarTitle: {
+        fontSize: '20px',
+        marginBottom: '15px',
+        color: '#2c2f33',
+    },
+    sidebarList: {
+        listStyleType: 'none',
+        padding: 0,
+    },
+    sidebarItem: {
+        padding: '10px 0',
+        fontSize: '16px',
+        color: '#2c2f33',
+        cursor: 'pointer',
+        transition: 'background-color 0.2s',
     },
     content: {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    heading: {
-        fontSize: '24px',
-        marginBottom: '10px',
-    },
-    description: {
-        fontSize: '16px',
-        marginBottom: '20px',
-        textAlign: 'center',
-    },
-    box: {
-        width: '100%',
-        maxWidth: '400px',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start', 
         padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        backgroundColor: '#f9f9f9',
-    },
-    selectionContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-    },
-    button: {
-        padding: '10px',
-        fontSize: '16px',
-        backgroundColor: '#e2eaf1',
-        borderRadius: '5px',
-        border: 'none',
-        cursor: 'pointer',
+        paddingLeft: '100px',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px',
-        marginTop: '20px',
+        alignItems: 'flex-start', 
+        gap: '15px',
+        textAlign: 'left',
+        width: '100%', 
+    },
+    inputGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%', 
+    },
+    heading: {
+        fontSize: '24px',
+        marginBottom: '20px',
+        color: '#2c2f33',
     },
     label: {
         fontSize: '14px',
+        color: '#2c2f33',
+        marginBottom: '5px',
     },
     input: {
-        width: '90%',
+        width: '40%',
         padding: '10px',
         fontSize: '16px',
         borderRadius: '5px',
         border: '1px solid #ccc',
+        backgroundColor: '#f9f9f9',
     },
     submitButton: {
         padding: '10px',
         fontSize: '16px',
-        backgroundColor: '#093966',
+        backgroundColor: '#7289da',
         color: 'white',
         borderRadius: '5px',
         border: 'none',
         cursor: 'pointer',
+        transition: 'background-color 0.3s',
     },
     messageText: {
         marginTop: '20px',
         fontSize: '16px',
-        color: '#093966',
+        color: '#43b581',
+        textAlign: 'center',
     },
     footer: {
-        backgroundColor: '#8AAEC6',
+        backgroundColor: '#fff',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         color: 'black',
         padding: '5px 0',
         textAlign: 'center',
     },
 };
-
 
 export default ManageAccountPage;
