@@ -5,7 +5,7 @@ import './CSSFolders/AddTask.css';
 import { useNavigate,useLocation } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import { addTask} from './Api/createTask';
+import { editTask} from './Api/editTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
 
@@ -80,7 +80,7 @@ const EditTask = ({ loggedIn, logout }) => {
     });
 
     // Add task to Firestore
-    EditTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
+    editTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
     console.log("task.priority: " + task.priority)
     console.log("task.dueDate: " + task.dueDate)
     

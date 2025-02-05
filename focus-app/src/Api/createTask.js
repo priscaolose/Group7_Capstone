@@ -1,14 +1,16 @@
 //src/firestone.js
 import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import app from '../firebase/firebaseConfig';
-
+import { v4 as uuidv4 } from "uuid"; 
 const db = getFirestore(app);
 
 //add task
 export const addTask = async (userId, taskName,taskDescription,
   startTime, endTime,category,priority) => {
+  const taskID = uuidv4(); 
   try {
     await addDoc(collection(db, "tasks"), {
+      taskID,
       userId,
       taskName,
       taskDescription,
