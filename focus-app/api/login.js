@@ -20,7 +20,7 @@ app.get("/api/login", async (req, res) => {
     // Get user data
     let userData;
     emailSnapshot.forEach((childSnapshot) => {
-      userData = childSnapshot.data();
+      userData = childSnapshot.val();
     });
     // Return user first name
     console.log("Name: " + userData.firstName);
