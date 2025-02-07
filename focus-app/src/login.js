@@ -110,22 +110,18 @@ const Login = ({ login, loggedIn, logout }) => {
         alert("Signed In Successfully");
         setEmail("");
         setPassword("");
-        try {
-          const response = await fetch("/api/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email }),
-          });
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
 
-          firstName = await response.json();
-        } catch (error) {
-          console.error("Error Logging in:", error);
-          alert(error.message);
-        }
+        firstName = await response.json();
         const userData = { firstName: firstName };
         setUser(userData);
+        
         navigate("/dashboard");
         login(); // Call the login function passed as a prop to set loggedIn to true
       } else {
