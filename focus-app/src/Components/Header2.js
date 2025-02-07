@@ -4,7 +4,7 @@ import logo from '../Images/Focus-8.png'; // Import the logo image
 import Navbar from './navBar'; // Import Navbar component
 import '../CSSFolders/Header.css'; 
 import Homepage from '../Homepage';
-import { useUser } from "./Components/context";
+import { useUser } from "./context";
 
 const Header2 = () => {
   const navigate = useNavigate();
