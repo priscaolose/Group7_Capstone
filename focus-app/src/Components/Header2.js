@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Import the hook for navigation
-import logo from '../Images/logo.png'; 
+import logo from '../Images/Focus-8.png'; // Import the logo image
 import Navbar from './navBar'; // Import Navbar component
 import '../CSSFolders/Header.css'; 
 import Homepage from '../Homepage';
@@ -18,6 +18,7 @@ const Header2 = () => {
       <img
         src={logo}
         alt="Logo"
+       
         className="header-logo"
         onClick={() => navigate('/Homepage')} // Navigate to the home page when logo is clicked
         style={{ cursor: 'pointer' }} // Optional: Show pointer cursor

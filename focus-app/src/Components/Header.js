@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Import the hook for navigation
-import logo from '../Images/logo.png';
+import logo from '../Images/Focus-8.png'; // Import the logo image
 import Navbar from './navBar'; // Import Navbar component
 import '../CSSFolders/Header.css'; 
 import Homepage from '../Homepage';
@@ -21,6 +21,7 @@ const Header = ({ loggedIn, logout }) => {
           className="header-logo"
           onClick={handleLogoClick} // Add click handler for logo navigation
           style={{ cursor: 'pointer' }} // Optional: Show pointer cursor
+          sizes='500px'
         />
         <div className="navAndLogOut">
           <Navbar />
