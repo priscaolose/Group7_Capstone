@@ -23,6 +23,7 @@ app.post("/api/login", async (req, res) => {
       userData = childSnapshot.val();
     });
     // Return user first name
+    console.log("Name: " + userData.firstName);
     res.status(200).json({ name: userData.firstName });
   } catch (error) {
     res.json({ error: 'Failed to sign in' });

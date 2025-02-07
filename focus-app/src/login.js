@@ -107,6 +107,8 @@ const Login = ({ login, loggedIn, logout }) => {
       const user = userCredential.user;
       if (user) {
         alert("Signed In Successfully");
+        setEmail("");
+        setPassword("");
         const response = await fetch("/api/login", {
           method: "POST",
           headers: {
@@ -118,8 +120,6 @@ const Login = ({ login, loggedIn, logout }) => {
         const { name } = await response.json();
         const userData = { firstName: name };
         setUser(userData);
-        setEmail("");
-        setPassword("");
         navigate("/dashboard");
         login(); // Call the login function passed as a prop to set loggedIn to true
       } else {
