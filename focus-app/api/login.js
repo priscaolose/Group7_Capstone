@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/api/login", async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.query;
 
   try {
     // Get a reference to the database
