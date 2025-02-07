@@ -6,6 +6,7 @@ app.use(express.json());
 
 app.get("/api/login", async (req, res) => {
   const { email } = req.query;
+  console.log("Request received");
 
   try {
     // Get a reference to the database
@@ -20,7 +21,7 @@ app.get("/api/login", async (req, res) => {
     // Get user data
     let userData;
     emailSnapshot.forEach((doc) => {
-      userData = doc.data(); // Assuming only one document matches
+      userData = doc.data();
     });
     // Return user first name
     console.log("Name: " + userData.firstName);
