@@ -1,4 +1,5 @@
 import { db } from "../src/firebase/firebaseConfig.js";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import express from "express";
 
 const app = express();
@@ -10,10 +11,12 @@ app.get("/api/login", async (req, res) => {
 
   try {
     // Get a reference to the database
-    const usersRef = db.collection("Users");
+    const usersRef = collection(db, "Users");
 
-    // Check if user email is in database
-    const emailSnapshot = await usersRef.where("email", "==", email).get();
+    // Create a query to find documents with the matching email
+    const q = query(usersRef, where("email", "==", email));
+    const emailSnapshot = await getDocs(q);
+    
     if (emailSnapshot.empty) {
       return res.json({ error: "User not found" });
     }
