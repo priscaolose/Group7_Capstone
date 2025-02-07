@@ -17,8 +17,10 @@ app.get("/api/login", async (req, res) => {
     if (emailSnapshot.empty) {
       return res.json({ error: "User not found" });
     }
+    console.log("Got user from email");
 
     // Get user data
+    console.log("Getting user");
     let userData;
     emailSnapshot.forEach((doc) => {
       userData = doc.data();
