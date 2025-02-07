@@ -110,7 +110,7 @@ const Login = ({ login, loggedIn, logout }) => {
         setEmail("");
         setPassword("");
         const response = await fetch("/api/login", {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

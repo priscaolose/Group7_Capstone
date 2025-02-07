@@ -4,8 +4,8 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-app.post("/api/login", async (req, res) => {
-  const { email } = req.body;
+app.get("/api/login", async (req, res) => {
+  const { email } = req.query;
 
   try {
     // Get a reference to the database
