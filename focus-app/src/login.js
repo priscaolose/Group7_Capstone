@@ -99,7 +99,6 @@ const Login = ({ login, loggedIn, logout }) => {
 
   async function handleLogin(email, password) {
     try {
-      let firstName;
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -116,8 +115,8 @@ const Login = ({ login, loggedIn, logout }) => {
           body: JSON.stringify({ email }),
         });
 
-        firstName = await response.json();
-        const userData = { firstName: firstName };
+        const { name } = await response.json();
+        const userData = { firstName: name };
         setUser(userData);
         setEmail("");
         setPassword("");
