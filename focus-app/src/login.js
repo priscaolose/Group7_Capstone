@@ -69,6 +69,19 @@ const Login = ({ login, loggedIn, logout }) => {
       const emailExists = await checkIfEmailExists(result.user.email);
       console.log("emailExists", emailExists);
       if (emailExists) {
+        const response = await fetch(`/api/login?email=${encodeURIComponent(email)}`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.name) {
+          const userData = { firstName: data.name };
+          setUser(userData);
+        }
         // Existing user - proceed to home
         navigate("/addTask", { state: { email: result.user.email } });
       } else {

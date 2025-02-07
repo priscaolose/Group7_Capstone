@@ -4,12 +4,16 @@ import logo from '../Images/Focus-8.png'; // Import the logo image
 import Navbar from './navBar'; // Import Navbar component
 import '../CSSFolders/Header.css'; 
 import Homepage from '../Homepage';
+import { useUser } from "./Components/context";
 
 const Header2 = () => {
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const HandleLogout = () => {
     // Optional: Add any logout logic here (e.g., clearing auth tokens or session)
+    const userData = { firstName: null };
+    setUser(userData);
     navigate('/login'); // Redirect to the login page after logout
   };
 
