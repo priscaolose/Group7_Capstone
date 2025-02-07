@@ -117,11 +117,13 @@ const Login = ({ login, loggedIn, logout }) => {
           body: JSON.stringify({ email }),
         });
 
-        const { name } = await response.json();
-        const userData = { firstName: name };
-        setUser(userData);
-        navigate("/dashboard");
-        login(); // Call the login function passed as a prop to set loggedIn to true
+        if (response.ok) {
+          const { name } = await response.json();
+          const userData = { firstName: name };
+          setUser(userData);
+          navigate("/dashboard");
+          login(); // Call the login function passed as a prop to set loggedIn to true
+        }
       } else {
         //if user does not have an account, I want them to be redirected to the registration page
       }
