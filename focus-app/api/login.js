@@ -4,8 +4,8 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-app.get("/api/login", async (req, res) => {
-  const { email } = req.query;
+app.post("/api/login", async (req, res) => {
+  const { email } = req.body;
 
   try {
     // Get a reference to the database
@@ -20,7 +20,7 @@ app.get("/api/login", async (req, res) => {
     // Get user data
     let userData;
     emailSnapshot.forEach((childSnapshot) => {
-      userData = childSnapshot.val();
+      userData = childSnapshot.data();
     });
     // Return user first name
     console.log("Name: " + userData.firstName);

@@ -109,19 +109,17 @@ const Login = ({ login, loggedIn, logout }) => {
         alert("Signed In Successfully");
         setEmail("");
         setPassword("");
-        const response = await fetch("/api/login", {
+        const response = await fetch(`/api/login?email=${encodeURIComponent(email)}`, {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          const { name } =  { firstName: data.firstName };
-          const userData = { firstName: name };
+          const userData = { firstName: data.firstName };
           setUser(userData);
           navigate("/dashboard");
           login(); // Call the login function passed as a prop to set loggedIn to true
