@@ -4,7 +4,7 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-app.post("/api/login", async (req, res) => {
+app.get("/api/login", async (req, res) => {
   const { email } = req.body;
 
   try {
