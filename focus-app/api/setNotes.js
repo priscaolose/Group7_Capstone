@@ -12,7 +12,6 @@ app.post("/api/setNotes", async (req, res) =>{
     const userRef = collection(db, "Notes");
 
     try {
-        // Hash password
         await addDoc(userRef, {
           userName,
           note
