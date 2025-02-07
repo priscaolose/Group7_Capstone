@@ -113,13 +113,13 @@ const Login = ({ login, loggedIn, logout }) => {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
-          },
+          }
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          const userData = { firstName: data.firstName };
+          const userData = { firstName: data.name };
           setUser(userData);
           navigate("/dashboard");
           login(); // Call the login function passed as a prop to set loggedIn to true
