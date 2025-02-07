@@ -1,4 +1,4 @@
-import { db } from "../src/firebase/firebaseConfig";
+import { db } from "../src/firebase/firebaseConfig.js";
 import express from "express";
 
 const app = express();
