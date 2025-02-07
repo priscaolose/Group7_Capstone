@@ -1,12 +1,11 @@
 import { db } from "../src/firebase/firebaseConfig";
 import express from "express";
-const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(express.json());
 
 app.post("/api/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
 
   try {
     // Get a reference to the database
@@ -23,19 +22,8 @@ app.post("/api/login", async (req, res) => {
     emailSnapshot.forEach((childSnapshot) => {
       userData = childSnapshot.val();
     });
-
-    // Check if password is correct
-    bcrypt.compare(password, userData.password, function(err, result){
-      if(result === false)
-      {
-        return res.json({ error: "Invalid password" });
-      }
-      if(result === true)
-      {
-        res.json({ message: "Login successful" });
-      }
-    });
-
+    // Return user first name
+    res.status(200).json({ name: userData.firstName });
   } catch (error) {
     res.json({ error: 'Failed to sign in' });
   }
