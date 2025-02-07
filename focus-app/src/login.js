@@ -118,7 +118,7 @@ const Login = ({ login, loggedIn, logout }) => {
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (response.ok && data.name) {
           const userData = { firstName: data.name };
           setUser(userData);
           navigate("/dashboard");
