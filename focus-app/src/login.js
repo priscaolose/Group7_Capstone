@@ -110,15 +110,17 @@ const Login = ({ login, loggedIn, logout }) => {
         setEmail("");
         setPassword("");
         const response = await fetch("/api/login", {
-          method: "GET",
+          method: 'GET',
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email }),
         });
 
+        const data = await response.json();
+
         if (response.ok) {
-          const { name } = await response.json();
+          const { name } =  { firstName: data.firstName };
           const userData = { firstName: name };
           setUser(userData);
           navigate("/dashboard");
