@@ -107,14 +107,14 @@ const Login = ({ login, loggedIn, logout }) => {
       const user = userCredential.user;
       if (user) {
         alert("Signed In Successfully");
-        setEmail("");
-        setPassword("");
         const response = await fetch(`/api/login?email=${encodeURIComponent(email)}`, {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
           }
         });
+        setEmail("");
+        setPassword("");
 
         const data = await response.json();
 
