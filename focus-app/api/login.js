@@ -18,12 +18,15 @@ app.get("/api/login", async (req, res) => {
     }
 
     // Get user data
-    const userData = emailSnapshot.data();
+    let userData;
+    emailSnapshot.forEach((doc) => {
+      userData = doc.data(); // Assuming only one document matches
+    });
     // Return user first name
     console.log("Name: " + userData.firstName);
     res.status(200).json({ name: userData.firstName });
   } catch (error) {
-    res.json({ error: 'Failed to sign in' });
+    res.json({ error: "Failed to sign in" });
   }
 });
 
