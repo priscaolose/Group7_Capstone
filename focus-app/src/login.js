@@ -110,7 +110,7 @@ const Login = ({ login, loggedIn, logout }) => {
         alert("Signed In Successfully");
         setEmail("");
         setPassword("");
-        const response = await fetch("/api/login", {
+        /*const response = await fetch("/api/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -120,8 +120,8 @@ const Login = ({ login, loggedIn, logout }) => {
 
         firstName = await response.json();
         const userData = { firstName: firstName };
-        setUser(userData);
-        
+        setUser(userData);*/
+
         navigate("/dashboard");
         login(); // Call the login function passed as a prop to set loggedIn to true
       } else {
