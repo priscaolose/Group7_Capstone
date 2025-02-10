@@ -50,6 +50,7 @@ function Dashboard() {
   const [currentTime, setCurrentTime] = useState('00:00:00');
   const [note, setNote] = useState('');
   const [notesList, setNotesList] = useState([]);
+  const [notes, setNotes] = useState('');
 
   /*useEffect(() => {
     const fetchUserData = async (userID) => {
@@ -309,9 +310,18 @@ function Dashboard() {
                   fontSize: '1rem',
                   fontFamily: '"Poppins", sans-serif',
                   padding: '8px',
+                  height: '50vh',
                 }}
                 placeholder="Write your notes here..."
               />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNote}
+                sx={{ mt: 2 }}
+              >
+                save
+              </Button>
                 </Typography>
               </Paper>
             </Box>
