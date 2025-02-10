@@ -299,14 +299,19 @@ function Dashboard() {
                 >
                   Notes
 
-                <Box sx = {{ mb: 1}}>
-                  <TextField
-                    fullWidth
-                    label="Add a note"
-                    variant='outlined'
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                  />
+               <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                style={{
+                  width: '100%',
+                  border: '1px solid #ccc',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontFamily: '"Poppins", sans-serif',
+                  padding: '8px',
+                }}
+                placeholder="Write your notes here..."
+              />
                   <Button
                     variant="contained"
                     color="primary"
@@ -319,7 +324,7 @@ function Dashboard() {
                   >
                     Add Note
                   </Button>
-                </Box>
+          
                 </Typography>
               </Paper>
             </Box>
