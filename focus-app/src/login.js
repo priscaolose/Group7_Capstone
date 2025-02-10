@@ -91,11 +91,12 @@ const Login = ({ login, loggedIn,logout }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      console.log("user",user.email);
       if (user) {
         alert('Signed In Successfully');
         setEmail('');
         setPassword('');
-        navigate('/dashboard');
+        navigate('/dashboard', { state: { email: user.email } }); // Pass email in state
         login(); // Call the login function passed as a prop to set loggedIn to true      
       }
       else{

@@ -88,6 +88,7 @@ const AddTask = ({ loggedIn, logout }) => {
 
     // Add your task submission logic here
     console.log('Task to be added:', task);
+    console.log("email: " + email)
     alert('Task has been successfully submitted');
   };
 

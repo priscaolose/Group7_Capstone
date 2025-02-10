@@ -73,6 +73,7 @@ const Register = () => {
             setErrors(newErrors); // Set all errors at once
             return; // Exit the function if there are errors
         }
+        console.log("email",email)
         handleRegister(e);
     };
 
@@ -114,7 +115,6 @@ const handleRegister = async (e) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        // ... Firebase auth code ...
 
         const response = await fetch('/api/register', {
             method: 'POST',
@@ -126,7 +126,7 @@ const handleRegister = async (e) => {
                 lastName,
                 email,
                 userName: user.uid,
-                phonenumber: phone, // Note: match the field name with server
+                phonenumber: phone,
                 password,
             }),
         });
@@ -134,14 +134,18 @@ const handleRegister = async (e) => {
         const userData = { firstName: firstName };
         setUser(userData);
 
+        // Log the raw response text
+        const responseText = await response.text();
+        console.log("Raw response:", responseText);
+
         // First check if response is ok
         if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = JSON.parse(responseText); // Now safe to parse
             throw new Error(errorData.error || 'Registration failed');
         }
 
-        const result = await response.json();
-        navigate('/dashboard', { state: { email:user.email } });
+        const result = JSON.parse(responseText); // Now safe to parse
+        navigate('/dashboard', { state: { email: user.email } });
         setSuccessMessage(result.message);
 
     } catch (error) {

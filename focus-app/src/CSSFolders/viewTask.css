@@ -1,0 +1,39 @@
+.task-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1059a2;
+    text-align: left;
+    margin-bottom: 40px;
+    margin-top: 5px;
+    margin-left: 20px;
+  }
+
+.sort-icon {
+  color: #1059a2;
+  font-size: 1.5rem;
+  margin-left: 20px;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.filter-icon{
+  color: #1059a2;
+  font-size: 1.5rem;
+  margin-left: 10px;
+  margin-right: 2px;
+  cursor: pointer;
+}
+
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px; 
+  font-size: 1rem;
+  color: #1059a2;
+  cursor: pointer;
+}
+.icon-text:focus{
+  color: #05305c;
+
+}
+

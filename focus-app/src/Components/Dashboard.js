@@ -15,7 +15,7 @@ import { auth } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
 import { db } from '../firebase/firebaseConfig'; // Firestore config
-import { Link } from 'react-router-dom';
+import { Link,useLocation} from 'react-router-dom';
 import { useUser } from './context';
 import TextField from '@mui/material/TextField';
 import { Notes } from '@mui/icons-material';
@@ -49,6 +49,8 @@ const theme = createTheme({
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   const [userFirstName, setUserFirstName] = useState(null);
+  const location = useLocation(); 
+  const email = location.state?.email; 
   //const [user, setUser] = useState(null);
   const { user } = useUser();
   const [currentTime, setCurrentTime] = useState('00:00:00');
@@ -240,6 +242,7 @@ function Dashboard() {
                 <Typography
                   variant="body1"
                   component={Link} to = "/addTask"
+                  state={{ email: email }}
                   sx={{
                     color: theme.palette.primary.main,
                     fontSize: '1.25rem',

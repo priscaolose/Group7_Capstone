@@ -93,8 +93,8 @@ const EditTask = ({ loggedIn, logout }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      {/* Header */}
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
