@@ -299,7 +299,7 @@ function Dashboard() {
                 >
                   Notes
 
-                <Box sx = {{ mb: 2}}>
+                <Box sx = {{ mb: 1}}>
                   <TextField
                     fullWidth
                     label="Add a note"
