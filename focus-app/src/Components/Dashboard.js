@@ -312,19 +312,6 @@ function Dashboard() {
                 }}
                 placeholder="Write your notes here..."
               />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNote}
-                    sx={{ 
-                      mt: 2,
-                      backgroundColor: theme.palette.primary.main,
-                      color: 'white',
-                    }}
-                  >
-                    Add Note
-                  </Button>
-          
                 </Typography>
               </Paper>
             </Box>
