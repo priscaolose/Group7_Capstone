@@ -6,6 +6,7 @@ import {
   Typography,
   Paper,
   useMediaQuery,
+  Button,
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -298,8 +299,26 @@ function Dashboard() {
                 >
                   Notes
 
-                <Box>
-                <TextField fullWidth label="Enter notes" id="fullWidth" />
+                <Box sx = {{ mb: 2}}>
+                  <TextField
+                    fullWidth
+                    label="Add a note"
+                    variant='outlined'
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNote}
+                    sx={{ 
+                      mt: 2,
+                      backgroundColor: theme.palette.primary.main,
+                      color: 'white',
+                    }}
+                  >
+                    Add Note
+                  </Button>
                 </Box>
                 </Typography>
               </Paper>
