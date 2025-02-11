@@ -1,29 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
 import { useNavigate,useLocation } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import { editTask} from './Api/editTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
+import { useParams } from "react-router-dom";
+import { useGetTasks,useUpdateTask } from './Api/editTask';
 
-const EditTask = ({ loggedIn, logout }) => {
+const EditTask = () => {
+  const { id } = useParams();
   const location = useLocation();
-  const email = location.state?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-
   const navigate = useNavigate();
-  const [task, setTask] = useState({
-    title: '',
-    description: '',
-    dueDate: '',
-    category: '',
-    priority: '',
-  });
+  const {tasks} = useGetTasks(id);
+  console.log("tasks",tasks);
+  const updateTask = useUpdateTask(); 
+
+  
+  const [task, setTask] = useState("");
+  useEffect(() => {
+    if (tasks) { 
+      setTask({
+        title: tasks.taskName || "",
+        description: tasks.taskDescription || "",
+        dueDate: tasks.startTime || "",
+        category: tasks.category || "",
+        priority: tasks.priority || "",
+      });
+    }
+  }, [tasks]); 
+
+  console.log("tasks after useEffect",task)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +58,6 @@ const EditTask = ({ loggedIn, logout }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // Clear previous error messages
     setErrors({});
 
@@ -70,22 +81,18 @@ const EditTask = ({ loggedIn, logout }) => {
       setErrors(newErrors);
       return; // Prevent the form submission if there are errors
     }
-
-    setTask({
-      title: '',
-      description: '',
-      dueDate: '',
-      category: '',
-      priority: '',
-    });
-
-    // Add task to Firestore
-    editTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-    console.log("task.priority: " + task.priority)
-    console.log("task.dueDate: " + task.dueDate)
-    
-    // Navigate back to dashboard 
-    navigate('/dashboard');
+    updateTask(id, task)
+    .then(() => {
+      setTask({
+        title: '',
+        description: '',
+        dueDate: '',
+        category: '',
+        priority: '',
+      });
+      navigate('/dashboard');
+      alert('Task has been successfully updated');
+    })
 
     // Add your task submission logic here
     console.log('Task to be added:', task);

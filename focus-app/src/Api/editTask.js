@@ -1,18 +1,58 @@
 
-import { getFirestore } from "firebase/firestore";
-import { ref, update } from "firebase/database"; 
+import { updateDoc } from "firebase/firestore";
 import app from '../firebase/firebaseConfig';
-import { v4 as uuidv4 } from "uuid"; 
+import { getFirestore,getDoc,doc} from "firebase/firestore";
+import { useEffect,useState } from 'react';
+
 const db = getFirestore(app);
 
-export const editTask = async (req, res) => {
-    const { userID, taskID, updatedData } = req.body;
+//update tasks (ex. mark complete)
 
-    try {
-        const taskRef = ref(db, `tasks/${userID}/${taskID}`);
-        await update(taskRef, updatedData);
-        res.status(200).json({ message: 'Task updated successfully' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+const useUpdateTask = () => {
+    const updateTask = async (taskId, updatedData) => {
+      try {
+        const taskRef = doc(db, "tasks", taskId);
+        await updateDoc(taskRef, updatedData);
+        console.log("Task updated successfully!");
+      } catch (error) {
+        console.error("Error updating task:", error.message);
+      }
+    };
+  
+    return updateTask; // ✅ Return the function
+  };
+  
+
+const useGetTasks = (userId) => {
+    const [loading, setLoading] = useState(true);  
+    const [error, setError] = useState(null);  
+    const [tasks, setTasks] = useState([]);  
+    // Firebase setup
+    const db = getFirestore();
+
+    useEffect(() => {
+      const fetchTasks = async () => {
+        try {
+            const docRef = doc(db, "tasks", userId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              setTasks(docSnap.data());
+              console.log("docSnap.data",docSnap.data)
+              console.log("tasks",tasks);
+              console.log("userId",userId)
+            } else {
+              console.log("No such document!")
+            }
+        } catch (error) {
+          setError("Error getting documents: " + error.message);
+          setLoading(false);
+        }
+      };
+        if(userId)
+        fetchTasks();
+    }, [userId]); 
+    return { tasks };
 };
+
+
+export {useGetTasks,useUpdateTask};

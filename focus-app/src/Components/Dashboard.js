@@ -254,7 +254,8 @@ function Dashboard() {
 
                 <Typography
                   variant="body1"
-                  component={Link} to = "/viewTask"
+                  component={Link} to = "/viewTask" 
+                  state={{ email: email }}
                   sx={{
                     color: theme.palette.primary.main,
                     fontSize: '1.25rem',

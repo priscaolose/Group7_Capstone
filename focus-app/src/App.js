@@ -56,7 +56,7 @@ function App() {
             {/* Add route for ManageAccount */}
             <Route path="/manageaccount" element={<ManageAccount />} />
 
-            <Route path="/editTask" 
+            <Route path="/editTask/:id" 
               element={< EditTask />} 
             />
 
