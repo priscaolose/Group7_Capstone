@@ -11,15 +11,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { auth } from '../firebase/firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
-import { db } from '../firebase/firebaseConfig'; // Firestore config
 import { Link,useLocation} from 'react-router-dom';
 import { useUser } from './context';
 import TextField from '@mui/material/TextField';
-import { Notes } from '@mui/icons-material';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 // Custom Theme
 const theme = createTheme({

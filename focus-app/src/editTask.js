@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 import ColorDropdown from './ColorDropdown'; 
@@ -12,7 +12,6 @@ import { useGetTasks,useUpdateTask } from './Api/editTask';
 
 const EditTask = () => {
   const { id } = useParams();
-  const location = useLocation();
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
@@ -26,16 +25,14 @@ const EditTask = () => {
   useEffect(() => {
     if (tasks) { 
       setTask({
-        title: tasks.taskName || "",
-        description: tasks.taskDescription || "",
-        dueDate: tasks.startTime || "",
+        title: tasks.title || "",
+        description: tasks.description || "",
+        dueDate: tasks.dueDate || "",
         category: tasks.category || "",
         priority: tasks.priority || "",
       });
     }
   }, [tasks]); 
-
-  console.log("tasks after useEffect",task)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,11 +44,11 @@ const EditTask = () => {
 
   const handleCancel = () => {
     setTask({
-      title: '',
-      description: '',
-      dueDate: '',
-      category: '',
-      priority: '',
+        title: tasks.title,
+        description: tasks.description,
+        dueDate: tasks.dueDate,
+        category: tasks.category,
+        priority: tasks.priority,
     });
     setErrors({});
   };
@@ -66,8 +63,8 @@ const EditTask = () => {
     if (!task.title) {
       newErrors.title = 'Title is required.';
     }
-    if (task.title && task.title.length > 20) {
-        newErrors.title = 'Title must be at less than 20 characters';
+    if (task.title && task.title.length > 75) {
+        newErrors.title = 'Title must be at less than 75 characters';
       }
     if (task.description && task.description.length > 150) {
         newErrors.description = 'Description must be less than 150 characters';
@@ -96,7 +93,6 @@ const EditTask = () => {
 
     // Add your task submission logic here
     console.log('Task to be added:', task);
-    alert('Task has been successfully submitted');
   };
 
   return (
@@ -106,7 +102,7 @@ const EditTask = () => {
         <Header2 />
       </Grid2>
   
-      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh">
+      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
         <form onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
           <Grid2 xs={12} md={6} container direction="column" spacing={3}>

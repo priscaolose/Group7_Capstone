@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import { addTask} from './Api/createTask';
+import { addTask } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
+
 const AddTask = ({ loggedIn, logout }) => {
   const location = useLocation();
   const email = location.state?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  console.log("email,",email)
   const navigate = useNavigate();
   const [task, setTask] = useState({
     title: '',
@@ -30,6 +32,15 @@ const AddTask = ({ loggedIn, logout }) => {
       ...prev,
       [name]: value,
     }));
+  };
+  
+  const handleYesClick = () => {
+    setIsModalVisible(false); 
+    navigate('/dashboard'); 
+  };
+
+  const handleNoClick = () => {
+    setIsModalVisible(false); 
   };
 
   const handleCancel = () => {
@@ -54,12 +65,12 @@ const AddTask = ({ loggedIn, logout }) => {
     if (!task.title) {
       newErrors.title = 'Title is required.';
     }
-    if (task.title && task.title.length > 20) {
-        newErrors.title = 'Title must be at less than 20 characters';
-      }
+    if (task.title && task.title.length > 75) {
+        newErrors.title = 'Title must be less than 75 characters';
+    }
     if (task.description && task.description.length > 150) {
         newErrors.description = 'Description must be less than 150 characters';
-      }
+    }
     if (!task.dueDate) {
       newErrors.dueDate = 'Due date is required.';
     }
@@ -70,26 +81,18 @@ const AddTask = ({ loggedIn, logout }) => {
       return; // Prevent the form submission if there are errors
     }
 
+    // Add task to Firestore
+    addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
+    console.log("task.priority: " + task.priority)
+    console.log("task.dueDate: " + task.dueDate)
     setTask({
       title: '',
       description: '',
       dueDate: '',
       category: '',
       priority: '',
-    });
-
-    // Add task to Firestore
-    addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-    console.log("task.priority: " + task.priority)
-    console.log("task.dueDate: " + task.dueDate)
-    
-    // Navigate back to dashboard 
-    navigate('/dashboard');
-
-    // Add your task submission logic here
-    console.log('Task to be added:', task);
-    console.log("email: " + email)
-    alert('Task has been successfully submitted');
+    })
+    setIsModalVisible(true);
   };
 
   return (
@@ -99,8 +102,8 @@ const AddTask = ({ loggedIn, logout }) => {
         <Header2 />
       </Grid2>
   
-      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh">
-        <form onSubmit={handleSubmit}>
+      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px">
+        <form id="taskForm" onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
           <Grid2 xs={12} md={6} container direction="column" spacing={3}>
             {/* Heading and Buttons Row */}
@@ -218,13 +221,12 @@ const AddTask = ({ loggedIn, logout }) => {
                       </InputAdornment>
                     ),
                   }}
-                  margin-bottom={5}
                 />
                 {errors.title && <label className="errorLabel">{errors.title}</label>}
               </Box>
             </Grid2>
   
-            {/* Task Description Field with Floating Label */}
+            {/* Task Description Field */}
             <Grid2 xs={12}>
               <Box sx={{ position: 'relative' }}>
                 {(task.description || isFocused) && (
@@ -274,23 +276,8 @@ const AddTask = ({ loggedIn, logout }) => {
                       fontWeight: 'bold',
                     },
                   }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={() => setTask({ description: '' })}>
-                          <Clear sx={{ fontSize: '24px' }} />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
                   multiline
                   rows={4}
-                  margin-bottom={5}
                 />
                 {errors.description && <label className="errorLabel">{errors.description}</label>}
               </Box>
@@ -300,7 +287,6 @@ const AddTask = ({ loggedIn, logout }) => {
           {/* Column 2: Task Due Date */}
           <Grid2 xs={12} md={6} container direction="row" spacing={3}>
             <Grid2 xs={12}>
-              {/* Due Date Field */}
               <TextField
                 fullWidth
                 label="Task DueDate"
@@ -318,51 +304,41 @@ const AddTask = ({ loggedIn, logout }) => {
                   '& .MuiInputBase-root': {
                     borderRadius: '10px',
                   },
-                  '& .MuiFormLabel-root': {
-                    color: '#105',
-                  },
-                  '& .MuiInputBase-input': {
-                    padding: '10px',
-                    fontSize: '30px',
-                  },
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => setTask({ ...task, dueDate: '' })}>
-                        <Clear sx={{ fontSize: '24px' }} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                inputProps={{
-                  style: {
-                    appearance: 'none',
-                    WebkitAppearance: 'none',
-                    MozAppearance: 'none',
-                  },
                 }}
               />
             </Grid2>
             <Grid2 item container spacing={2} justifyContent="flex-end">
               <Grid2 item>
-                  <ColorDropdown
-                      name="category" 
-                      onChange={handleChange} 
-                  />
-                    </Grid2>
+                <ColorDropdown name="category" onChange={handleChange} />
+              </Grid2>
               <Grid2 item>
-                  <PriorityDropdown  
-                      name="priority" 
-                      onChange={handleChange} 
-                  />
+                <PriorityDropdown name="priority" onChange={handleChange} />
               </Grid2>
             </Grid2>
           </Grid2>
-
         </form>
+
+        {isModalVisible && (
+          <div id="myModal" className="modal" style={{ display: 'block' }}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h2>Your task has been successfully created!</h2>
+                <span className="close" onClick={handleNoClick}>
+                  &times;
+                </span>
+              </div>
+              <div className="modal-body">
+                <p>Click Yes to navigate back to the Dashboard or No to stay here.</p>
+              </div>
+              <div className="modal-footer">
+                <Button onClick={handleYesClick}>Yes</Button>
+                <Button onClick={handleNoClick}>No</Button>
+              </div>
+            </div>
+          </div>
+        )}
       </Grid2>
-  
+
       {/* Footer */}
       <Grid2 xs={12}>
         <Footer />

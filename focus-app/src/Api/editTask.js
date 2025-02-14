@@ -9,10 +9,13 @@ const db = getFirestore(app);
 //update tasks (ex. mark complete)
 
 const useUpdateTask = () => {
+  console.log("function was called")
     const updateTask = async (taskId, updatedData) => {
       try {
         const taskRef = doc(db, "tasks", taskId);
         await updateDoc(taskRef, updatedData);
+        console.log("task ref",taskRef)
+        console.log("updated data", updatedData);
         console.log("Task updated successfully!");
       } catch (error) {
         console.error("Error updating task:", error.message);

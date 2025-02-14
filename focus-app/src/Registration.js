@@ -22,6 +22,9 @@ const Register = () => {
     const { setUser } = useUser();
 
     const navigate = useNavigate();
+    const handleAccountLogin = () => {
+        navigate('/login');
+    };
 
     const isValidPhoneNumber = (phoneNumber) => {
         const regex = /^\+?1?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
@@ -236,11 +239,14 @@ const handleRegister = async (e) => {
                 </form>
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 <div className="googleSignInContainer">
-                <div className="googleSignInText">Sign Up With</div>
-                    <img src={Googlelogo} onClick={() => handleGoogleSignUp(navigate)} alt="GoogleLogo" className="google-logo" />
+                    <div className="googleSignInText">Sign Up With</div>
+                        <img src={Googlelogo} onClick={() => handleGoogleSignUp(navigate)} alt="GoogleLogo" className="google-logo" />
+                    </div>
+                    <div className="alreadyHaveAnAccount"> Already have an account? <span className="clickableRegister" onClick={handleAccountLogin}>
+                        Sign in 
+                        </span>
+                    </div>
                 </div>
-
-            </div>
             <Footer />
         </div>
     );

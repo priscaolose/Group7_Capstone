@@ -1,6 +1,6 @@
 import { collection, query, where, getFirestore,getDocs} from "firebase/firestore";
 import { useEffect,useState } from 'react';
-
+import { useLocation } from "react-router-dom";
 const useTasks = (userEmail) => {
     const [loading, setLoading] = useState(true);  
     const [error, setError] = useState(null);  
@@ -8,8 +8,8 @@ const useTasks = (userEmail) => {
     // Firebase setup
     const db = getFirestore();
     const Tasks = collection(db, "tasks");
-
-    
+    console.log("function was called")
+    console.log("user email",userEmail);
     useEffect(() => {
       const fetchTasks = async () => {
         const nameQuery = query(Tasks, where("userId", "==", userEmail));
@@ -34,7 +34,7 @@ const useTasks = (userEmail) => {
       if (userEmail) {
         fetchTasks();
       }
-    }, [userEmail]); 
+    }, [useLocation(),userEmail]); 
     return { tasks, error,loading };
 };
 

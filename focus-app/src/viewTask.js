@@ -10,9 +10,8 @@ import { faSearch, faSort, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { TableContainer, Table, TableBody, TableRow, TableCell, Paper, Button, Checkbox } from '@mui/material';
 import SortByDropDown from './sortByDropdown.js';
 import { useLocation } from 'react-router-dom';
-import { collection, query, where, getFirestore,getDocs} from "firebase/firestore";
 import  useTasks from './Api/extractTasks.js';
-
+import { deleteTask } from './Api/createTask.js';
 
 const SearchBox = ({ setFilteredTasks,tasks }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,16 +29,18 @@ const SearchBox = ({ setFilteredTasks,tasks }) => {
       setFilteredTasks(tasks);
     } else {
       setFilteredTasks(tasks.filter((task) =>
-        task.taskName.toLowerCase().replace(/\s+/g,"").trim().includes(value.toLowerCase().replace(/\s+/g,"").trim()) ||
-        task.taskDescription.toLowerCase().replace(/\s+/g,"").trim().includes(value.toLowerCase().replace(/\s+/g,"").trim())
+        task.title.toLowerCase().replace(/\s+/g,"").trim().includes(value.toLowerCase().replace(/\s+/g,"").trim()) ||
+        task.description.toLowerCase().replace(/\s+/g,"").trim().includes(value.toLowerCase().replace(/\s+/g,"").trim())
       ));
     }
   };
-
+  const handleDelete =() =>{
+    
+  }
   const handleSearch = () => {
    setFilteredTasks(tasks.filter((task) =>
-      task.taskName.toLowerCase().replace(/\s+/g,"").trim().includes(searchTerm.toLowerCase().trim().replace(/\s+/g,"").trim()) ||
-      task.taskDescription.toLowerCase().replace(/\s+/g,"").trim().includes(searchTerm.toLowerCase().replace(/\s+/g,"").trim())
+      task.title.toLowerCase().replace(/\s+/g,"").trim().includes(searchTerm.toLowerCase().trim().replace(/\s+/g,"").trim()) ||
+      task.description.toLowerCase().replace(/\s+/g,"").trim().includes(searchTerm.toLowerCase().replace(/\s+/g,"").trim())
     ));
   
   };
@@ -85,12 +86,12 @@ const TaskTable = ({ filteredTasks,tasks }) => {
                 <Checkbox />
               </TableCell>
               <TableCell component="th" scope="row">
-                <Typography fontWeight="bold">{task.taskName}</Typography>
+                <Typography fontWeight="bold">{task.title}</Typography>
                 <Typography variant="body3" color="text.secondary">
-                  {task.taskDescription}
+                  {task.description}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                 Task DueDate: {task.startTime}
+                 Task DueDate: {task.dueDate}
                 </Typography>
               </TableCell>
               <TableCell align="right">
@@ -98,7 +99,7 @@ const TaskTable = ({ filteredTasks,tasks }) => {
                   <Button variant="contained" size="small"  sx={{ textTransform: 'none' ,backgroundColor: '#8AAEC6'}} onClick={() => navigate(`/editTask/${task.id}`)}>
                     edit
                   </Button>
-                  <Button variant="contained" size="small" color="error" sx={{ textTransform: 'none' }}>
+                  <Button variant="contained" size="small" color="error" sx={{ textTransform: 'none' }} onClick = {()=>deleteTask(task.id)}>
                     delete
                   </Button>
                 </Box>
@@ -107,7 +108,7 @@ const TaskTable = ({ filteredTasks,tasks }) => {
           ))}
         </TableBody>
       </Table>
-        )};
+        )}
     </TableContainer>
   );
 };
@@ -120,27 +121,26 @@ const ViewTask = () => {
 
   const location = useLocation();
   const userEmail = location.state?.email;
-  console.log("userEMail",userEmail);
-  const { tasks, loading, error } = useTasks(userEmail); // Fetch tasks
-  console.log("tasks in viewTask",tasks)
+  const { tasks, loading, error } = useTasks(userEmail); 
+  console.log("tasks after stuff has been aded",tasks) //for some reason the task is not being pulled appropraitely here
   useEffect(() => {
     setFilteredTasks(tasks);
+    console.log("filtered tasks",filteredTasks)
   }, [tasks]);
-  console.log("filtered tasks",filteredTasks)
+  
   const toggleDropDown = () => {
     setShowDropdown((prev) => !prev);
-  };
-
-  if (loading) {
-    return <div>Loading...</div>; // Optional: Show a loading indicator
   }
 
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
   if (error) {
-    return <div>{error}</div>; // Display error if there is one
+    return <div>{error}</div>; 
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
@@ -148,7 +148,7 @@ const ViewTask = () => {
         flexGrow: 1,
         overflowY: 'auto',
         margin: '10px 30px',
-        paddingTop: '10px',
+       paddingTop: '10px',
         width: '100%',
         '& > *': { marginBottom: 3 }
       }}>
