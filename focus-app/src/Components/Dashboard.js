@@ -169,7 +169,7 @@ function Dashboard() {
                   }}
                 >
                   {/* display user's first name */}
-                  {user?.firstName || "Loading..."} 
+                  {user?.firstName || "Guest"} 
                 </Typography>
               </Paper>
 

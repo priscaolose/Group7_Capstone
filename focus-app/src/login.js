@@ -4,7 +4,11 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import "./CSSFolders/Login.css";
 import Googlelogo from "./Images/googleLogo.png";
-import { signInWithGoogle, checkIfEmailExists } from "./firebase/firebaseAuth";
+import {
+  signInWithGoogle,
+  checkIfEmailExists,
+  getUsersName,
+} from "./firebase/firebaseAuth";
 import { auth } from "./firebase/firebaseConfig";
 import {
   signInWithEmailAndPassword,
@@ -69,19 +73,9 @@ const Login = ({ login, loggedIn, logout }) => {
       const emailExists = await checkIfEmailExists(result.user.email);
       console.log("emailExists", emailExists);
       if (emailExists) {
-        /*const response = await fetch(`/api/login?email=${encodeURIComponent(email)}`, {
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
-          }
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.name) {
-          const userData = { firstName: data.name };
-          setUser(userData);
-        }*/
+        const firstName = await getUsersName(result.user.email);
+        const userData = { firstName: firstName };
+        setUser(userData);
         // Existing user - proceed to home
         navigate("/addTask", { state: { email: result.user.email } });
       } else {
@@ -120,12 +114,15 @@ const Login = ({ login, loggedIn, logout }) => {
       const user = userCredential.user;
       if (user) {
         alert("Signed In Successfully");
-        const response = await fetch(`/api/login?email=${encodeURIComponent(email)}`, {
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `/api/login?email=${encodeURIComponent(email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
         setEmail("");
         setPassword("");
 
