@@ -16,6 +16,7 @@ function NoteSection() {
   const [note, setNote] = useState("");
   const [notesList, setNotesList] = useState([]);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Function to save note to the database
   const handleNote = async () => {
@@ -23,6 +24,8 @@ function NoteSection() {
       setMessage("Please enter a note before saving.");
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await fetch("/api/setNotes", {
@@ -37,16 +40,23 @@ function NoteSection() {
       });
 
       const data = await response.json();
+      
       if (response.ok) {
         setNotesList([...notesList, note]); // Add note to UI
         setNote(""); // Clear input field
         setMessage("Note saved successfully!");
+
+        setTimeout(() => setMessage(""), 3000);
       } else {
         setMessage(`Error: ${data.error}`);
       }
     } catch (error) {
       console.error("Error saving note:", error);
       setMessage("Failed to save note. Try again.");
+      setTimeout(() => setMessage(""), 3000);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -73,17 +83,31 @@ function NoteSection() {
       <Box sx={{ mb: 2 }}>
         <TextField
           fullWidth
+          multiline
           label="Enter a note"
           variant="outlined"
           value={note}
           onChange={(e) => setNote(e.target.value)}
+          sx={{
+            backgroundColor: "FFF176",
+            borderRadius: "8px",
+            boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
+            "& .MuiOutlinedInput-root": {
+              border: "none",
+              "& fieldset": { border: "none" },
+            },
+            fontFamily: '"Comic Sans MS", cursive, sans-serif',
+            fontSize: "1rem",
+            padding: "8px",
+          }}
         />
         <Button
           variant="contained"
           onClick={handleNote}
+          disabled={loading}
           sx={{ mt: 2, backgroundColor: "#1059a2", color: "white" }}
         >
-          Save Note
+          {loading ? "Saving..." : "Save Note"}
         </Button>
       </Box>
 
