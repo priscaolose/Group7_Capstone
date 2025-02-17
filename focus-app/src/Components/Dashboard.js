@@ -14,8 +14,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { useUser } from './context';
-import TextField from '@mui/material/TextField';
-import { Notes } from '@mui/icons-material';
+import NoteSection from './NoteSection';
 
 // Custom Theme
 const theme = createTheme({
@@ -40,7 +39,6 @@ const theme = createTheme({
     },
   },
 });
-
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
@@ -290,40 +288,11 @@ function Dashboard() {
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   minHeight: '50vh',
                 }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    backgroundColor: "white",
-                    mb: 2,
-                  }}
-                >
-                  Notes
-
-               <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                style={{
-                  width: '100%',
-                  border: '1px solid #ccc',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  fontFamily: '"Poppins", sans-serif',
-                  padding: '8px',
-                  height: '50vh',
-                }}
-                placeholder="Write your notes here..."
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNote}
-                sx={{ mt: 2 }}
-              >
-                save
-              </Button>
-                </Typography>
+              >    
               </Paper>
+              <Box sx={{ display: "grid", gap: 4 }}>
+            <NoteSection /> {/* Uses the NoteSection component */}
+          </Box>
             </Box>
           </Box>
         </Box>
