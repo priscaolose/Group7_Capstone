@@ -48,7 +48,7 @@ function Dashboard() {
   const [currentTime, setCurrentTime] = useState('00:00:00');
   const [note, setNote] = useState('');
   const [notesList, setNotesList] = useState([]);
-  const [notes, setNotes] = useState('');
+ 
 
   /*useEffect(() => {
     const fetchUserData = async (userID) => {
