@@ -280,16 +280,6 @@ function Dashboard() {
                   It's always a great time to take the first step.
                 </Typography>
               </Paper>
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: '16px',
-                  background: 'white',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                  minHeight: '50vh',
-                }}
-              >    
-              </Paper>
               <Box sx={{ display: "grid", gap: 4 }}>
             <NoteSection /> {/* Uses the NoteSection component */}
           </Box>
