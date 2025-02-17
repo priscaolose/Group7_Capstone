@@ -80,7 +80,7 @@ function NoteSection() {
       </Typography>
 
       {/* Input Field */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{backgroundColor: "FFF176", mb: 2 }}>
         <TextField
           fullWidth
           multiline
@@ -90,6 +90,7 @@ function NoteSection() {
           onChange={(e) => setNote(e.target.value)}
           sx={{
             backgroundColor: "FFF176",
+            color: "#fff176",
             borderRadius: "8px",
             boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
             "& .MuiOutlinedInput-root": {
