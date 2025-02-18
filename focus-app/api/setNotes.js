@@ -12,6 +12,7 @@ app.post("/api/setNotes", async (req, res) => {
     console.log("request received:", req.body);
 
     const { userName, note } = req.body;
+    cons [message, setMessage] = useState("");
 
     //const userRef = collection(db, "Notes");
     if (!userName || !note) {

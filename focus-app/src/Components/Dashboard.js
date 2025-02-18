@@ -46,40 +46,29 @@ function Dashboard() {
   //const [user, setUser] = useState(null);
   const { user } = useUser();
   const [currentTime, setCurrentTime] = useState('00:00:00');
-  const [note, setNote] = useState('');
-  const [notesList, setNotesList] = useState([]);
+  const [randomQuote, setRandomQuote] = useState('');
  
 
-  /*useEffect(() => {
-    const fetchUserData = async (userID) => {
-      try {
-        const userRef = doc(db, "Users", userID); // Access user document in Firestore
-        const userDoc = await getDoc(userRef);
+  const quotes = [
+    "Its always a great time to take the first step.",
+    "Believe you can and you’re halfway there. – Theodore Roosevelt",
+    "The only way to do great work is to love what you do. – Steve Jobs",
+    "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
+    "Do what you can, with what you have, where you are. – Theodore Roosevelt",
+    "Your limitation—it’s only your imagination.",
+    "Push yourself, because no one else is going to do it for you.",
+    "Hard work beats talent when talent doesn’t work hard.",
+    "It’s not whether you get knocked down, it’s whether you get up. – Vince Lombardi",
+    "Dream big and dare to fail. – Norman Vaughan",
+    "Act as if what you do makes a difference. It does. – William James",
+    "Keep on going, and the chances are that you will stumble on something, perhaps when you are least expecting it. I never heard of anyone ever stumbling on something sitting down. – Charles F. Kettering"
+  ];
 
-        if (userDoc.exists()) {
-          setUserFirstName(userDoc.data().firstName); // Set user's first name from Firestore
-        } else {
-          console.error("User document not found");
-          setUserFirstName("Guest"); // display for missing first name
-        }
-      } catch (error) {
-        console.error("Error fetching user data from Firestore:", error);
-        setUserFirstName("Guest"); // display for errors
-      }
-    };
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setRandomQuote(quotes[randomIndex]);
+  }, []);
 
-    const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
-      if (loggedInUser) {
-        setUser(loggedInUser);
-        fetchUserData(loggedInUser.uid); // Fetch user data when logged in
-      } else {
-        setUser(null);
-        setUserFirstName("Guest");
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);*/
   useEffect(() => {
     const updateClock = () => {
       const today = new Date();
@@ -277,7 +266,7 @@ function Dashboard() {
                     lineHeight: 1.5,
                   }}
                 >
-                  It's always a great time to take the first step.
+                  {randomQuote}
                 </Typography>
               </Paper>
               <Box sx={{ display: "grid", gap: 4 }}>
