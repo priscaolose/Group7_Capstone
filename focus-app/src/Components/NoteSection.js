@@ -143,9 +143,9 @@ function NoteSection() {
           variant="contained"
           onClick={handleNote}
           disabled={loading}
-          sx={{ mt: 2, backgroundColor: "#1059a2", color: "white" }}
+          sx={{ mt: 2, backgroundColor: "#1059a2", color: "white", }}
         >
-          {loading ? "Saving..." : "Save Note"}
+          {loading ? "Saving..." : "Save"}
         </Button>
       </Box>
 
