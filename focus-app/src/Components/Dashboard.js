@@ -6,7 +6,6 @@ import {
   Typography,
   Paper,
   useMediaQuery,
-  Button,
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -94,16 +93,6 @@ function Dashboard() {
     return hours > 12 ? hours - 12 : hours;
   }
 
-  const handleNote = () => {
-    if (note.trim() !== ''){
-      setNotesList([...notesList, note]);
-      setNote('');
-    }
-  };
-
-  const handleDelete = (index) => {
-    setNotesList(notesList.filter((note, i) => i !== index));
-  };
 
   return (
     <ThemeProvider theme={theme}>
