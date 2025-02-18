@@ -8,9 +8,9 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; 
+import EditIcon from "@mui/icons-material/Edit"; // ✅ Import Edit Icon
 import { useUser } from "./context";
-import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, where, orderBy, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
 function NoteSection() {
@@ -21,61 +21,30 @@ function NoteSection() {
   const [editedNote, setEditedNote] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [lastVisible, setLastVisible] = useState(null);
-  const [firstVisible, setFirstVisible] = useState(null);
-  const [prevPages, setPrevPages] = useState([]);
 
-  const NOTES_PER_PAGE = 5; //Set max notes per page
-
-  //  Fetch notes with pagination
-  const fetchNotes = async (next = false) => {
-    if (!user) return;
-
-    let q = query(
-      collection(db, "Notes"),
-      where("userName", "==", user.firstName),
-      orderBy("timestamp", "desc"),
-      limit(NOTES_PER_PAGE)
-    );
-
-    if (next && lastVisible) {
-      q = query(q, startAfter(lastVisible));
-    }
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        setFirstVisible(querySnapshot.docs[0]); // Save first note (for back navigation)
-        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]); // Save last note (for next page)
-      }
-
-      setNotesList(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-
-      if (next) {
-        setPrevPages([...prevPages, lastVisible]); // Track pages for "Previous" button
-      }
-    });
-
-    return () => unsubscribe();
-  };
-
+  // ✅ Fetch notes from Firebase when user logs in
   useEffect(() => {
-    fetchNotes(); // Load first page of notes
+    const fetchNotes = async () => {
+      if (!user) return;
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "Notes"));
+        const fetchedNotes = querySnapshot.docs
+          .filter((doc) => doc.data().userName === user.firstName)
+          .map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        setNotesList(fetchedNotes);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotes();
   }, [user]);
 
-  // Load next page
-  const handleNextPage = () => {
-    if (lastVisible) fetchNotes(true);
-  };
-
-  // Load previous page
-  const handlePrevPage = () => {
-    if (prevPages.length > 0) {
-      fetchNotes(false);
-      setPrevPages(prevPages.slice(0, -1)); // Remove last page reference
-    }
-  };
-
-  // Save a new note to Firebase
+  // ✅ Save a new note to Firebase
   const handleNote = async () => {
     if (!note.trim()) {
       setMessage("Please enter a note before saving.");
@@ -85,13 +54,14 @@ function NoteSection() {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, "Notes"), {
+      const newNoteRef = await addDoc(collection(db, "Notes"), {
         userName: user?.firstName || "Guest",
         note: note,
         timestamp: new Date(),
       });
 
-      setNote(""); 
+      setNotesList([...notesList, { id: newNoteRef.id, note }]);
+      setNote("");
       setMessage("Note saved successfully!");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
@@ -102,25 +72,28 @@ function NoteSection() {
     }
   };
 
-  // Delete a note from Firebase
+  // ✅ Delete a note from Firebase
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "Notes", id));
+      setNotesList(notesList.filter((note) => note.id !== id));
     } catch (error) {
       console.error("Error deleting note:", error);
     }
   };
 
-  // Enable edit mode for a note
+  // ✅ Enable edit mode for a note
   const handleEdit = (note) => {
     setEditingNoteId(note.id);
     setEditedNote(note.note);
   };
 
-  // Save edited note to Firebase
+  // ✅ Save edited note to Firebase
   const handleSaveEdit = async (id) => {
     try {
       await updateDoc(doc(db, "Notes", id), { note: editedNote });
+
+      setNotesList(notesList.map((n) => (n.id === id ? { ...n, note: editedNote } : n)));
       setEditingNoteId(null);
       setMessage("Note updated successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -207,7 +180,10 @@ function NoteSection() {
 
             <Box>
               {editingNoteId === note.id ? (
-                <Button onClick={() => handleSaveEdit(note.id)} sx={{ color: "green", mr: 1 }}>
+                <Button
+                  onClick={() => handleSaveEdit(note.id)}
+                  sx={{ color: "green", mr: 1 }}
+                >
                   Save
                 </Button>
               ) : (
@@ -223,16 +199,7 @@ function NoteSection() {
         ))}
       </Box>
 
-      {/* Pagination Buttons */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-        <Button onClick={handlePrevPage} disabled={prevPages.length === 0}>
-          Previous
-        </Button>
-        <Button onClick={handleNextPage} disabled={!lastVisible}>
-          Next
-        </Button>
-      </Box>
-
+      {/* Status Message */}
       {message && <Typography sx={{ color: "green", mt: 2 }}>{message}</Typography>}
     </Paper>
   );
