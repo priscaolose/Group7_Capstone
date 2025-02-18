@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/viewTask.css';
@@ -10,10 +10,10 @@ import { faSearch, faSort, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { TableContainer, Table, TableBody, TableRow, TableCell, Paper, Button, Checkbox } from '@mui/material';
 import SortByDropDown from './sortByDropdown.js';
 import { useLocation } from 'react-router-dom';
-import  useTasks from './Api/extractTasks.js';
+import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
 
-const SearchBox = ({ setFilteredTasks,tasks }) => {
+const SearchBox = ({ setFilteredTasks, tasks }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleInputChange = (event) => {
@@ -29,20 +29,17 @@ const SearchBox = ({ setFilteredTasks,tasks }) => {
       setFilteredTasks(tasks);
     } else {
       setFilteredTasks(tasks.filter((task) =>
-        task.title.toLowerCase().replace(/\s+/g,"").trim().includes(value.toLowerCase().replace(/\s+/g,"").trim()) ||
-        task.description.toLowerCase().replace(/\s+/g,"").trim().includes(value.toLowerCase().replace(/\s+/g,"").trim())
+        task.title.toLowerCase().replace(/\s+/g, "").trim().includes(value.toLowerCase().replace(/\s+/g, "").trim()) ||
+        task.description.toLowerCase().replace(/\s+/g, "").trim().includes(value.toLowerCase().replace(/\s+/g, "").trim())
       ));
     }
   };
-  const handleDelete =() =>{
-    
-  }
+
   const handleSearch = () => {
-   setFilteredTasks(tasks.filter((task) =>
-      task.title.toLowerCase().replace(/\s+/g,"").trim().includes(searchTerm.toLowerCase().trim().replace(/\s+/g,"").trim()) ||
-      task.description.toLowerCase().replace(/\s+/g,"").trim().includes(searchTerm.toLowerCase().replace(/\s+/g,"").trim())
+    setFilteredTasks(tasks.filter((task) =>
+      task.title.toLowerCase().replace(/\s+/g, "").trim().includes(searchTerm.toLowerCase().trim().replace(/\s+/g, "").trim()) ||
+      task.description.toLowerCase().replace(/\s+/g, "").trim().includes(searchTerm.toLowerCase().replace(/\s+/g, "").trim())
     ));
-  
   };
 
   return (
@@ -60,55 +57,73 @@ const SearchBox = ({ setFilteredTasks,tasks }) => {
   );
 };
 
-const TaskTable = ({ filteredTasks,tasks }) => {
+const TaskTable = ({ filteredTasks, onDelete }) => {
   const navigate = useNavigate();
+
+  const handleDelete = async (taskId) => {
+    const success = await deleteTask(taskId);
+    if (success) {
+      onDelete(taskId);
+    }
+  };
 
   return (
     <TableContainer component={Paper} sx={{ marginTop: 5, borderRadius: '8px', maxHeight: '600px', maxWidth: '1000px', overflow: 'auto', margin: '0 auto', boxShadow: '2px 2px 5px rgba(0,0,0,0.1)' }}>
-      {filteredTasks.length === 0?
-      (<Typography variant="h6" sx={{ textAlign: 'center', padding: 2,color:'red' }}>
+      {filteredTasks.length === 0 ? (
+        <Typography variant="h6" sx={{ textAlign: 'center', padding: 2, color: 'red' }}>
           No tasks matching that description.
-        </Typography>):
-      (<Table sx={{ minWidth: 650, borderRadius: '8px' }} aria-label="task table">
-        <TableBody>
-          {filteredTasks.map((task) => (
-            <TableRow key={task.id} sx={{
-            //  backgroundImage: 'linear-gradient(to bottom, #FFF1F1, #E2EAF1)',
-              borderBottom: '1.5px solid #2E3B55',
-              boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
-              paddingBottom: '10px',
-              '&:hover': {
-                backgroundImage: 'linear-gradient(to bottom, #E2EAF1, #FFF1F1)',
-                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
-              },  
-            }}>
-              <TableCell padding="checkbox">
-                <Checkbox />
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Typography fontWeight="bold">{task.title}</Typography>
-                <Typography variant="body3" color="text.secondary">
-                  {task.description}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                 Task DueDate: {task.dueDate}
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Box sx={{ display: 'flex', gap: '5px', justifyContent: 'flex-end' }}>
-                  <Button variant="contained" size="small"  sx={{ textTransform: 'none' ,backgroundColor: '#8AAEC6'}} onClick={() => navigate(`/editTask/${task.id}`)}>
-                    edit
-                  </Button>
-                  <Button variant="contained" size="small" color="error" sx={{ textTransform: 'none' }} onClick = {()=>deleteTask(task.id)}>
-                    delete
-                  </Button>
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-        )}
+        </Typography>
+      ) : (
+        <Table sx={{ minWidth: 650, borderRadius: '8px' }} aria-label="task table">
+          <TableBody>
+            {filteredTasks.map((task) => (
+              <TableRow key={task.id} sx={{
+                borderBottom: '1.5px solid #2E3B55',
+                boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
+                paddingBottom: '10px',
+                '&:hover': {
+                  backgroundImage: 'linear-gradient(to bottom, #E2EAF1, #FFF1F1)',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+                },
+              }}>
+                <TableCell padding="checkbox">
+                  <Checkbox />
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <Typography fontWeight="bold">{task.title}</Typography>
+                  <Typography variant="body3" color="text.secondary">
+                    {task.description}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Task DueDate: {task.dueDate}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Box sx={{ display: 'flex', gap: '5px', justifyContent: 'flex-end' }}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{ textTransform: 'none', backgroundColor: '#8AAEC6' }}
+                      onClick={() => navigate(`/editTask/${task.id}`)}
+                    >
+                      edit
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      color="error"
+                      sx={{ textTransform: 'none' }}
+                      onClick={() => handleDelete(task.id)}
+                    >
+                      delete
+                    </Button>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </TableContainer>
   );
 };
@@ -116,27 +131,27 @@ const TaskTable = ({ filteredTasks,tasks }) => {
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  //const [loading, setLoading] = useState(true);  // To track the loading state
- // const [error, setError] = useState(null);  // To track any error
-
   const location = useLocation();
   const userEmail = location.state?.email;
-  const { tasks, loading, error } = useTasks(userEmail); 
-  console.log("tasks after stuff has been aded",tasks) //for some reason the task is not being pulled appropraitely here
+  const { tasks, loading, error } = useTasks(userEmail);
+
   useEffect(() => {
     setFilteredTasks(tasks);
-    console.log("filtered tasks",filteredTasks)
   }, [tasks]);
-  
+
+  const handleDeleteTask = (taskId) => {
+    setFilteredTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
+  };
+
   const toggleDropDown = () => {
     setShowDropdown((prev) => !prev);
-  }
+  };
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
   if (error) {
-    return <div>{error}</div>; 
+    return <div>{error}</div>;
   }
 
   return (
@@ -148,7 +163,7 @@ const ViewTask = () => {
         flexGrow: 1,
         overflowY: 'auto',
         margin: '10px 30px',
-       paddingTop: '10px',
+        paddingTop: '10px',
         width: '100%',
         '& > *': { marginBottom: 3 }
       }}>
@@ -168,7 +183,7 @@ const ViewTask = () => {
           }}
         >
           <Grid2 item xs={12} sm={6} md={4}>
-            <SearchBox tasks = {tasks} setFilteredTasks={setFilteredTasks} />
+            <SearchBox tasks={tasks} setFilteredTasks={setFilteredTasks} />
           </Grid2>
           <Grid2 item xs={12} sm={6} md={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: "center", gap: 1 }}>
             <span className="icon-text">
@@ -198,7 +213,7 @@ const ViewTask = () => {
           </Grid2>
         </Grid2>
         <Grid2 item xs={12} sx={{ marginTop: 3 }}>
-          <TaskTable tasks = {tasks} filteredTasks={filteredTasks} />
+          <TaskTable filteredTasks={filteredTasks} onDelete={handleDeleteTask} />
         </Grid2>
       </Box>
       <Grid2 xs={12}>

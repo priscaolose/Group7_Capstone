@@ -51,8 +51,10 @@ export const updateTask = async (taskId, updatedData) => {
 export const deleteTask = async (taskId) => {
   try {
     await deleteDoc(doc(db, "tasks", taskId));
-    console.log(`Task ${taskId} deleted successfully.`)
+    console.log(`Task ${taskId} deleted successfully.`);
+    return true; // Return true to indicate success
   } catch (error) {
-      console.error("Error delting task:", error.message);
+    console.error("Error deleting task:", error.message);
+    return false; // Return false to indicate failure
   }
 };
