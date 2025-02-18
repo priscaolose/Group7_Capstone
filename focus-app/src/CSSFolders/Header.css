@@ -85,8 +85,8 @@
 
   /* Logout button adjustments */
   .logOutButton {
-    background-color: black;
-    color: white;
+    background-color: #1059a2;
+    color: "white";
     border-radius: 8px;
     padding: 3px 80px;
     cursor: pointer;

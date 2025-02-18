@@ -45,6 +45,7 @@ const Header2 = () => {
           type="submit"
           value="Log Out"
           onClick={HandleLogout} // Call HandleLogout on click
+          sx={{ color: "white" }}
         />
       </div>
     </header>
