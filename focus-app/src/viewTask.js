@@ -12,8 +12,9 @@ import SortByDropDown from './sortByDropdown.js';
 import { useLocation } from 'react-router-dom';
 import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
-
+import { useUser } from './Components/context';
 const SearchBox = ({ setFilteredTasks, tasks }) => {
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleInputChange = (event) => {
@@ -131,10 +132,15 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const { user } = useUser();
   const location = useLocation();
-  const userEmail = location.state?.email;
+  const userEmail = user?.email;
   const { tasks, loading, error } = useTasks(userEmail);
+  console.log("user.email", user.email);
 
+
+  console.log("user?.firstName",user?.firstName  )
+  console.log("user?.email",userEmail )
   useEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
@@ -169,7 +175,7 @@ const ViewTask = () => {
       }}>
         <Grid2 item>
           <Typography variant="h4" className="task-title" sx={{ marginBottom: 2 }}>
-            Antonette's Tasks
+            {user.firstName} Tasks
           </Typography>
         </Grid2>
         <Grid2

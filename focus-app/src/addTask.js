@@ -8,10 +8,12 @@ import { Clear } from '@mui/icons-material';
 import { addTask } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
+import { useUser } from './Components/context';
 
 const AddTask = ({ loggedIn, logout }) => {
   const location = useLocation();
-  const email = location.state?.email;
+  const { user } = useUser();
+  const email = user?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);

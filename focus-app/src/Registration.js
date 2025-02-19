@@ -134,7 +134,7 @@ const handleRegister = async (e) => {
             }),
         });
 
-        const userData = { firstName: firstName };
+        const userData = { firstName: firstName, email: email};
         setUser(userData);
 
         // Log the raw response text
