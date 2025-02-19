@@ -62,7 +62,7 @@ function NoteSection() {
     });
 
     return () => unsubscribe(); // ✅ Clean up listener when component unmounts
-  }, [user], sortOrder);
+  }, [user]);
 
   // Toggle sort order
   const toggleSortOrder = () => {
