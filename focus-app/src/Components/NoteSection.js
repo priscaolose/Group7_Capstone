@@ -12,6 +12,7 @@ import EditIcon from "@mui/icons-material/Edit"; // ✅ Import Edit Icon
 import { useUser } from "./context";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, orderBy } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import { query, where } from "firebase/firestore";
 
 function NoteSection() {
   const { user } = useUser();
