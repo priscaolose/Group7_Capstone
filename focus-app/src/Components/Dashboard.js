@@ -64,8 +64,15 @@ function Dashboard() {
   ];
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    setRandomQuote(quotes[randomIndex]);
+    const changeQuote = () => {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      setRandomQuote(quotes[randomIndex]);
+    };
+
+    changeQuote();
+    const interval = setInterval(changeQuote, 60000);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
