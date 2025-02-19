@@ -8,11 +8,11 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; // ✅ Import Edit Icon
+import EditIcon from "@mui/icons-material/Edit"; 
 import { useUser } from "./context";
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, orderBy } from "firebase/firestore";
+import { collection, query, where, orderBy, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import { query, where } from "firebase/firestore";
+import { format } from "date-fns"; // ✅ Install with: npm install date-fns
 
 function NoteSection() {
   const { user } = useUser();
@@ -23,33 +23,43 @@ function NoteSection() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch notes from Firebase when user logs in
+  // ✅ Format timestamps for user-friendly display
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return "No date";
+
+    const now = new Date();
+    const noteDate = new Date(timestamp);
+    const isToday = format(noteDate, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
+    const isYesterday =
+      format(noteDate, "yyyy-MM-dd") ===
+      format(new Date(now.setDate(now.getDate() - 1)), "yyyy-MM-dd");
+
+    if (isToday) {
+      return `Today at ${format(noteDate, "h:mm a")}`;
+    } else if (isYesterday) {
+      return `Yesterday at ${format(noteDate, "h:mm a")}`;
+    } else {
+      return `${format(noteDate, "MMM d, yyyy")} at ${format(noteDate, "h:mm a")}`;
+    }
+  };
+
+  // ✅ Fetch notes in real-time, sorted by latest timestamp
   useEffect(() => {
-    const fetchNotes = async () => {
-      if (!user) return;
+    if (!user) return;
 
-      try {
-        const querySnapshot = await getDocs(
-          query(
-            collection(db, "Notes"),
-            where("userName", "==", user.firstName),
-            orderBy("timestamp", "desc")
-          )
-        );
-        
-        const fetchedNotes = querySnapshot.docs
-          .filter((doc) => doc.data().userName === user.firstName)
-          .map((doc) => ({ id: doc.id, ...doc.data() }));
+    const notesRef = collection(db, "Notes");
+    const q = query(notesRef, where("userName", "==", user.firstName), orderBy("timestamp", "desc"));
 
-        setNotesList(fetchedNotes);
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const fetchedNotes = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().timestamp?.toDate(),
+      }));
+      setNotesList(fetchedNotes);
+    });
 
-    fetchNotes();
+    return () => unsubscribe(); // ✅ Clean up listener when component unmounts
   }, [user]);
 
   // ✅ Save a new note to Firebase
@@ -60,7 +70,6 @@ function NoteSection() {
     }
 
     setLoading(true);
-
     try {
       const newNoteRef = await addDoc(collection(db, "Notes"), {
         userName: user?.firstName || "Guest",
@@ -68,7 +77,6 @@ function NoteSection() {
         timestamp: new Date(),
       });
 
-      setNotesList([...notesList, { id: newNoteRef.id, note }]);
       setNote("");
       setMessage("Note saved successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -84,9 +92,11 @@ function NoteSection() {
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "Notes", id));
-      setNotesList(notesList.filter((note) => note.id !== id));
+      setMessage("Note deleted successfully!");
+      setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       console.error("Error deleting note:", error);
+      setMessage("Failed to delete note.");
     }
   };
 
@@ -100,8 +110,6 @@ function NoteSection() {
   const handleSaveEdit = async (id) => {
     try {
       await updateDoc(doc(db, "Notes", id), { note: editedNote });
-
-      setNotesList(notesList.map((n) => (n.id === id ? { ...n, note: editedNote } : n)));
       setEditingNoteId(null);
       setMessage("Note updated successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -138,20 +146,13 @@ function NoteSection() {
             backgroundColor: "#FFF176",
             borderRadius: "8px",
             boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
-            "& .MuiOutlinedInput-root": {
-              border: "none",
-              "& fieldset": { border: "none" },
-            },
-            fontFamily: '"Comic Sans MS", cursive, sans-serif',
-            fontSize: "1rem",
-            padding: "8px",
           }}
         />
         <Button
           variant="contained"
           onClick={handleNote}
           disabled={loading}
-          sx={{ mt: 2, backgroundColor: "#1059a2", color: "white", }}
+          sx={{ mt: 2, backgroundColor: "#1059a2", color: "white" }}
         >
           {loading ? "Saving..." : "Save"}
         </Button>
@@ -170,28 +171,26 @@ function NoteSection() {
               alignItems: "center",
             }}
           >
-            {editingNoteId === note.id ? (
-              <TextField
-                fullWidth
-                variant="outlined"
-                value={editedNote}
-                onChange={(e) => setEditedNote(e.target.value)}
-                sx={{
-                  backgroundColor: "#FFF176",
-                  borderRadius: "8px",
-                  padding: "5px",
-                }}
-              />
-            ) : (
-              <Typography variant="body1">{note.note}</Typography>
-            )}
+            <Box>
+              {editingNoteId === note.id ? (
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  value={editedNote}
+                  onChange={(e) => setEditedNote(e.target.value)}
+                  sx={{ backgroundColor: "#FFF176", borderRadius: "8px", padding: "5px" }}
+                />
+              ) : (
+                <Typography variant="body1">{note.note}</Typography>
+              )}
+              <Typography variant="caption" sx={{ color: "gray" }}>
+                {formatTimestamp(note.timestamp)}
+              </Typography>
+            </Box>
 
             <Box>
               {editingNoteId === note.id ? (
-                <Button
-                  onClick={() => handleSaveEdit(note.id)}
-                  sx={{ color: "green", mr: 1 }}
-                >
+                <Button onClick={() => handleSaveEdit(note.id)} sx={{ color: "green", mr: 1 }}>
                   Save
                 </Button>
               ) : (
