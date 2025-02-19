@@ -8,20 +8,9 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
+import EditIcon from "@mui/icons-material/Edit"; 
 import { useUser } from "./context";
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  addDoc,
-  deleteDoc,
-  doc,
-  updateDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, query, where, orderBy, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { format } from "date-fns"; // Install with: npm install date-fns
 
@@ -33,9 +22,8 @@ function NoteSection() {
   const [editedNote, setEditedNote] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState("desc");
 
-  // ✅ Format timestamps for better readability
+  // Format timestamps for user-friendly display
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "No date";
 
@@ -55,40 +43,24 @@ function NoteSection() {
     }
   };
 
-  // ✅ Fetch notes in real-time from Firestore
+  //Fetch notes in real-time, sorted by latest timestamp
   useEffect(() => {
-    if (!user || !user.firstName) {
-      console.log("User not found or firstName is undefined");
-      return;
-    }
-
-    console.log("Fetching notes for user:", user.firstName);
+    if (!user) return;
 
     const notesRef = collection(db, "Notes");
-    const q = query(notesRef, where("userName", "==", user.firstName), orderBy("timestamp", sortOrder));
+    const q = query(notesRef, where("userName", "==", user.firstName), orderBy("timestamp", "desc"));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      if (querySnapshot.empty) {
-        console.log("No notes found for this user.");
-      }
-
       const fetchedNotes = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         timestamp: doc.data().timestamp?.toDate(),
       }));
-
-      console.log("Fetched notes:", fetchedNotes);
       setNotesList(fetchedNotes);
     });
 
-    return () => unsubscribe(); // Cleanup listener
-  }, [user, sortOrder]);
-
-  // ✅ Toggle Sort Order
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
-  };
+    return () => unsubscribe(); // ✅ Clean up listener when component unmounts
+  }, [user]);
 
   // ✅ Save a new note to Firebase
   const handleNote = async () => {
@@ -99,8 +71,8 @@ function NoteSection() {
 
     setLoading(true);
     try {
-      await addDoc(collection(db, "Notes"), {
-        userName: user?.firstName || "Guest", // ✅ Ensure userName is stored
+      const newNoteRef = await addDoc(collection(db, "Notes"), {
+        userName: user?.firstName || "Guest",
         note: note,
         timestamp: new Date(),
       });
@@ -157,17 +129,9 @@ function NoteSection() {
         minHeight: "50vh",
       }}
     >
-      {/* Notes Title & Sort Button in One Row */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-        <Typography variant="h6" sx={{ color: "#1059a2" }}>
-          Notes
-        </Typography>
-
-        {/* Sort Button */}
-        <IconButton onClick={toggleSortOrder} sx={{ color: "#1059a2" }}>
-          <SwapVertIcon />
-        </IconButton>
-      </Box>
+      <Typography variant="h6" sx={{ color: "#1059a2", mb: 2 }}>
+        Notes
+      </Typography>
 
       {/* Input Field */}
       <Box sx={{ mb: 2 }}>
@@ -196,41 +160,53 @@ function NoteSection() {
 
       {/* Display Notes List */}
       <Box sx={{ mt: 2, maxHeight: "40vh", overflowY: "auto" }}>
-        {notesList.length === 0 ? (
-          <Typography sx={{ color: "gray", textAlign: "center", mt: 2 }}>
-            No notes available.
-          </Typography>
-        ) : (
-          notesList.map((note) => (
-            <Paper
-              key={note.id}
-              sx={{
-                p: 2,
-                mt: 1,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box>
+        {notesList.map((note) => (
+          <Paper
+            key={note.id}
+            sx={{
+              p: 2,
+              mt: 1,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Box>
+              {editingNoteId === note.id ? (
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  value={editedNote}
+                  onChange={(e) => setEditedNote(e.target.value)}
+                  sx={{ backgroundColor: "#FFF176", borderRadius: "8px", padding: "5px" }}
+                />
+              ) : (
                 <Typography variant="body1">{note.note}</Typography>
-                <Typography variant="caption" sx={{ color: "gray" }}>
-                  {formatTimestamp(note.timestamp)}
-                </Typography>
-              </Box>
-              <Box>
+              )}
+              <Typography variant="caption" sx={{ color: "gray" }}>
+                {formatTimestamp(note.timestamp)}
+              </Typography>
+            </Box>
+
+            <Box>
+              {editingNoteId === note.id ? (
+                <Button onClick={() => handleSaveEdit(note.id)} sx={{ color: "green", mr: 1 }}>
+                  Save
+                </Button>
+              ) : (
                 <IconButton onClick={() => handleEdit(note)} color="primary">
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => handleDelete(note.id)} color="error">
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </Paper>
-          ))
-        )}
+              )}
+              <IconButton onClick={() => handleDelete(note.id)} color="error">
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          </Paper>
+        ))}
       </Box>
 
+      {/* Status Message */}
       {message && <Typography sx={{ color: "green", mt: 2 }}>{message}</Typography>}
     </Paper>
   );
