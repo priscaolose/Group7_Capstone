@@ -25,7 +25,7 @@ function NoteSection() {
   const [firstVisible, setFirstVisible] = useState(null);
   const [prevPages, setPrevPages] = useState([]);
 
-  //const NOTES_PER_PAGE = 5; // ✅ Set max notes per page
+  const NOTES_PER_PAGE = 5; // ✅ Set max notes per page
 
   // ✅ Fetch notes with pagination
   const fetchNotes = async (next = false) => {
@@ -42,18 +42,18 @@ function NoteSection() {
       q = query(q, startAfter(lastVisible));
     }
 
-    // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-    //   if (!querySnapshot.empty) {
-    //     setFirstVisible(querySnapshot.docs[0]); // ✅ Save first note (for back navigation)
-    //     setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]); // ✅ Save last note (for next page)
-    //   }
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      if (!querySnapshot.empty) {
+        setFirstVisible(querySnapshot.docs[0]); // ✅ Save first note (for back navigation)
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]); // ✅ Save last note (for next page)
+      }
 
-    //   setNotesList(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setNotesList(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
 
-    //   if (next) {
-    //     setPrevPages([...prevPages, lastVisible]); // ✅ Track pages for "Previous" button
-    //   }
-    // });
+      if (next) {
+        setPrevPages([...prevPages, lastVisible]); // ✅ Track pages for "Previous" button
+      }
+    });
 
     return () => unsubscribe();
   };
@@ -223,16 +223,7 @@ function NoteSection() {
         ))}
       </Box>
 
-      {/* Pagination Buttons */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-        <Button onClick={handlePrevPage} disabled={prevPages.length === 0}>
-          Previous
-        </Button>
-        <Button onClick={handleNextPage} disabled={!lastVisible}>
-          Next
-        </Button>
-      </Box>
-
+      
       {message && <Typography sx={{ color: "green", mt: 2 }}>{message}</Typography>}
     </Paper>
   );
