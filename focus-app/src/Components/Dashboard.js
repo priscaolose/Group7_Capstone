@@ -1,55 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import Header2 from './Header2';
-import Footer from './Footer';
-import {
-  Box,
-  Typography,
-  Paper,
-  useMediaQuery,
-} from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
-import { useUser } from './context';
-import NoteSection from './NoteSection';
-
-// Custom Theme
-const theme = createTheme({
-  typography: {
-    fontFamily: '"Poppins", sans-serif',
-    h5: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 500,
-    },
-    body1: {
-      fontWeight: 400,
-    },
-  },
-  palette: {
-    primary: {
-      main: '#1059a2',
-    },
-    background: {
-      default: '#f4f6f8',
-    },
-  },
-});
-
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
-  //const [userFirstName, setUserFirstName] = useState(null);
-  //const [user, setUser] = useState(null);
   const { user } = useUser();
   const [currentTime, setCurrentTime] = useState('00:00:00');
-  const [randomQuote, setRandomQuote] = useState('');
- 
+  const [randomQuote, setRandomQuote] = useState("");
 
+  // List of motivational quotes
   const quotes = [
-    "Its always a great time to take the first step.",
     "Believe you can and you’re halfway there. – Theodore Roosevelt",
     "The only way to do great work is to love what you do. – Steve Jobs",
     "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
@@ -59,20 +15,13 @@ function Dashboard() {
     "Hard work beats talent when talent doesn’t work hard.",
     "It’s not whether you get knocked down, it’s whether you get up. – Vince Lombardi",
     "Dream big and dare to fail. – Norman Vaughan",
-    "Act as if what you do makes a difference. It does. – William James",
-    "Keep on going, and the chances are that you will stumble on something, perhaps when you are least expecting it. I never heard of anyone ever stumbling on something sitting down. – Charles F. Kettering"
+    "Act as if what you do makes a difference. It does. – William James"
   ];
 
+  // Select a random quote when the component loads
   useEffect(() => {
-    const changeQuote = () => {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      setRandomQuote(quotes[randomIndex]);
-    };
-
-    changeQuote();
-    const interval = setInterval(changeQuote, 60000);
-
-    return () => clearInterval(interval);
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setRandomQuote(quotes[randomIndex]);
   }, []);
 
   useEffect(() => {
@@ -83,23 +32,21 @@ function Dashboard() {
       const seconds = checkTime(today.getSeconds());
 
       hours = checkHour(hours);
-
       setCurrentTime(`${hours}:${minutes}:${seconds}`);
-  };
+    };
 
-  updateClock();
-  const interval = setInterval(updateClock, 1000);
-  return () => clearInterval(interval);
-  }, []); //cleanup on unmount
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   function checkTime(i) {
     return i < 10 ? `0${i}` : i;
-  } // Add a leading zero to single-digit numbers
-
-  function checkHour(hours){ // setting time for 12 hour format
-    return hours > 12 ? hours - 12 : hours;
   }
 
+  function checkHour(hours) {
+    return hours > 12 ? hours - 12 : hours;
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -129,7 +76,6 @@ function Dashboard() {
           >
             {/* Left Column */}
             <Box sx={{ display: 'grid', gap: 4 }}>
-              {/* Welcome Section */}
               <Paper
                 sx={{
                   p: 3,
@@ -151,7 +97,6 @@ function Dashboard() {
                     textAlign: 'left',
                   }}
                 >
-                  {/* display user's first name */}
                   {user?.firstName || "Guest"} 
                 </Typography>
               </Paper>
@@ -169,12 +114,10 @@ function Dashboard() {
                 <Typography>
                   <h2>Your Tasks</h2>
                 </Typography>
-                
               </Paper>
             </Box>
-      
 
-            {/* Center Column (Timer Section*/}
+            {/* Center Column (Timer Section) */}
             <Box sx={{ display: 'grid', gap: 4 }}>
               <Paper
                 sx={{
@@ -200,7 +143,7 @@ function Dashboard() {
                 </Typography>
                 <Typography
                   variant="body1"
-                  component={Link} to = "/addTask"
+                  component={Link} to="/addTask"
                   sx={{
                     color: theme.palette.primary.main,
                     fontSize: '1.25rem',
@@ -212,7 +155,7 @@ function Dashboard() {
 
                 <Typography
                   variant="body1"
-                  component={Link} to = "/viewTask"
+                  component={Link} to="/viewTask"
                   sx={{
                     color: theme.palette.primary.main,
                     fontSize: '1.25rem',
@@ -238,6 +181,7 @@ function Dashboard() {
 
             {/* Right Column */}
             <Box sx={{ display: 'grid', gap: 4 }}>
+              {/* Reminder Section with Random Quote */}
               <Paper
                 sx={{
                   p: 3,
@@ -260,21 +204,23 @@ function Dashboard() {
                     color: '#333',
                     mt: 1,
                     lineHeight: 1.5,
+                    fontStyle: "italic", // Italicized for a quote feel
                   }}
                 >
-                  {randomQuote}
+                  "{randomQuote}"
                 </Typography>
               </Paper>
+
+              {/* Notes Section */}
               <Box sx={{ display: "grid", gap: 4 }}>
-            <NoteSection /> {/* Uses the NoteSection component */}
-          </Box>
+                <NoteSection /> {/* Uses the NoteSection component */}
+              </Box>
             </Box>
           </Box>
         </Box>
-        <Footer/>
+        <Footer />
       </div>
     </ThemeProvider>
-
   );
 }
 
