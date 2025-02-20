@@ -1,7 +1,39 @@
+import React, { useEffect, useState } from "react";
+import { 
+  Box, 
+  Typography, 
+  Paper, 
+  useMediaQuery, 
+  Button 
+} from "@mui/material"; 
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Link } from "react-router-dom";
+import Header2 from "./Header2";
+import Footer from "./Footer";
+import NoteSection from "./NoteSection"; // ✅ Import Notes Component
+import { useUser } from "./context"; // ✅ Import User Context for user data
+
+// Custom Theme
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Poppins", sans-serif',
+    h5: { fontWeight: 600 },
+    h6: { fontWeight: 500 },
+    body1: { fontWeight: 400 },
+  },
+  palette: {
+    primary: { main: "#1059a2" },
+    background: { default: "#f4f6f8" },
+  },
+});
+
 function Dashboard() {
-  const isSmallScreen = useMediaQuery('(max-width: 900px)');
+  const isSmallScreen = useMediaQuery("(max-width: 900px)");
   const { user } = useUser();
-  const [currentTime, setCurrentTime] = useState('00:00:00');
+  const [currentTime, setCurrentTime] = useState("00:00:00");
   const [randomQuote, setRandomQuote] = useState("");
 
   // List of motivational quotes
@@ -24,6 +56,7 @@ function Dashboard() {
     setRandomQuote(quotes[randomIndex]);
   }, []);
 
+  // Live Clock Update
   useEffect(() => {
     const updateClock = () => {
       const today = new Date();
@@ -50,54 +83,57 @@ function Dashboard() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className='mainContainer'>
+      <div className="mainContainer">
         <Header2 />
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            minHeight: 'auto',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            minHeight: "auto",
             px: isSmallScreen ? 2 : 4,
             py: 1,
-            backgroundColor: 'white',
-            overflowY: 'auto',
+            backgroundColor: "white",
+            overflowY: "auto",
           }}
         >
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
               gap: 4,
-              maxWidth: '1200px',
-              width: '100%',
+              maxWidth: "1200px",
+              width: "100%",
             }}
           >
             {/* Left Column */}
-            <Box sx={{ display: 'grid', gap: 4 }}>
+            <Box sx={{ display: "grid", gap: 4 }}>
               <Paper
                 sx={{
                   p: 3,
-                  borderRadius: '16px',
-                  background: 'white',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  borderRadius: "16px",
+                  background: "white",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                   borderColor: theme.palette.primary.main,
                 }}
               >
-                <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 'bold', textAlign: 'left' }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ color: theme.palette.primary.main, fontWeight: "bold", textAlign: "left" }}
+                >
                   Welcome Back
                 </Typography>
                 <Typography
                   variant="h5"
                   sx={{
                     mt: 1,
-                    color: '#333',
-                    fontWeight: 'bold',
-                    textAlign: 'left',
+                    color: "#333",
+                    fontWeight: "bold",
+                    textAlign: "left",
                   }}
                 >
-                  {user?.firstName || "Guest"} 
+                  {user?.firstName || "Guest"}
                 </Typography>
               </Paper>
 
@@ -105,10 +141,10 @@ function Dashboard() {
               <Paper
                 sx={{
                   p: 3,
-                  borderRadius: '16px',
-                  background: 'white',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                  minHeight: '50vh',
+                  borderRadius: "16px",
+                  background: "white",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                  minHeight: "50vh",
                 }}
               >
                 <Typography>
@@ -118,61 +154,31 @@ function Dashboard() {
             </Box>
 
             {/* Center Column (Timer Section) */}
-            <Box sx={{ display: 'grid', gap: 4 }}>
+            <Box sx={{ display: "grid", gap: 4 }}>
               <Paper
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '16px',
-                  background: 'white',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "16px",
+                  background: "white",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                   p: 4,
-                  textDecoration: 'none',
+                  textDecoration: "none",
                 }}
               >
-                <Typography
-                  variant="h3"
-                  sx={{
-                    color: '#333',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {currentTime}  
+                <Typography variant="h3" sx={{ color: "#333", fontWeight: "bold" }}>
+                  {currentTime}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  component={Link} to="/addTask"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: '1.25rem',
-                    mt: 2,
-                  }}
-                >
-                  add task 
+                <Typography variant="body1" component={Link} to="/addTask" sx={{ color: theme.palette.primary.main, fontSize: "1.25rem", mt: 2 }}>
+                  Add Task
                 </Typography>
-
-                <Typography
-                  variant="body1"
-                  component={Link} to="/viewTask"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: '1.25rem',
-                    mt: 2,
-                  }}
-                >
-                  view tasks 
+                <Typography variant="body1" component={Link} to="/viewTask" sx={{ color: theme.palette.primary.main, fontSize: "1.25rem", mt: 2 }}>
+                  View Tasks
                 </Typography>
               </Paper>
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: '16px',
-                  background: 'white',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                }}
-              >
+              <Paper sx={{ p: 3, borderRadius: "16px", background: "white", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar />
                 </LocalizationProvider>
@@ -180,40 +186,20 @@ function Dashboard() {
             </Box>
 
             {/* Right Column */}
-            <Box sx={{ display: 'grid', gap: 4 }}>
+            <Box sx={{ display: "grid", gap: 4 }}>
               {/* Reminder Section with Random Quote */}
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: '16px',
-                  background: 'white',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
-                >
+              <Paper sx={{ p: 3, borderRadius: "16px", background: "white", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}>
+                <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
                   Reminder:
                 </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: '#333',
-                    mt: 1,
-                    lineHeight: 1.5,
-                    fontStyle: "italic", // Italicized for a quote feel
-                  }}
-                >
+                <Typography variant="body1" sx={{ color: "#333", mt: 1, lineHeight: 1.5, fontStyle: "italic" }}>
                   "{randomQuote}"
                 </Typography>
               </Paper>
 
               {/* Notes Section */}
               <Box sx={{ display: "grid", gap: 4 }}>
-                <NoteSection /> {/* Uses the NoteSection component */}
+                <NoteSection />
               </Box>
             </Box>
           </Box>
