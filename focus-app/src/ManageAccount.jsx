@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './Images/logo.png';
+import { getAuth } from 'firebase/auth';
+import { db } from './firebase/firebaseConfig';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { updateUserInfo } from './Api/accountManagement';
 
 const ManageAccountPage = () => {
     const [formData, setFormData] = useState({
@@ -12,14 +16,49 @@ const ManageAccountPage = () => {
     const [message, setMessage] = useState('');
     const [selectedSection, setSelectedSection] = useState('profile'); // Track selected section
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const auth = getAuth();
+            const currentUser = auth.currentUser;
+            if (!currentUser) return;
+            const userCollection = collection(db, 'Users');
+            const q = query(userCollection, where('username', '==', currentUser.uid));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const userDoc = querySnapshot.docs[0];
+                const userData = userDoc.data();
+                setFormData({
+                    firstName: userData.firstName || '',
+                    lastName: userData.lastName || '',
+                    phoneNumber: userData.phonenumber || '',
+                    email: userData.email || '',
+                    password: '',
+                });
+            } else {
+            }
+        };
+        fetchUserData();
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
-        setMessage('Your account details have been successfully updated!');
+        try {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            if (!user) {
+                setMessage('No user is currently signed in.');
+                return;
+            }
+            await updateUserInfo(user, formData);
+            setMessage('Your account details have been successfully updated!');
+        } catch (error) {
+            setMessage(`Update failed: ${error.message}`);
+        }
     };
 
     const handleSidebarClick = (section) => {
