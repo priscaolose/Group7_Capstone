@@ -3,77 +3,46 @@ import {
   Box,
   Typography,
   Paper,
-  Button,
   TextField,
+  Button,
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; 
+import EditIcon from "@mui/icons-material/Edit"; // ✅ Import Edit Icon
 import { useUser } from "./context";
-import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, where, orderBy, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 
 function NoteSection() {
   const { user } = useUser();
   const [note, setNote] = useState("");
   const [notesList, setNotesList] = useState([]);
-  const [editingNoteId, setEditingNoteId] = useState(null);
-  const [editedNote, setEditedNote] = useState("");
+  const [editingNoteId, setEditingNoteId] = useState(null); // ✅ Track which note is being edited
+  const [editedNote, setEditedNote] = useState(""); // ✅ Stores the updated text
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [lastVisible, setLastVisible] = useState(null);
-  const [firstVisible, setFirstVisible] = useState(null);
-  const [prevPages, setPrevPages] = useState([]);
 
-  const NOTES_PER_PAGE = 5; // ✅ Set max notes per page
-
-  // ✅ Fetch notes with pagination
-  const fetchNotes = async (next = false) => {
-    if (!user) return;
-
-    let q = query(
-      collection(db, "Notes"),
-      where("userName", "==", user.firstName),
-      orderBy("timestamp", "desc"),
-      limit(NOTES_PER_PAGE)
-    );
-
-    if (next && lastVisible) {
-      q = query(q, startAfter(lastVisible));
-    }
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        setFirstVisible(querySnapshot.docs[0]); // ✅ Save first note (for back navigation)
-        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]); // ✅ Save last note (for next page)
-      }
-
-      setNotesList(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-
-      if (next) {
-        setPrevPages([...prevPages, lastVisible]); // ✅ Track pages for "Previous" button
-      }
-    });
-
-    return () => unsubscribe();
-  };
-
+  // ✅ Fetch notes from Firebase when user logs in
   useEffect(() => {
-    fetchNotes(); // ✅ Load first page of notes
+    const fetchNotes = async () => {
+      if (!user) return;
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "Notes"));
+        const fetchedNotes = querySnapshot.docs
+          .filter((doc) => doc.data().userName === user.firstName)
+          .map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        setNotesList(fetchedNotes);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotes();
   }, [user]);
-
-  // ✅ Load next page
-  const handleNextPage = () => {
-    if (lastVisible) fetchNotes(true);
-  };
-
-  // ✅ Load previous page
-  const handlePrevPage = () => {
-    if (prevPages.length > 0) {
-      fetchNotes(false);
-      setPrevPages(prevPages.slice(0, -1)); // ✅ Remove last page reference
-    }
-  };
 
   // ✅ Save a new note to Firebase
   const handleNote = async () => {
@@ -82,23 +51,20 @@ function NoteSection() {
       return;
     }
 
-    setLoading(true);
-
     try {
-      await addDoc(collection(db, "Notes"), {
+      const newNoteRef = await addDoc(collection(db, "Notes"), {
         userName: user?.firstName || "Guest",
         note: note,
         timestamp: new Date(),
       });
 
-      setNote(""); 
-      setMessage("Note saved successfully!");
+      setNotesList([...notesList, { id: newNoteRef.id, note }]);
+      setNote("");
+      setMessage("Note added successfully!");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       console.error("Error saving note:", error);
       setMessage("Failed to save note. Try again.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -106,6 +72,7 @@ function NoteSection() {
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "Notes", id));
+      setNotesList(notesList.filter((note) => note.id !== id));
     } catch (error) {
       console.error("Error deleting note:", error);
     }
@@ -114,14 +81,17 @@ function NoteSection() {
   // ✅ Enable edit mode for a note
   const handleEdit = (note) => {
     setEditingNoteId(note.id);
-    setEditedNote(note.note);
+    setEditedNote(note.note); // Set existing note text in the input
   };
 
   // ✅ Save edited note to Firebase
   const handleSaveEdit = async (id) => {
     try {
       await updateDoc(doc(db, "Notes", id), { note: editedNote });
-      setEditingNoteId(null);
+
+      // ✅ Update the note in UI
+      setNotesList(notesList.map((n) => (n.id === id ? { ...n, note: editedNote } : n)));
+      setEditingNoteId(null); // Exit edit mode
       setMessage("Note updated successfully!");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {
@@ -149,6 +119,7 @@ function NoteSection() {
         <TextField
           fullWidth
           multiline
+          rows={4}
           label="Enter a note"
           variant="outlined"
           value={note}
@@ -157,13 +128,10 @@ function NoteSection() {
             backgroundColor: "#FFF176",
             borderRadius: "8px",
             boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
-            "& .MuiOutlinedInput-root": {
-              border: "none",
-              "& fieldset": { border: "none" },
-            },
-            fontFamily: '"Comic Sans MS", cursive, sans-serif',
+            "& .MuiOutlinedInput-root": { border: "none", "& fieldset": { border: "none" } },
+            fontFamily: `"Comic Sans MS", cursive`,
             fontSize: "1rem",
-            padding: "8px",
+            padding: "10px",
           }}
         />
         <Button
@@ -177,53 +145,56 @@ function NoteSection() {
       </Box>
 
       {/* Display Notes List */}
-      <Box sx={{ mt: 2, maxHeight: "40vh", overflowY: "auto" }}>
-        {notesList.map((note) => (
-          <Paper
-            key={note.id}
-            sx={{
-              p: 2,
-              mt: 1,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            {editingNoteId === note.id ? (
-              <TextField
-                fullWidth
-                variant="outlined"
-                value={editedNote}
-                onChange={(e) => setEditedNote(e.target.value)}
-                sx={{
-                  backgroundColor: "#FFF176",
-                  borderRadius: "8px",
-                  padding: "5px",
-                }}
-              />
-            ) : (
-              <Typography variant="body1">{note.note}</Typography>
-            )}
-
-            <Box>
+      {loading ? (
+        <Typography sx={{ color: "gray", mt: 2 }}>Loading notes...</Typography>
+      ) : (
+        <Box sx={{ mt: 2, maxHeight: "40vh", overflowY: "auto" }}>
+          {notesList.map((note) => (
+            <Paper
+              key={note.id}
+              sx={{
+                p: 2,
+                mt: 1,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               {editingNoteId === note.id ? (
-                <Button onClick={() => handleSaveEdit(note.id)} sx={{ color: "green", mr: 1 }}>
-                  Save
-                </Button>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  value={editedNote}
+                  onChange={(e) => setEditedNote(e.target.value)}
+                  sx={{ backgroundColor: "#FFF176", borderRadius: "8px", padding: "5px" }}
+                />
               ) : (
-                <IconButton onClick={() => handleEdit(note)} color="primary">
-                  <EditIcon />
-                </IconButton>
+                <Typography variant="body1">{note.note}</Typography>
               )}
-              <IconButton onClick={() => handleDelete(note.id)} color="error">
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          </Paper>
-        ))}
-      </Box>
 
-      
+              <Box>
+                {editingNoteId === note.id ? (
+                  <Button
+                    onClick={() => handleSaveEdit(note.id)}
+                    sx={{ color: "green", mr: 1 }}
+                  >
+                    Save
+                  </Button>
+                ) : (
+                  <IconButton onClick={() => handleEdit(note)} color="primary">
+                    <EditIcon />
+                  </IconButton>
+                )}
+                <IconButton onClick={() => handleDelete(note.id)} color="error">
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Paper>
+          ))}
+        </Box>
+      )}
+
+      {/* Status Message */}
       {message && <Typography sx={{ color: "green", mt: 2 }}>{message}</Typography>}
     </Paper>
   );
