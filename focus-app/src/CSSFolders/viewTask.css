@@ -37,3 +37,62 @@
 
 }
 
+.navbar {
+  position: relative; 
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  color: #1059a2;
+}
+
+.navbar .navbar-brand {
+  color: #1059a2;
+  font-size: 0.5rem;
+  margin-right: 20px;
+}
+
+.navbar .navbar-burger {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  position: relative; /* Ensures proper alignment for absolute child */
+  color: #1059a2; /* Ensure the burger icon color is blue */
+}
+
+.navbar .navbar-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* Positions it right below the button */
+  left: 0; /* Aligns it to the left of the button */
+  background-color: white;
+  width: 250px;
+  z-index: 999;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .navbar-menu.is-active {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.navbar .navbar-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 15px;
+  color: black;
+  text-decoration: none;
+  padding: 10px 0;
+  transition: background-color 0.2s;
+}
+
+.navbar .navbar-item:hover {
+  background-color: #f0f0f0;
+}
+
+.navbar .navbar-item:not(:last-child) {
+  border-bottom: 1px #8AAEC6 solid;
+}

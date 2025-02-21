@@ -13,6 +13,7 @@ import { useLocation } from 'react-router-dom';
 import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
 import { useUser } from './Components/context';
+import FilterByIcon from './Components/filterByIcon.js';
 const SearchBox = ({ setFilteredTasks, tasks }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -104,7 +105,7 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
                     <Button
                       variant="contained"
                       size="small"
-                      sx={{ textTransform: 'none', backgroundColor: '#8AAEC6' }}
+                      sx={{ textTransform: 'none', backgroundColor: '#1059a2' }}
                       onClick={() => navigate(`/editTask/${task.id}`)}
                     >
                       edit
@@ -175,7 +176,7 @@ const ViewTask = () => {
       }}>
         <Grid2 item>
           <Typography variant="h4" className="task-title" sx={{ marginBottom: 2 }}>
-            {user.firstName} Tasks
+            {user.firstName}'s Tasks
           </Typography>
         </Grid2>
         <Grid2
@@ -192,10 +193,7 @@ const ViewTask = () => {
             <SearchBox tasks={tasks} setFilteredTasks={setFilteredTasks} />
           </Grid2>
           <Grid2 item xs={12} sm={6} md={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: "center", gap: 1 }}>
-            <span className="icon-text">
-              <FontAwesomeIcon className="filter-icon" icon={faFilter} />
-              Filter Tasks
-            </span>
+          <FilterByIcon filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
             <div style={{ position: "relative", display: "inline-block" }}>
               <span className="icon-text" onClick={toggleDropDown}>
                 <FontAwesomeIcon className="sort-icon" icon={faSort} />
