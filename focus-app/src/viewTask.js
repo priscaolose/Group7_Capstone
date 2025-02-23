@@ -185,13 +185,17 @@ const ViewTask = () => {
             marginBottom: 3,
           }}
         >
-          <Grid2 item xs={12} sm={6} md={4} sx={{display: 'flex', justifyContent: 'space-between',gap: 2,alignItems: "center",}}>
-            <SearchBox tasks={tasks} setFilteredTasks={setFilteredTasks} />
-            <Grid2 item xs={12} sm={6} md={2} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center", gap: 1 }}>
-                <FilterByIcon filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
-                <SortByDropDown filteredTasks={tasks} setFilteredTasks = {setFilteredTasks} />                
+       <Grid2 container sx={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
+            <Grid2 item xs={12} sm={6} md={4}>
+              <SearchBox tasks={tasks} setFilteredTasks={setFilteredTasks} />
             </Grid2>
-          </Grid2>
+
+            <Grid2 item xs={12} sm={6} md={4} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center", gap: 0.5 }}>
+              <FilterByIcon filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
+              <SortByDropDown filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
+            </Grid2>
+      </Grid2>
+
         
         </Grid2>
         <Grid2 item xs={12} sx={{ marginTop: 3 }}>
