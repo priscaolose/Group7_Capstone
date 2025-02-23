@@ -137,11 +137,7 @@ const ViewTask = () => {
   const location = useLocation();
   const userEmail = user?.email;
   const { tasks, loading, error } = useTasks(userEmail);
-  console.log("user.email", user.email);
 
-
-  console.log("user?.firstName",user?.firstName  )
-  console.log("user?.email",userEmail )
   useEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
@@ -189,32 +185,14 @@ const ViewTask = () => {
             marginBottom: 3,
           }}
         >
-          <Grid2 item xs={12} sm={6} md={4}>
+          <Grid2 item xs={12} sm={6} md={4} sx={{display: 'flex', justifyContent: 'space-between',gap: 2,alignItems: "center",}}>
             <SearchBox tasks={tasks} setFilteredTasks={setFilteredTasks} />
+            <Grid2 item xs={12} sm={6} md={2} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center", gap: 1 }}>
+                <FilterByIcon filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
+                <SortByDropDown filteredTasks={tasks} setFilteredTasks = {setFilteredTasks} />                
+            </Grid2>
           </Grid2>
-          <Grid2 item xs={12} sm={6} md={2} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: "center", gap: 1 }}>
-          <FilterByIcon filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
-            <div style={{ position: "relative", display: "inline-block" }}>
-              <span className="icon-text" onClick={toggleDropDown}>
-                <FontAwesomeIcon className="sort-icon" icon={faSort} />
-                Sort By
-              </span>
-              {showDropdown && (
-                <div style={{
-                  position: "absolute",
-                  top: "100%",
-                  left: 0,
-                  zIndex: 10,
-                  background: "white",
-                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                  borderRadius: "8px",
-                  padding: "5px"
-                }}>
-                  <SortByDropDown />
-                </div>
-              )}
-            </div>
-          </Grid2>
+        
         </Grid2>
         <Grid2 item xs={12} sx={{ marginTop: 3 }}>
           <TaskTable filteredTasks={filteredTasks} onDelete={handleDeleteTask} />

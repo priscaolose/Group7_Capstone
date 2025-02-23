@@ -1,13 +1,11 @@
 import React, { useState, useRef, useEffect} from "react";
 import "../CSSFolders/viewTask.css";
+
 const FilterByIcon = ({filteredTasks,setFilteredTasks}) => {
   const [selectedFilter,setSelectedFilter] = useState(null)
   const [isOpen, setIsOpen] = useState(false);
-  const [items, setItems] = useState([]);
   const navbarRef = useRef(null);
-  console.log("filtered tasks: " , filteredTasks)
   const today = new Date();
-  localStorage.setItem('items', JSON.stringify(items));
 
   const unSelectFilter = () =>
   {
