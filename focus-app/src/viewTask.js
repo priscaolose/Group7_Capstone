@@ -6,18 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import { Grid2, Box, Typography } from '@mui/material';
 import './CSSFolders/SearchBox.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faSort, faFilter } from '@fortawesome/free-solid-svg-icons';
-import { TableContainer, Table, TableBody, TableRow, TableCell, Paper, Button, Checkbox } from '@mui/material';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { TableContainer, Table, TableBody, TableRow, TableCell, Paper, Checkbox } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import SortByDropDown from './sortByDropdown.js';
 import { useLocation } from 'react-router-dom';
 import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
 import { useUser } from './Components/context';
 import FilterByIcon from './Components/filterByIcon.js';
+
+
 const SearchBox = ({ setFilteredTasks, tasks }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
-
   const handleInputChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value.trim());
@@ -44,6 +46,7 @@ const SearchBox = ({ setFilteredTasks, tasks }) => {
     ));
   };
 
+ 
   return (
     <div className='search-box'>
       <input
@@ -59,16 +62,38 @@ const SearchBox = ({ setFilteredTasks, tasks }) => {
   );
 };
 
-const TaskTable = ({ filteredTasks, onDelete }) => {
-  const navigate = useNavigate();
-
-  const handleDelete = async (taskId) => {
+const handleDelete = async (taskId, onDelete) => {
+  try {
     const success = await deleteTask(taskId);
     if (success) {
-      onDelete(taskId);
+      onDelete(taskId); 
     }
-  };
+  } catch (error) {
+    console.error('Error deleting task:', error);
+  }
+};
+;
 
+const TaskDialog = ({ open, onClose, title, taskID, handleDelete }) => {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Delect Task</DialogTitle>
+      <DialogContent>
+        Are you sure you want to delete the "{title}" task? This action cannot be undone.
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button color="error" onClick={() => handleDelete(taskID, title)}>
+          Confirm Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const TaskTable = ({ filteredTasks, onDelete }) => {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <TableContainer component={Paper} sx={{ marginTop: 5, borderRadius: '8px', maxHeight: '600px', maxWidth: '1000px', overflow: 'auto', margin: '0 auto', boxShadow: '2px 2px 5px rgba(0,0,0,0.1)' }}>
       {filteredTasks.length === 0 ? (
@@ -115,10 +140,23 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
                       size="small"
                       color="error"
                       sx={{ textTransform: 'none' }}
-                      onClick={() => handleDelete(task.id)}
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}    
+                      //onClick={() => handleDelete(task.id,task.title)}
                     >
                       delete
                     </Button>
+                    <TaskDialog
+                          open={isOpen}
+                          onClose={() => setIsOpen(false)}
+                          handleDelete={() => {
+                            handleDelete(task.id, onDelete);
+                            setIsOpen(false);
+                          }}                        
+                          title={task.title}
+                          taskID={task.id}
+                    />
                   </Box>
                 </TableCell>
               </TableRow>
@@ -133,6 +171,7 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const location = useLocation();
   const userEmail = user?.email;
@@ -196,7 +235,6 @@ const ViewTask = () => {
             </Grid2>
       </Grid2>
 
-        
         </Grid2>
         <Grid2 item xs={12} sx={{ marginTop: 3 }}>
           <TaskTable filteredTasks={filteredTasks} onDelete={handleDeleteTask} />
