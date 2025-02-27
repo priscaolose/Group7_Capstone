@@ -2,24 +2,22 @@ import React, { useState } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
+import { useNavigate} from 'react-router-dom';
+import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 import { addTask } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
 import { useUser } from './Components/context';
 
-const AddTask = ({ loggedIn, logout }) => {
-  const location = useLocation();
+const AddTask = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const email = user?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false); 
   console.log("email,",email)
-  const navigate = useNavigate();
   const [task, setTask] = useState({
     title: '',
     description: '',
@@ -36,13 +34,28 @@ const AddTask = ({ loggedIn, logout }) => {
     }));
   };
   
-  const handleYesClick = () => {
-    setIsModalVisible(false); 
-    navigate('/dashboard'); 
-  };
-
-  const handleNoClick = () => {
-    setIsModalVisible(false); 
+  const TaskDialog = ({ open, onClose }) => {
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogTitle>Task Creation</DialogTitle>
+        <DialogContent>
+              A New Task has been successfully created!
+        </DialogContent>
+        <DialogActions>
+          <Button 
+          sx={{
+            padding: '8px 1px',
+            backgroundColor: '#8AAEC6',
+            cursor: 'pointer',
+            color: 'white',
+            width: '10px',
+            fontSize: '16px',
+            }}
+          onClick={onClose}>
+          Ok</Button>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   const handleCancel = () => {
@@ -55,6 +68,10 @@ const AddTask = ({ loggedIn, logout }) => {
     });
     setErrors({});
   };
+  
+  const handleDialogClose = () => {
+    setIsOpen(false); 
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -77,34 +94,32 @@ const AddTask = ({ loggedIn, logout }) => {
       newErrors.dueDate = 'Due date is required.';
     }
 
-    // If there are errors, set them in state and prevent form submission
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; // Prevent the form submission if there are errors
+      return; 
     }
 
-    // Add task to Firestore
     addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-    console.log("task.priority: " + task.priority)
-    console.log("task.dueDate: " + task.dueDate)
-    setTask({
-      title: '',
-      description: '',
-      dueDate: '',
-      category: '',
-      priority: '',
-    })
-    setIsModalVisible(true);
+      setTask({
+        title: '',
+        description: '',
+        dueDate: '',
+        category: '',
+        priority: '',
+      })
+      setIsOpen(true); 
   };
 
+
+  
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
-  
-      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px">
+   
+      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
         <form id="taskForm" onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
           <Grid2 xs={12} md={6} container direction="column" spacing={3}>
@@ -288,7 +303,8 @@ const AddTask = ({ loggedIn, logout }) => {
   
           {/* Column 2: Task Due Date */}
           <Grid2 xs={12} md={6} container direction="row" spacing={3}>
-            <Grid2 xs={12}>
+          <Grid2 xs={12}>
+              {/* Due Date Field */}
               <TextField
                 fullWidth
                 label="Task DueDate"
@@ -306,6 +322,29 @@ const AddTask = ({ loggedIn, logout }) => {
                   '& .MuiInputBase-root': {
                     borderRadius: '10px',
                   },
+                  '& .MuiFormLabel-root': {
+                    color: '#105',
+                  },
+                  '& .MuiInputBase-input': {
+                    padding: '10px',
+                    fontSize: '30px',
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setTask({ ...task, dueDate: '' })}>
+                        <Clear sx={{ fontSize: '24px' }} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                inputProps={{
+                  style: {
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                  },
                 }}
               />
             </Grid2>
@@ -320,29 +359,15 @@ const AddTask = ({ loggedIn, logout }) => {
           </Grid2>
         </form>
 
-        {isModalVisible && (
-          <div id="myModal" className="modal" style={{ display: 'block' }}>
-            <div className="modal-content">
-              <div className="modal-header">
-                <h2>Your task has been successfully created!</h2>
-                <span className="close" onClick={handleNoClick}>
-                  &times;
-                </span>
-              </div>
-              <div className="modal-body">
-                <p>Click Yes to navigate back to the Dashboard or No to stay here.</p>
-              </div>
-              <div className="modal-footer">
-                <Button onClick={handleYesClick}>Yes</Button>
-                <Button onClick={handleNoClick}>No</Button>
-              </div>
-            </div>
-          </div>
+        {isOpen && (
+          <TaskDialog
+            open={isOpen}
+            onClose={handleDialogClose}
+          />
         )}
       </Grid2>
-
       {/* Footer */}
-      <Grid2 xs={12}>
+      <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
         <Footer />
       </Grid2>
     </Box>

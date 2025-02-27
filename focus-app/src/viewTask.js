@@ -171,7 +171,6 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const location = useLocation();
   const userEmail = user?.email;

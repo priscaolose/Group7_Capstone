@@ -9,9 +9,10 @@ import ColorDropdown from './ColorDropdown';
 import PriorityDropdown from './taskPriority';
 import { useParams } from "react-router-dom";
 import { useGetTasks,useUpdateTask } from './Api/editTask';
-import { useUser } from './Components/context';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 
 const EditTask = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
@@ -53,47 +54,75 @@ const EditTask = () => {
     });
     setErrors({});
   };
+  const TaskDialog = ({ open, onClose }) => {
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogTitle>Task Creation</DialogTitle>
+        <DialogContent>
+              A New Task has been successfully updated!
+        </DialogContent>
+        <DialogActions>
+          <Button 
+          sx={{
+            padding: '8px 1px',
+            backgroundColor: '#8AAEC6',
+            cursor: 'pointer',
+            color: 'white',
+            width: '10px',
+            fontSize: '16px',
+            }}
+          onClick={onClose}>
+          Ok</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Clear previous error messages
     setErrors({});
-
+  
     // Create an errors object
     const newErrors = {};
     if (!task.title) {
       newErrors.title = 'Title is required.';
     }
     if (task.title && task.title.length > 75) {
-        newErrors.title = 'Title must be at less than 75 characters';
-      }
+      newErrors.title = 'Title must be at less than 75 characters';
+    }
     if (task.description && task.description.length > 150) {
-        newErrors.description = 'Description must be less than 150 characters';
-      }
+      newErrors.description = 'Description must be less than 150 characters';
+    }
     if (!task.dueDate) {
       newErrors.dueDate = 'Due date is required.';
     }
-
+  
     // If there are errors, set them in state and prevent form submission
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return; // Prevent the form submission if there are errors
     }
+  
     updateTask(id, task)
-    .then(() => {
-      setTask({
-        title: '',
-        description: '',
-        dueDate: '',
-        category: '',
-        priority: '',
+      .then(() => {
+        setTask({
+          title: '',
+          description: '',
+          dueDate: '',
+          category: '',
+          priority: '',
+        });
+        setIsOpen(true); 
+      })
+      .catch((error) => {
+        console.error('Error updating task:', error);
       });
-      navigate('/dashboard');
-      alert('Task has been successfully updated');
-    })
-
-    // Add your task submission logic here
-    console.log('Task to be added:', task);
+  };
+  
+  const handleDialogClose = () => {
+    setIsOpen(false); 
+    navigate('/dashboard'); 
   };
 
   return (
@@ -102,7 +131,7 @@ const EditTask = () => {
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
-  
+    
       <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
         <form onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
@@ -363,12 +392,19 @@ const EditTask = () => {
               </Grid2>
             </Grid2>
           </Grid2>
-
+         {isOpen && (
+      <TaskDialog
+        open={isOpen}
+        onClose={handleDialogClose}
+        title="Task Updated"
+        taskID={id}
+      />
+)}
         </form>
       </Grid2>
   
       {/* Footer */}
-      <Grid2 xs={12}>
+      <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
         <Footer />
       </Grid2>
     </Box>
