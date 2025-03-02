@@ -154,12 +154,16 @@ function Dashboard() {
                       <Typography
                         variant="body1"
                         sx={{ fontWeight: "bold", color: "#1059a2" }}
+                        textAlign={"left"}
                       >
                         {task.taskName}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "#333" }}>
+                      <Typography variant="body2" sx={{ color: "#333" }}
+                        textAlign={"left"}
+                      >
                         {task.taskDescription}
                       </Typography>
+                      <hr style={{ backgroundColor: 'gray', height: '1px', border: 'none'}}/>
                     </Box>
                   )) || "You have no tasks. Click on Add Task to add some!"}
               </Paper>
