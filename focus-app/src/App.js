@@ -8,6 +8,8 @@ import ManageAccount from "./ManageAccount"; // Import ManageAccount component
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { UserProvider } from "./Components/context";
+import TimerPage from "./Components/timerPage"; // Import TimerPage component
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -50,6 +52,10 @@ function App() {
               path="/addtask"
               element={<AddTask loggedIn={loggedIn} logout={logout} />}
             />
+
+           {/* Add route for ManageAccount */}
+            <Route path="/TimerPage" element={<TimerPage />} />
+            
 
             {/* Add route for ManageAccount */}
             <Route path="/manageaccount" element={<ManageAccount />} />

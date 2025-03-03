@@ -191,8 +191,8 @@ function Dashboard() {
                   {currentTime}
                 </Typography>
                 <Box sx={{ mt: 3, gap: 3 }}> 
-                <Typography variant="body1" component={Link} to="/viewTask" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 4, gap: 2 }}>
-                  Set Timer
+                <Typography variant="body1" component={Link} to="/TimerPage" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 4, gap: 2 }}>
+                  Set Timer 
                 </Typography>
                 <Typography variant="body1" component={Link} to="/addTask" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 2 }}>
                   Add Task

@@ -8,23 +8,23 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; // ✅ Import Edit Icon
+import EditIcon from "@mui/icons-material/Edit"; 
 import { useUser } from "./context";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import { format } from "date-fns"; // ✅ Install with: npm install date-fns
+import { format } from "date-fns";  
 
 
 function NoteSection() {
   const { user } = useUser();
   const [note, setNote] = useState("");
   const [notesList, setNotesList] = useState([]);
-  const [editingNoteId, setEditingNoteId] = useState(null); // ✅ Track which note is being edited
-  const [editedNote, setEditedNote] = useState(""); // ✅ Stores the updated text
+  const [editingNoteId, setEditingNoteId] = useState(null); 
+  const [editedNote, setEditedNote] = useState(""); 
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  // ✅ Fetch notes from Firebase when user logs in
+  // Fetch notes from Firebase when user logs in
   useEffect(() => {
     const fetchNotes = async () => {
       if (!user) return;
@@ -65,7 +65,7 @@ const formatTimestamp = (timestamp) => {
   }
 };
 
-  // ✅ Save a new note to Firebase
+  // Save a new note to Firebase
   const handleNote = async () => {
     if (!note.trim()) {
       setMessage("Please enter a note before saving.");
@@ -89,7 +89,7 @@ const formatTimestamp = (timestamp) => {
     }
   };
 
-  // ✅ Delete a note from Firebase
+  //  Delete a note from Firebase
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "Notes", id));
@@ -99,18 +99,18 @@ const formatTimestamp = (timestamp) => {
     }
   };
 
-  // ✅ Enable edit mode for a note
+  //  Enable edit mode for a note
   const handleEdit = (note) => {
     setEditingNoteId(note.id);
     setEditedNote(note.note); // Set existing note text in the input
   };
 
-  // ✅ Save edited note to Firebase
+  //  Save edited note to Firebase
   const handleSaveEdit = async (id) => {
     try {
       await updateDoc(doc(db, "Notes", id), { note: editedNote });
 
-      // ✅ Update the note in UI
+      //  Update the note in UI
       setNotesList(notesList.map((n) => (n.id === id ? { ...n, note: editedNote } : n)));
       setEditingNoteId(null); // Exit edit mode
       setMessage("Note updated successfully!");
