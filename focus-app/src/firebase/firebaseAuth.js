@@ -20,7 +20,7 @@ export const signInWithGoogle = async () => {
 
 export const checkIfEmailExists = async (email) => {
   try {
-    const usersRef = collection(db, "users");
+    const usersRef = collection(db, "Users");
 
     const q = query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
