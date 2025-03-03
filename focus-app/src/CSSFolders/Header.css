@@ -3,15 +3,17 @@
     display: flex;
     width: 100%;
     padding: 1px;
-    background-color: #e2e9f1;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow for a dropdown effect */
     margin-bottom: 60px;
     align-items: center;
     justify-content: space-between;
+    padding: 0 20px 0px 20px; /*Adjust the padding based on your design for left and right spacing*/
   }
   
   .header-logo {
     height: 60px;
+    
   }
   
   /* Basic navbar styling */
@@ -83,11 +85,12 @@
 
   /* Logout button adjustments */
   .logOutButton {
-    background-color: black;
-    color: white;
+    background-color: #1059a2;
+    color: "white";
     border-radius: 8px;
     padding: 3px 80px;
     cursor: pointer;
     margin-left: auto;
+    
   }
   
