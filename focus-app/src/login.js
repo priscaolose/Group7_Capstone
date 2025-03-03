@@ -22,7 +22,7 @@ const Login = ({ login, loggedIn, logout }) => {
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-  const { setUser } = useUser();
+  const { setUser, setTasks } = useUser();
   console.log("loggedin:", loggedIn);
   console.log("logout:", logout);
 
@@ -76,8 +76,19 @@ const Login = ({ login, loggedIn, logout }) => {
         const firstName = await getUsersName(result.user.email);
         const userData = { firstName: firstName };
         setUser(userData);
+        const task = await fetch(
+          `/api/getTask?userID=${encodeURIComponent(result.user.email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const taskList = await task.json();
+        setTasks(taskList);
         // Existing user - proceed to home
-        navigate("/addTask", { state: { email: result.user.email } });
+        navigate("/dashboard", { state: { email: result.user.email } });
       } else {
         // New user - create account first
         if (
@@ -123,9 +134,20 @@ const Login = ({ login, loggedIn, logout }) => {
             },
           }
         );
+        const task = await fetch(
+          `/api/getTask?userID=${encodeURIComponent(email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         setEmail("");
         setPassword("");
 
+        const taskList = await task.json();
+        setTasks(taskList);
         const data = await response.json();
 
         if (response.ok && data.name) {

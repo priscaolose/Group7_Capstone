@@ -11,7 +11,7 @@ import Cookies from 'js-cookie';
 
 const Header2 = () => {
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { setUser, setTasks } = useUser();
 
   const HandleLogout = async () => {
     // Optional: Add any logout logic here (e.g., clearing auth tokens or session)
@@ -22,6 +22,8 @@ const Header2 = () => {
         Cookies.remove(cName, { path: '/'})
       );
       setUser(null);
+      setTasks(null);
+      localStorage.removeItem("tasks");
       navigate("/login"); // Redirect to the login page after logout
       console.log("User logged out");
     } catch (error) {

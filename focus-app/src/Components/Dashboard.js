@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  useMediaQuery, 
-  Button 
-} from "@mui/material"; 
+import { Box, Typography, Paper, useMediaQuery, Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -32,9 +26,10 @@ const theme = createTheme({
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery("(max-width: 900px)");
-  const { user } = useUser();
+  const { user, tasks } = useUser();
   const [currentTime, setCurrentTime] = useState("00:00:00");
   const [randomQuote, setRandomQuote] = useState("");
+  let count = 0;
 
   // List of motivational quotes
   const quotes = [
@@ -47,7 +42,7 @@ function Dashboard() {
     "Hard work beats talent when talent doesn’t work hard.",
     "It’s not whether you get knocked down, it’s whether you get up. – Vince Lombardi",
     "Dream big and dare to fail. – Norman Vaughan",
-    "Act as if what you do makes a difference. It does. – William James"
+    "Act as if what you do makes a difference. It does. – William James",
   ];
 
   // Select a random quote when the component loads
@@ -118,9 +113,13 @@ function Dashboard() {
                   borderColor: theme.palette.primary.main,
                 }}
               >
-                <Typography 
-                  variant="h6" 
-                  sx={{ color: theme.palette.primary.main, fontWeight: "bold", textAlign: "left" }}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: theme.palette.primary.main,
+                    fontWeight: "bold",
+                    textAlign: "left",
+                  }}
                 >
                   Welcome Back
                 </Typography>
@@ -150,6 +149,23 @@ function Dashboard() {
                 <Typography>
                   <h2>Your Tasks</h2>
                 </Typography>
+                {tasks.slice(0,5).map((task, index) => (
+                    <Box key={index} sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ fontWeight: "bold", color: "#1059a2" }}
+                        textAlign={"left"}
+                      >
+                        {task.taskName}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: "#333" }}
+                        textAlign={"left"}
+                      >
+                        {task.taskDescription}
+                      </Typography>
+                      <hr style={{ backgroundColor: 'gray', height: '1px', border: 'none'}}/>
+                    </Box>
+                  )) || "You have no tasks. Click on Add Task to add some!"}
               </Paper>
             </Box>
 
@@ -168,7 +184,10 @@ function Dashboard() {
                   textDecoration: "none",
                 }}
               >
-                <Typography variant="h3" sx={{ color: "#333", fontWeight: "bold" }}>
+                <Typography
+                  variant="h3"
+                  sx={{ color: "#333", fontWeight: "bold" }}
+                >
                   {currentTime}
                 </Typography>
                 <Box sx={{ mt: 3, gap: 3 }}> 
@@ -183,7 +202,14 @@ function Dashboard() {
                 </Typography>
                 </Box>
               </Paper>
-              <Paper sx={{ p: 3, borderRadius: "16px", background: "white", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  borderRadius: "16px",
+                  background: "white",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                }}
+              >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar />
                 </LocalizationProvider>
@@ -193,11 +219,29 @@ function Dashboard() {
             {/* Right Column */}
             <Box sx={{ display: "grid", gap: 4 }}>
               {/* Reminder Section with Random Quote */}
-              <Paper sx={{ p: 3, borderRadius: "16px", background: "white", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}>
-                <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  borderRadius: "16px",
+                  background: "white",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{ color: theme.palette.primary.main }}
+                >
                   Reminder:
                 </Typography>
-                <Typography variant="body1" sx={{ color: "#333", mt: 1, lineHeight: 1.5, fontStyle: "italic" }}>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#333",
+                    mt: 1,
+                    lineHeight: 1.5,
+                    fontStyle: "italic",
+                  }}
+                >
                   "{randomQuote}"
                 </Typography>
               </Paper>

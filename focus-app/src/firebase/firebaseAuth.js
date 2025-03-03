@@ -50,7 +50,7 @@ export const checkIfEmailExists = async (email) => {
   }
 };
 
-const storeUserInDatabase = async (user) => {
+export const storeUserInDatabase = async (user) => {
   const usersRef = collection(db, "Users");
   const q = query(usersRef, where("displayName", "==", user.displayName));
 
@@ -106,7 +106,7 @@ export const handleGoogleSignUp = async (navigate) => {
       console.log("Signed Up With Google Clicked", result.user.email);
       await storeUserInDatabase(result.user);
       await getUsersName(result.user.email);
-      navigate("/addTask", { state: { email: result.user.email } }); // Redirect to add task page
+      navigate("/dashboard", { state: { email: result.user.email } }); // Redirect to add task page
     }
   } catch (error) {
     console.error("Error during Google Sign-Up:", error);
