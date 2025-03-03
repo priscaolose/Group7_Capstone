@@ -4,7 +4,7 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import './CSSFolders/Login.css';
 import Googlelogo from './Images/googleLogo.png';
-import { signInWithGoogle,checkIfEmailExists } from './firebase/firebaseAuth';
+import { signInWithGoogle,checkIfEmailExists, getUsersName } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
 import { Link } from 'react-router-dom';
