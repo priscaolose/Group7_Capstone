@@ -7,8 +7,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import Header2 from "./Header2";
 import Footer from "./Footer";
-import NoteSection from "./NoteSection"; // ✅ Import Notes Component
-import { useUser } from "./context"; // ✅ Import User Context for user data
+import NoteSection from "./NoteSection"; 
+import { useUser } from "./context"; 
 
 // Custom Theme
 const theme = createTheme({
