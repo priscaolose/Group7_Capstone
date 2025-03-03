@@ -12,6 +12,8 @@ import EditIcon from "@mui/icons-material/Edit"; // ✅ Import Edit Icon
 import { useUser } from "./context";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import { format } from "date-fns"; // ✅ Install with: npm install date-fns
+
 
 function NoteSection() {
   const { user } = useUser();
@@ -43,6 +45,25 @@ function NoteSection() {
 
     fetchNotes();
   }, [user]);
+
+const formatTimestamp = (timestamp) => {
+  if (!timestamp) return "No date";
+
+  const now = new Date(); // Current time
+  const noteDate = new Date(timestamp); // Convert Firestore timestamp to Date
+  const isToday = format(noteDate, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
+  const isYesterday =
+    format(noteDate, "yyyy-MM-dd") ===
+    format(new Date(now.setDate(now.getDate() - 1)), "yyyy-MM-dd");
+
+  if (isToday) {
+    return `Today at ${format(noteDate, "h:mm a")}`; // Example: "Today at 3:45 PM"
+  } else if (isYesterday) {
+    return `Yesterday at ${format(noteDate, "h:mm a")}`; // Example: "Yesterday at 11:30 AM"
+  } else {
+    return `${format(noteDate, "MMM d, yyyy")} at ${format(noteDate, "h:mm a")}`; // Example: "Feb 10, 2024 at 8:00 PM"
+  }
+};
 
   // ✅ Save a new note to Firebase
   const handleNote = async () => {
@@ -131,7 +152,7 @@ function NoteSection() {
             "& .MuiOutlinedInput-root": { border: "none", "& fieldset": { border: "none" } },
             fontFamily: `"Comic Sans MS", cursive`,
             fontSize: "1rem",
-            padding: "10px",
+            padding: "auto",
           }}
         />
         <Button
@@ -140,14 +161,17 @@ function NoteSection() {
           disabled={loading}
           sx={{ mt: 2, backgroundColor: "#1059a2", color: "white" }}
         >
-          {loading ? "Saving..." : "Save Note"}
+          {loading ? "Saving..." : "Save"}
         </Button>
       </Box>
 
-      {/* Display Notes List */}
+      {/* Show Loading Indicator */}
       {loading ? (
         <Typography sx={{ color: "gray", mt: 2 }}>Loading notes...</Typography>
+      ) : notesList.length === 0 ? (
+        <Typography sx={{ color: "gray", mt: 2 }}>No notes available.</Typography>
       ) : (
+        // Display Notes List
         <Box sx={{ mt: 2, maxHeight: "40vh", overflowY: "auto" }}>
           {notesList.map((note) => (
             <Paper
@@ -160,17 +184,26 @@ function NoteSection() {
                 alignItems: "center",
               }}
             >
-              {editingNoteId === note.id ? (
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  value={editedNote}
-                  onChange={(e) => setEditedNote(e.target.value)}
-                  sx={{ backgroundColor: "#FFF176", borderRadius: "8px", padding: "5px" }}
-                />
-              ) : (
-                <Typography variant="body1">{note.note}</Typography>
-              )}
+              <Box>
+                {editingNoteId === note.id ? (
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    value={editedNote}
+                    onChange={(e) => setEditedNote(e.target.value)}
+                    sx={{
+                      backgroundColor: "#FFF176",
+                      borderRadius: "8px",
+                      padding: "5px",
+                    }}
+                  />
+                ) : (
+                  <Typography variant="body1">{note.note}</Typography>
+                )}
+                <Typography variant="caption" sx={{ color: "gray" }}>
+                  {formatTimestamp(note.timestamp)}
+                </Typography>
+              </Box>
 
               <Box>
                 {editingNoteId === note.id ? (
@@ -199,5 +232,4 @@ function NoteSection() {
     </Paper>
   );
 }
-
 export default NoteSection;

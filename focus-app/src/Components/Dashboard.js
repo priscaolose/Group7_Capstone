@@ -171,12 +171,17 @@ function Dashboard() {
                 <Typography variant="h3" sx={{ color: "#333", fontWeight: "bold" }}>
                   {currentTime}
                 </Typography>
-                <Typography variant="body1" component={Link} to="/addTask" sx={{ color: theme.palette.primary.main, fontSize: "1.25rem", mt: 2 }}>
+                <Box sx={{ mt: 3, gap: 3 }}> 
+                <Typography variant="body1" component={Link} to="/viewTask" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 4, gap: 2 }}>
+                  Set Timer
+                </Typography>
+                <Typography variant="body1" component={Link} to="/addTask" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 2 }}>
                   Add Task
                 </Typography>
-                <Typography variant="body1" component={Link} to="/viewTask" sx={{ color: theme.palette.primary.main, fontSize: "1.25rem", mt: 2 }}>
+                <Typography variant="body1" component={Link} to="/viewTask" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 2 }}>
                   View Tasks
                 </Typography>
+                </Box>
               </Paper>
               <Paper sx={{ p: 3, borderRadius: "16px", background: "white", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
