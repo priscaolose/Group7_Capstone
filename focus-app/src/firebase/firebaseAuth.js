@@ -103,4 +103,34 @@ export const handleGoogleSignUp = async (navigate) => {
   }
 };
 
+export const getUsersName = async (email) => {
+  try {
+    // Get a reference to the database
+    const usersRef = collection(db, "Users");
+
+    // Create a query to find documents with the matching email
+    const q = query(usersRef, where("email", "==", email));
+    const emailSnapshot = await getDocs(q);
+
+    if (emailSnapshot.empty) {
+      console.log("Error getting user");
+      return "error";
+    }
+    console.log("Got user from email");
+
+    // Get user data
+    console.log("Getting user");
+    let userData;
+    emailSnapshot.forEach((doc) => {
+      userData = doc.data();
+    });
+    // Return user first name
+    const firstName = userData.displayName.split(" ")[0];
+    console.log("Name: " + firstName);
+    return firstName;
+  } catch (error) {
+    console.error("Error getting users name");
+  }
+};
+
 export {auth,provider}
