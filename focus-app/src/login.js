@@ -8,12 +8,14 @@ import { signInWithGoogle,checkIfEmailExists } from './firebase/firebaseAuth';
 import { auth } from './firebase/firebaseConfig';
 import { signInWithEmailAndPassword,fetchSignInMethodsForEmail } from "firebase/auth";
 import { Link } from 'react-router-dom';
+import { useUser } from "./Components/context";
 const Login = ({ login, loggedIn,logout }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
+  const { setUser, setTasks } = useUser();
   console.log("loggedin:",loggedIn)
   console.log("logout:",logout)
 
