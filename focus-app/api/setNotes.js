@@ -1,5 +1,4 @@
 
-
 const express = require("express");
 const { collection, addDoc } = require("firebase/firestore");
 const { db } = require("../src/firebase/firebaseConfig");

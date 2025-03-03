@@ -11,22 +11,10 @@ import Cookies from 'js-cookie';
 
 const Header2 = () => {
   const navigate = useNavigate();
-  const { setUser } = useUser();
 
-  const HandleLogout = async () => {
+  const HandleLogout = () => {
     // Optional: Add any logout logic here (e.g., clearing auth tokens or session)
-    try {
-      await signOut(auth);
-      const cookies = Cookies.get();
-      Object.keys(cookies).forEach(cName =>
-        Cookies.remove(cName, { path: '/'})
-      );
-      setUser(null);
-      navigate("/login"); // Redirect to the login page after logout
-      console.log("User logged out");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
+    navigate('/login'); // Redirect to the login page after logout
   };
 
   return (
@@ -35,7 +23,7 @@ const Header2 = () => {
         src={logo}
         alt="Logo"
         className="header-logo"
-        onClick={() => navigate('/')} // Navigate to the home page when logo is clicked
+        onClick={() => navigate('/Homepage')} // Navigate to the home page when logo is clicked
         style={{ cursor: 'pointer' }} // Optional: Show pointer cursor
       />
       <div className="navAndLogOut">
@@ -45,7 +33,6 @@ const Header2 = () => {
           type="submit"
           value="Log Out"
           onClick={HandleLogout} // Call HandleLogout on click
-          sx={{ color: "white" }}
         />
       </div>
     </header>

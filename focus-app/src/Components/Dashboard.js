@@ -11,9 +11,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { auth } from '../firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore'; // Firestore imports
+import { db } from '../firebase/firebaseConfig'; // Firestore config
 import { Link } from 'react-router-dom';
-import { useUser } from './context';
-import NoteSection from './NoteSection';
 
 // Custom Theme
 const theme = createTheme({
@@ -31,7 +33,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#1059a2',
+      main: '#1a73e8',
     },
     background: {
       default: '#f4f6f8',
@@ -41,58 +43,39 @@ const theme = createTheme({
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
-  //const [userFirstName, setUserFirstName] = useState(null);
-  //const [user, setUser] = useState(null);
-  const { user } = useUser();
-  const [currentTime, setCurrentTime] = useState('00:00:00');
-  const [randomQuote, setRandomQuote] = useState('');
- 
-
-  const quotes = [
-    "Its always a great time to take the first step.",
-    "Believe you can and you’re halfway there. – Theodore Roosevelt",
-    "The only way to do great work is to love what you do. – Steve Jobs",
-    "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
-    "Do what you can, with what you have, where you are. – Theodore Roosevelt",
-    "Your limitation—it’s only your imagination.",
-    "Push yourself, because no one else is going to do it for you.",
-    "Hard work beats talent when talent doesn’t work hard.",
-    "It’s not whether you get knocked down, it’s whether you get up. – Vince Lombardi",
-    "Dream big and dare to fail. – Norman Vaughan",
-    "Act as if what you do makes a difference. It does. – William James",
-    "Keep on going, and the chances are that you will stumble on something, perhaps when you are least expecting it. I never heard of anyone ever stumbling on something sitting down. – Charles F. Kettering"
-  ];
+  const [userFirstName, setUserFirstName] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    setRandomQuote(quotes[randomIndex]);
+    const fetchUserData = async (userID) => {
+      try {
+        const userRef = doc(db, "Users", userID); // Access user document in Firestore
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+          setUserFirstName(userDoc.data().firstName); // Set user's first name from Firestore
+        } else {
+          console.error("User document not found");
+          setUserFirstName("Guest"); // display for missing first name
+        }
+      } catch (error) {
+        console.error("Error fetching user data from Firestore:", error);
+        setUserFirstName("Guest"); // display for errors
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, (loggedInUser) => {
+      if (loggedInUser) {
+        setUser(loggedInUser);
+        fetchUserData(loggedInUser.uid); // Fetch user data when logged in
+      } else {
+        setUser(null);
+        setUserFirstName("Guest");
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
-
-  useEffect(() => {
-    const updateClock = () => {
-      const today = new Date();
-      let hours = today.getHours();
-      const minutes = checkTime(today.getMinutes());
-      const seconds = checkTime(today.getSeconds());
-
-      hours = checkHour(hours);
-
-      setCurrentTime(`${hours}:${minutes}:${seconds}`);
-  };
-
-  updateClock();
-  const interval = setInterval(updateClock, 1000);
-  return () => clearInterval(interval);
-  }, []); //cleanup on unmount
-
-  function checkTime(i) {
-    return i < 10 ? `0${i}` : i;
-  } // Add a leading zero to single-digit numbers
-
-  function checkHour(hours){ // setting time for 12 hour format
-    return hours > 12 ? hours - 12 : hours;
-  }
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -104,7 +87,7 @@ function Dashboard() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            minHeight: 'auto',
+            minHeight: '100vh',
             px: isSmallScreen ? 2 : 4,
             py: 1,
             backgroundColor: 'white',
@@ -127,9 +110,8 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                  borderColor: theme.palette.primary.main,
                 }}
               >
                 <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 'bold', textAlign: 'left' }}>
@@ -145,7 +127,7 @@ function Dashboard() {
                   }}
                 >
                   {/* display user's first name */}
-                  {user?.firstName || "Guest"} 
+                  {userFirstName || "Loading..."} 
                 </Typography>
               </Paper>
 
@@ -154,20 +136,40 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   minHeight: '50vh',
                 }}
               >
-                <Typography>
-                  <h2>Your Tasks</h2>
+                <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
+                  Today's Tasks
                 </Typography>
-                
+                <Typography component="div">
+                <ul style={{ paddingLeft: '1.5rem', margin: 0}}>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                <li style={{ paddingLeft: '1.5rem', margin: 0 , paddingTop: '2em', color: '#333'}}>
+                  <Typography variant="body1"></Typography>
+                </li>
+                </ul>
+                  </Typography>
               </Paper>
             </Box>
-      
 
-            {/* Center Column (Timer Section*/}
+            {/* Center Column */}
             <Box sx={{ display: 'grid', gap: 4 }}>
               <Paper
                 sx={{
@@ -176,50 +178,39 @@ function Dashboard() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                   p: 4,
                   textDecoration: 'none',
                 }}
+                component={Link}
+                to="/addTask"
               >
                 <Typography
                   variant="h3"
                   sx={{
                     color: '#333',
-                    fontWeight: 'bold',
+                    fontWeight: '300',
                   }}
                 >
-                  {currentTime}  
+                  00:00
                 </Typography>
                 <Typography
                   variant="body1"
-                  component={Link} to = "/addTask"
                   sx={{
                     color: theme.palette.primary.main,
                     fontSize: '1.25rem',
                     mt: 2,
                   }}
                 >
-                  add task 
-                </Typography>
-
-                <Typography
-                  variant="body1"
-                  component={Link} to = "/viewTask"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: '1.25rem',
-                    mt: 2,
-                  }}
-                >
-                  view tasks 
+                  Add task here
                 </Typography>
               </Paper>
               <Paper
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 }}
               >
@@ -235,7 +226,7 @@ function Dashboard() {
                 sx={{
                   p: 3,
                   borderRadius: '16px',
-                  background: 'white',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 }}
               >
@@ -255,19 +246,34 @@ function Dashboard() {
                     lineHeight: 1.5,
                   }}
                 >
-                  {randomQuote}
+                  It's always a great time to take the first step.
                 </Typography>
               </Paper>
-              <Box sx={{ display: "grid", gap: 4 }}>
-            <NoteSection /> {/* Uses the NoteSection component */}
-          </Box>
+              <Paper
+                sx={{
+                  p: 3,
+                  borderRadius: '16px',
+                  background: 'linear-gradient(#FFF1F1, #E2EAF1)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  minHeight: '50vh',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: theme.palette.primary.main,
+                    mb: 2,
+                  }}
+                >
+                  Notes
+                </Typography>
+              </Paper>
             </Box>
           </Box>
         </Box>
-        <Footer/>
+        <Footer />
       </div>
     </ThemeProvider>
-
   );
 }
 

@@ -13,8 +13,9 @@ app.get("/api/getTask", async (req, res) =>{
         return res.status(400).json({ error: "Missing userID" });
     }
     try{
-        const tasksRef = collection(db, "Tasks");
-        const q = query(tasksRef, where('userID', '==', String(userID)), orderBy('dueDate'));
+        console.log("Got userID: " + userID);
+        const tasksRef = collection(db, "tasks");
+        const q = query(tasksRef, where('userId', '==', userID), orderBy("endTime", "desc"));
         const taskSnapshot = await getDocs(q);
         taskSnapshot.forEach(doc => console.log(doc.data().userID));
         taskSnapshot.docs.forEach(doc => console.log(doc.data()));
@@ -22,9 +23,13 @@ app.get("/api/getTask", async (req, res) =>{
         if(taskSnapshot.empty){
             return res.status(404).json({ message: 'User not found' });
         }
-        const task = taskSnapshot.docs[0].data();
-        res.status(200).json({ dueDate: task.dueDate, pointAmount: task.pointAmount, name: task.name, description: task.description, 
-            status: task.status, userID: task.userID });
+        const tasks = taskSnapshot.docs.map(doc =>({
+            taskName: doc.data().taskName,
+            taskDescription: doc.data().taskDescription,
+            dueDate: doc.data().endTime
+        }));
+        console.log("task info:" + tasks);
+        res.status(200).json(tasks);
     }catch(error){
         console.log(error);
         res.status(500).json({ error: 'Error getting user' });

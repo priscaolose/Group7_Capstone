@@ -7,7 +7,6 @@ import Footer from './Components/Footer';
 import Googlelogo from './Images/googleLogo.png';
 import {  handleGoogleSignUp  } from './firebase/firebaseAuth'; 
 import { useNavigate } from 'react-router-dom';
-import { useUser } from './Components/context';
 
 
 const Register = () => {
@@ -19,7 +18,6 @@ const Register = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errors, setErrors] = useState({}); // Single object to hold all error messages
     const [isLocked, setIsLocked] = useState(true);
-    const { setUser } = useUser();
 
     const navigate = useNavigate();
     const handleAccountLogin = () => {
