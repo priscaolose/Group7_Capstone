@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const popoutRoutes = require('./routes/popoutRoutes');
 const admin = require('firebase-admin');
+const canvasSyncRoutes = require('./routes/canvasSynncRoutes');
+app.use('/canvas', canvasSyncRoutes);
 
 //ini. firebase admin SDK
 const serviceAccount = require('./firebaseServiceAccount.json');
