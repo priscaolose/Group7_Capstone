@@ -65,7 +65,7 @@ const Login = ({ login, loggedIn,logout }) => {
       console.log("emailExists",emailExists)
       if (emailExists) {
         // Existing user - proceed to home
-        navigate('/addTask', { state: { email: result.user.email } });
+        navigate('/dashboard', { state: { email: result.user.email } });
       } else {
         // New user - create account first
         if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
