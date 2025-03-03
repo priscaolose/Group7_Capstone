@@ -7,6 +7,7 @@ import AddTask from './addTask';
 import ManageAccount from './ManageAccount'; // Import ManageAccount component
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { UserProvider } from "./Components/context";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -15,6 +16,7 @@ function App() {
   const logout = () => setLoggedIn(false);
 
   return (
+    <UserProvider>
     <div className="App">
       <BrowserRouter>
         <Routes>
@@ -41,6 +43,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
+    </UserProvider>
   );
 }
 
