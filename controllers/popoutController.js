@@ -6,6 +6,16 @@ const popoutsCollection = db.collection('popouts');
 exports.openPopout = async (req, res) => {
   try {
     const { userId, type, data } = req.body; //type: task, timer, etc.
+    if(type === 'timer') {
+      const existingTimer = await popoutsCollection
+        .where('userId', '==', userId)
+        .where('type', '==', 'timer')
+        .get();
+
+      if(!existingTimer.empty) {
+        return res.status(400).json({ message: 'A timer pop-out is already active.' });
+      }
+    }
     const popoutRef = await popoutsCollection.add({
       userId, 
       type,
@@ -27,6 +37,26 @@ exports.getPopouts = async (req, res) => {
   res.json(popouts);
   } catch (error) {
   res.status(500).json({ error: error.message });
+  }
+};
+
+//get active timer popout for user (if exists)
+exports.getActiveTimerPopout = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const snapshot = await popoutsCollection
+      .where('userId', '==', userId)
+      .where('type', '==', 'timer')
+      .get();
+
+    if(snapshot.empty) {
+      return res.status(200).json({ active: false, message: 'No active timer pop-out' });
+    }
+
+    const popout = snapshot.docs[0].data();
+    res.json({ active: true, popout });
+  } catch(error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
