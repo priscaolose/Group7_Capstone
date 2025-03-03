@@ -108,7 +108,11 @@ const Login = ({ login, loggedIn,logout }) => {
 
   async function handleLogin(email, password) {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       if (user) {
         alert("Signed In Successfully");
@@ -143,28 +147,33 @@ const Login = ({ login, loggedIn,logout }) => {
           navigate("/dashboard");
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
-      else{
+      } else {
         //if user does not have an account, I want them to be redirected to the registration page
       }
     } catch (error) {
-      if (error.code === 'auth/user-not-found') {
+      if (error.code === "auth/user-not-found") {
         alert("No account found with this email.");
-      } else if (error.code === 'auth/wrong-password') {
+      } else if (error.code === "auth/wrong-password") {
         alert("Incorrect password. Please try again.");
-      } else if (error.code === 'auth/too-many-requests') {
-        alert("Too many unsuccessful attempts. Please wait and try again later.");
+      } else if (error.code === "auth/too-many-requests") {
+        alert(
+          "Too many unsuccessful attempts. Please wait and try again later."
+        );
         //This is just a temporal holder for what i am testing
-      } else if(error.code === 'auth/invalid-credential') {
-        if (window.confirm("No account found with these details. Click OK to sign up and create an account.")) {
+      } else if (error.code === "auth/invalid-credential") {
+        if (
+          window.confirm(
+            "No account found with these details. Click OK to sign up and create an account."
+          )
+        ) {
           window.location.href = "/registration"; // Redirects to the registration page
-        }  
-      }
-      else {
+        }
+      } else {
         alert("Error logging in:" + error.code);
       }
     }
   }
-
+  
   return (
     <div className="mainContainer">
     <Header loggedIn={loggedIn} logout={logout}/>
