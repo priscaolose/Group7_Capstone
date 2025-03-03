@@ -64,6 +64,20 @@ const Login = ({ login, loggedIn,logout }) => {
       const emailExists = await checkIfEmailExists(result.user.email);
       console.log("emailExists",emailExists)
       if (emailExists) {
+        const firstName = await getUsersName(result.user.email);
+        const userData = { firstName: firstName };
+        setUser(userData);
+        const task = await fetch(
+          `/api/getTask?userID=${encodeURIComponent(result.user.email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const taskList = await task.json();
+        setTasks(taskList);
         // Existing user - proceed to home
         navigate('/dashboard', { state: { email: result.user.email } });
       } else {
@@ -95,12 +109,38 @@ const Login = ({ login, loggedIn,logout }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       if (user) {
-        alert('Signed In Successfully');
-        setEmail('');
-        setPassword('');
-        navigate('/dashboard');
-        login(); // Call the login function passed as a prop to set loggedIn to true      
-      }
+        alert("Signed In Successfully");
+        const response = await fetch(
+          `/api/login?email=${encodeURIComponent(email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const task = await fetch(
+          `/api/getTask?userID=${encodeURIComponent(email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setEmail("");
+        setPassword("");
+
+        const taskList = await task.json();
+        setTasks(taskList);
+        const data = await response.json();
+
+        if (response.ok && data.name) {
+          const userData = { firstName: data.name };
+          setUser(userData);
+          navigate("/dashboard");
+          login(); // Call the login function passed as a prop to set loggedIn to true
+        }
       else{
         //if user does not have an account, I want them to be redirected to the registration page
       }
