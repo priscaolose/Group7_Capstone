@@ -149,7 +149,8 @@ function Dashboard() {
                 <Typography>
                   <h2>Your Tasks</h2>
                 </Typography>
-                {tasks.slice(0,5).map((task, index) => (
+                 {tasks.length > 0 ? (
+                  tasks.slice(0, 5).map((task, index) => (
                     <Box key={index} sx={{ mb: 2 }}>
                       <Typography
                         variant="body1"
@@ -158,15 +159,31 @@ function Dashboard() {
                       >
                         {task.taskName}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "#333" }}
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#333" }}
                         textAlign={"left"}
                       >
                         {task.taskDescription}
                       </Typography>
-                      <hr style={{ backgroundColor: 'gray', height: '1px', border: 'none'}}/>
+                      <hr
+                        style={{
+                          backgroundColor: "gray",
+                          height: "1px",
+                          border: "none",
+                        }}
+                      />
                     </Box>
-                  )) || "You have no tasks. Click on Add Task to add some!"}
-              </Paper>
+                  ))
+                ) : (
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#666", textAlign: "center", mt: 2 }}
+                  >
+                    You have no tasks. Click on Add Task to add some!
+                  </Typography>
+                )}
+                </Paper>
             </Box>
 
             {/* Center Column (Timer Section) */}
