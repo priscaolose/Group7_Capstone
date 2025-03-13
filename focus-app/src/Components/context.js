@@ -8,11 +8,6 @@ export const UserProvider = ({ children }) => {
         return localUser ? JSON.parse(localUser) : null;
     });
 
-    const [tasks, setTasks] = useState(() =>{
-        const userTasks = localStorage.getItem("tasks");
-        return userTasks ? JSON.parse(userTasks) : [];
-    });
-
     useEffect(() => {
         if(user) {
             localStorage.setItem("user", JSON.stringify(user));
@@ -21,16 +16,8 @@ export const UserProvider = ({ children }) => {
         }
     }, [user]);
 
-    useEffect(() => {
-        if(tasks) {
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-        } else {
-            localStorage.removeItem("tasks");
-        }
-    }, [tasks]);
-
     return (
-        <UserContext.Provider value={{ user, setUser, tasks, setTasks }}>
+        <UserContext.Provider value={{ user, setUser }}>
             {children}
         </UserContext.Provider>
     );
