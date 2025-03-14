@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom'; // Import the hook for navigatio
 import logo from '../Images/Focus-8.png'; // Import the logo image
 import Navbar from './navBar'; // Import Navbar component
 import '../CSSFolders/Header.css'; 
-import Homepage from '../Homepage';
+import HomePage from '../Homepage';
 
 const Header = ({ loggedIn, logout }) => {
   const navigate = useNavigate(); // Correctly call the useNavigate hook inside the component
 
   const handleLogoClick = () => {
-    navigate('/Homepage'); // Navigate to the home page
+    navigate('/'); // Navigate to the home page
   };
 
   if (loggedIn) {

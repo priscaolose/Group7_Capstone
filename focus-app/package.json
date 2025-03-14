@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/icons-material": "^6.1.8",
     "@mui/material": "^6.1.10",
     "@mui/styles": "^6.1.8",
@@ -27,6 +31,8 @@
     "react-native-paper": "^5.12.5",
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
+    "react-select": "^5.10.0",
+    "uuid": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,20 +1,23 @@
 //src/firestone.js
 import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import app from '../firebase/firebaseConfig';
-
+import { v4 as uuidv4 } from "uuid"; 
 const db = getFirestore(app);
 
 //add task
-export const addTask = async (userId, taskName,taskDescription,
-  startTime, endTime) => {
+export const addTask = async (userId, title,description,
+  dueDate,category,priority) => {
+  const taskID = uuidv4(); 
   try {
     await addDoc(collection(db, "tasks"), {
+      taskID,
       userId,
-      taskName,
-      taskDescription,
-      startTime,
-      endTime,
+      title,
+      description,
+      dueDate,
       completed: false,
+      category,
+      priority,
     });
   } catch (error) {
       console.error("Error adding task:", error.message);
@@ -34,7 +37,7 @@ export const getTasks = async (userId) => {
 };
 
 
-//ipdate tasks (ex. mark complete)
+//update tasks (ex. mark complete)
 export const updateTask = async (taskId, updatedData) => {
   try {
     const taskRef = doc(db, "tasks", taskId);
@@ -48,7 +51,10 @@ export const updateTask = async (taskId, updatedData) => {
 export const deleteTask = async (taskId) => {
   try {
     await deleteDoc(doc(db, "tasks", taskId));
+    console.log(`Task ${taskId} deleted successfully.`);
+    return true; // Return true to indicate success
   } catch (error) {
-      console.error("Error delting task:", error.message);
+    console.error("Error deleting task:", error.message);
+    return false; // Return false to indicate failure
   }
 };

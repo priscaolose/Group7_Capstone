@@ -50,8 +50,8 @@ const Navbar = () => {
             <i className="fa-solid fa-list-check"></i> Manage Account
           </Link>
           
-          <Link to="/logout" className="navbar-item" onClick={closeNav}>
-            <i className="fa-solid fa-right-from-bracket"></i> Logout
+          <Link to="/Dashboard" className="navbar-item" onClick={closeNav}>
+            <i className="fa-solid fa-right-from-bracket"></i>Dashboard
           </Link>
         </div>
       </div>
