@@ -13,11 +13,12 @@ import { useUser } from './Components/context';
 const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
-  const email = user?.email;
+  //const email = user?.email;
+  const uid = user?.uid;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-  console.log("email,",email)
+  //console.log("email,",email)
   const [task, setTask] = useState({
     title: '',
     description: '',
@@ -99,7 +100,8 @@ const AddTask = () => {
       return; 
     }
 
-    addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
+    //addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
+    addTask(uid, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
       setTask({
         title: '',
         description: '',
