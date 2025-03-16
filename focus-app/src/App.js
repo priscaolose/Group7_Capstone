@@ -10,6 +10,8 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { UserProvider } from "./Components/context";
 import ViewTask from "./viewTask";
+import GoogleRedirect from "./googleRedirect";
+import Oauth2Callback from "./oauth2callback";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -64,6 +66,8 @@ function App() {
               path="/viewTask"
               element={< ViewTask />}
             />
+            <Route path="/googleredirect" element={<GoogleRedirect />} />  
+            <Route path="/oauth2callback" element={<Oauth2Callback />} />
 
           </Routes>
         </BrowserRouter>
