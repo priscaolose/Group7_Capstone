@@ -82,7 +82,10 @@ function Dashboard() {
       const seconds = checkTime(today.getSeconds());
 
       hours = checkHour(hours);
-      setCurrentTime(`${hours}:${minutes}:${seconds}`);
+      const formattedTime = `${hours}:${minutes}:${seconds}`;
+      setCurrentTime(formattedTime);
+
+      document.title = `Focus ${formattedTime}`;
     };
 
     updateClock();
