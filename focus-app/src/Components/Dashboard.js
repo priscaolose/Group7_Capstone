@@ -82,16 +82,17 @@ function Dashboard() {
       const seconds = checkTime(today.getSeconds());
 
       hours = checkHour(hours);
-      const formattedTime = `${hours}:${minutes}:${seconds}`;
-      setCurrentTime(formattedTime);
-
-      document.title = `Focus ${formattedTime}`;
+      setCurrentTime(`${hours}:${minutes}:${seconds}`);
     };
 
     updateClock();
     const interval = setInterval(updateClock, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    document.title = `Focus ${currentTime}`;
+  }, [currentTime]);
 
   function checkTime(i) {
     return i < 10 ? `0${i}` : i;
