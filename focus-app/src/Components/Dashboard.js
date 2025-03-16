@@ -91,7 +91,7 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    document.title = `Focus ${currentTime}`;
+    document.title = `Focus: ${currentTime}`;
   }, [currentTime]);
 
   function checkTime(i) {
