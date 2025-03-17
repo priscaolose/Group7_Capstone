@@ -6,6 +6,8 @@ import {
   Typography,
   Paper,  
   useMediaQuery,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -43,13 +45,38 @@ function Dashboard() {
   const isSmallScreen = useMediaQuery('(max-width: 900px)');
   //const [userFirstName, setUserFirstName] = useState(null);
   //const [user, setUser] = useState(null);
-  const { user } = useUser();
+  const { user, tasks } = useUser();
+  const [tabIndex, setTabIndex] = useState(1);
 
   console.log("User",user);
   
   const [currentTime, setCurrentTime] = useState('00:00:00');
   const [randomQuote, setRandomQuote] = useState('');
   let count = 0;
+
+  const handleTabChange = (event, newIndex) => {
+    setTabIndex(newIndex);
+  };
+
+  const t = new Date();
+  t.setHours(0,0,0,0);
+  const dayStart = Timestamp.fromDate(t);
+  const endDay = new Date();
+  endDay.setHours(23,59,59,999);
+  const eD = Timestamp.fromDate(endDay);
+
+  const filterTasks = tasks.filter(task => {
+    const tEndTime = task.dueDate;
+    if(!tEndTime) return false;
+    if(tabIndex === 0) {
+      return tEndTime < dayStart;
+    } else if(tabIndex === 1) {
+      return tEndTime >= dayStart && tEndTime <= eD;
+    } else if(tabIndex === 2) {
+      return tEndTime > eD;
+    }
+    return false;
+  });
 
 
   const quotes = [
@@ -167,9 +194,50 @@ function Dashboard() {
                   minHeight: '50vh',
                 }}
               >
+                <Tabs value={tabIndex} onChange={handleTabChange} centered>
+                  <Tab label="Past" />
+                  <Tab label="Today" />
+                  <Tab label="Future" />
+                </Tabs>
+
                 <Typography>
                   <h2>Your Tasks</h2>
                 </Typography>
+
+                {filterTasks.length > 0 ? (
+                  filterTasks.map((task, index) => (
+                    <Box key={index} sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ fontWeight: "bold", color: "#1059a2" }}
+                        textAlign={"left"}
+                      >
+                        {task.taskName}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#333" }}
+                        textAlign={"left"}
+                      >
+                        {task.taskDescription}
+                      </Typography>
+                      <hr
+                        style={{
+                          backgroundColor: "gray",
+                          height: "1px",
+                          border: "none",
+                        }}
+                      />
+                    </Box>
+                  ))
+                ) : (
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#666", textAlign: "center", mt: 2 }}
+                  >
+                    You have no tasks. Click on Add Task to add some!
+                  </Typography>
+                )}
                 
               </Paper>
             </Box>
