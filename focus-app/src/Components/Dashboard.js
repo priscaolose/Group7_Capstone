@@ -66,7 +66,7 @@ function Dashboard() {
   endDay.setHours(23,59,59,999);
   const eD = Timestamp.fromDate(endDay);
 
-  const filterTasks = tasks.filter(task => {
+  /*const filterTasks = tasks.filter(task => {
     const tEndTime = task.dueDate;
     if(!tEndTime) return false;
     if(tabIndex === 0) {
@@ -77,7 +77,7 @@ function Dashboard() {
       return tEndTime > eD;
     }
     return false;
-  });
+  });*/
 
 
   const quotes = [
@@ -205,8 +205,8 @@ function Dashboard() {
                   <h2>Your Tasks</h2>
                 </Typography>
 
-                {filterTasks.length > 0 ? (
-                  filterTasks.map((task, index) => (
+                {tasks.length > 0 ? (
+                  tasks.map((task, index) => (
                     <Box key={index} sx={{ mb: 2 }}>
                       <Typography
                         variant="body1"
