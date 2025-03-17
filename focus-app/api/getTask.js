@@ -13,7 +13,7 @@ app.get("/api/getTask", async (req, res) =>{
         return res.status(400).json({ error: "Missing userID" });
     }
     try{
-        const tasksRef = collection(db, "Tasks");
+        const tasksRef = collection(db, "tasks");
         const q = query(tasksRef, where('userID', '==', String(userID)), orderBy('dueDate'));
         const taskSnapshot = await getDocs(q);
         taskSnapshot.forEach(doc => console.log(doc.data().userID));
