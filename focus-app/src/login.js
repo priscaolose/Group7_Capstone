@@ -104,6 +104,7 @@ const Login = ({ login, loggedIn, logout }) => {
       login(); // Call the login function passed as a prop to set loggedIn to true
     } catch (error) {
       alert("Sign in failed. Please try again.");
+      console.log(error);
     }
   };
 
