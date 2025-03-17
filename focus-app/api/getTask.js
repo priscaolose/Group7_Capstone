@@ -14,7 +14,7 @@ app.get("/api/getTask", async (req, res) =>{
     }
     try{
         const tasksRef = collection(db, "tasks");
-        const q = query(tasksRef, where('userID', '==', String(userID)), orderBy('dueDate'));
+        const q = query(tasksRef, where('userId', '==', String(userID)), orderBy('dueDate'));
         const taskSnapshot = await getDocs(q);
         taskSnapshot.forEach(doc => console.log(doc.data().userID));
         taskSnapshot.docs.forEach(doc => console.log(doc.data()));
