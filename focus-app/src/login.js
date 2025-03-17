@@ -22,7 +22,7 @@ const Login = ({ login, loggedIn, logout }) => {
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-  const { setUser } = useUser();
+  const { setUser, setTasks } = useUser();
   console.log("setUser", setUser);
   console.log("loggedin:", loggedIn);
   console.log("logout:", logout);
@@ -78,6 +78,17 @@ const Login = ({ login, loggedIn, logout }) => {
         const userData = { firstName: firstName , email: result.user.email};
         console.log("userData", userData);
         setUser(userData);
+        const task = await fetch(
+          `/api/getTask?userID=${encodeURIComponent(result.user.email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const taskList = await task.json();
+        setTasks(taskList);
         // Existing user - proceed to home
         navigate("/viewTask", { state: { email: result.user.email } });
       } else {
