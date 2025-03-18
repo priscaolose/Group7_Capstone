@@ -1,31 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate} from 'react-router-dom';
-import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import { addTask } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
-import { useUser } from './Components/context';
+import { useParams } from "react-router-dom";
+import { useGetTasks,useUpdateTask } from './Api/editTask';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 
-const AddTask = () => {
+const EditTask = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
-  //const email = user?.email;
-  const uid = user?.uid;
+  const { id } = useParams();
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-  //console.log("email,",email)
-  const [task, setTask] = useState({
-    title: '',
-    description: '',
-    dueDate: '',
-    category: '',
-    priority: '',
-  });
+  const navigate = useNavigate();
+  const {tasks} = useGetTasks(id);
+  console.log("tasks",tasks);
+  const updateTask = useUpdateTask(); 
+
+  
+  const [task, setTask] = useState("");
+  useEffect(() => {
+    if (tasks) { 
+      setTask({
+        title: tasks.title || "",
+        description: tasks.description || "",
+        dueDate: tasks.dueDate || "",
+        category: tasks.category || "",
+        priority: tasks.priority || "",
+      });
+    }
+  }, [tasks]); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,13 +43,23 @@ const AddTask = () => {
       [name]: value,
     }));
   };
-  
+
+  const handleCancel = () => {
+    setTask({
+        title: tasks.title,
+        description: tasks.description,
+        dueDate: tasks.dueDate,
+        category: tasks.category,
+        priority: tasks.priority,
+    });
+    setErrors({});
+  };
   const TaskDialog = ({ open, onClose }) => {
     return (
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Task Creation</DialogTitle>
         <DialogContent>
-              A New Task has been successfully created!
+              A New Task has been successfully updated!
         </DialogContent>
         <DialogActions>
           <Button 
@@ -59,77 +78,69 @@ const AddTask = () => {
     );
   };
 
-  const handleCancel = () => {
-    setTask({
-      title: '',
-      description: '',
-      dueDate: '',
-      category: '',
-      priority: '',
-    });
-    setErrors({});
-  };
-  
-  const handleDialogClose = () => {
-    setIsOpen(false); 
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // Clear previous error messages
     setErrors({});
-
+  
     // Create an errors object
     const newErrors = {};
     if (!task.title) {
       newErrors.title = 'Title is required.';
     }
     if (task.title && task.title.length > 75) {
-        newErrors.title = 'Title must be less than 75 characters';
+      newErrors.title = 'Title must be at less than 75 characters';
     }
     if (task.description && task.description.length > 150) {
-        newErrors.description = 'Description must be less than 150 characters';
+      newErrors.description = 'Description must be less than 150 characters';
     }
     if (!task.dueDate) {
       newErrors.dueDate = 'Due date is required.';
     }
-
+  
+    // If there are errors, set them in state and prevent form submission
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; 
+      return; // Prevent the form submission if there are errors
     }
-
-    //addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-    addTask(uid, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-      setTask({
-        title: '',
-        description: '',
-        dueDate: '',
-        category: '',
-        priority: '',
+  
+    updateTask(id, task)
+      .then(() => {
+        setTask({
+          title: '',
+          description: '',
+          dueDate: '',
+          category: '',
+          priority: '',
+        });
+        setIsOpen(true); 
       })
-      setIsOpen(true); 
+      .catch((error) => {
+        console.error('Error updating task:', error);
+      });
+  };
+  
+  const handleDialogClose = () => {
+    setIsOpen(false); 
+    navigate('/dashboard'); 
   };
 
-
-  
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      {/* Header */}
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
-   
+    
       <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
-        <form id="taskForm" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
           <Grid2 xs={12} md={6} container direction="column" spacing={3}>
             {/* Heading and Buttons Row */}
             <Grid2 container alignItems="center" justifyContent="space-between">
               {/* "Add New Task" Heading */}
               <Grid2 item>
-                <h4 className="task-title">Add New Task</h4>
+                <h4 className="task-title">Edit Task</h4>
               </Grid2>
   
               {/* Buttons Container */}
@@ -150,7 +161,7 @@ const AddTask = () => {
                       fontSize: '16px',
                     }}
                   >
-                    Confirm
+                    Save Changes
                   </Button>
                 </Grid2>
 
@@ -240,12 +251,13 @@ const AddTask = () => {
                       </InputAdornment>
                     ),
                   }}
+                  margin-bottom={5}
                 />
                 {errors.title && <label className="errorLabel">{errors.title}</label>}
               </Box>
             </Grid2>
   
-            {/* Task Description Field */}
+            {/* Task Description Field with Floating Label */}
             <Grid2 xs={12}>
               <Box sx={{ position: 'relative' }}>
                 {(task.description || isFocused) && (
@@ -295,8 +307,23 @@ const AddTask = () => {
                       fontWeight: 'bold',
                     },
                   }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setTask({ description: '' })}>
+                          <Clear sx={{ fontSize: '24px' }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                   multiline
                   rows={4}
+                  margin-bottom={5}
                 />
                 {errors.description && <label className="errorLabel">{errors.description}</label>}
               </Box>
@@ -305,7 +332,7 @@ const AddTask = () => {
   
           {/* Column 2: Task Due Date */}
           <Grid2 xs={12} md={6} container direction="row" spacing={3}>
-          <Grid2 xs={12}>
+            <Grid2 xs={12}>
               {/* Due Date Field */}
               <TextField
                 fullWidth
@@ -352,22 +379,30 @@ const AddTask = () => {
             </Grid2>
             <Grid2 item container spacing={2} justifyContent="flex-end">
               <Grid2 item>
-                <ColorDropdown name="category" onChange={handleChange} />
-              </Grid2>
+                  <ColorDropdown
+                      name="category" 
+                      onChange={handleChange} 
+                  />
+                    </Grid2>
               <Grid2 item>
-                <PriorityDropdown name="priority" onChange={handleChange} />
+                  <PriorityDropdown  
+                      name="priority" 
+                      onChange={handleChange} 
+                  />
               </Grid2>
             </Grid2>
           </Grid2>
+         {isOpen && (
+      <TaskDialog
+        open={isOpen}
+        onClose={handleDialogClose}
+        title="Task Updated"
+        taskID={id}
+      />
+)}
         </form>
-
-        {isOpen && (
-          <TaskDialog
-            open={isOpen}
-            onClose={handleDialogClose}
-          />
-        )}
       </Grid2>
+  
       {/* Footer */}
       <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
         <Footer />
@@ -376,4 +411,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default EditTask;

@@ -7,6 +7,7 @@ import Footer from './Components/Footer';
 import Googlelogo from './Images/googleLogo.png';
 import {  handleGoogleSignUp  } from './firebase/firebaseAuth'; 
 import { useNavigate } from 'react-router-dom';
+import { useUser } from './Components/context';
 
 
 const Register = () => {
@@ -18,8 +19,12 @@ const Register = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errors, setErrors] = useState({}); // Single object to hold all error messages
     const [isLocked, setIsLocked] = useState(true);
+    const { setUser } = useUser();
 
     const navigate = useNavigate();
+    const handleAccountLogin = () => {
+        navigate('/login');
+    };
 
     const isValidPhoneNumber = (phoneNumber) => {
         const regex = /^\+?1?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
@@ -71,6 +76,7 @@ const Register = () => {
             setErrors(newErrors); // Set all errors at once
             return; // Exit the function if there are errors
         }
+        console.log("email",email)
         handleRegister(e);
     };
 
@@ -112,7 +118,6 @@ const handleRegister = async (e) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        // ... Firebase auth code ...
 
         const response = await fetch('/api/register', {
             method: 'POST',
@@ -124,19 +129,26 @@ const handleRegister = async (e) => {
                 lastName,
                 email,
                 userName: user.uid,
-                phonenumber: phone, // Note: match the field name with server
+                phonenumber: phone,
                 password,
             }),
         });
 
+        const userData = { firstName: firstName, email: email};
+        setUser(userData);
+
+        // Log the raw response text
+        const responseText = await response.text();
+        console.log("Raw response:", responseText);
+
         // First check if response is ok
         if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = JSON.parse(responseText); // Now safe to parse
             throw new Error(errorData.error || 'Registration failed');
         }
 
-        const result = await response.json();
-        navigate('/addTask', { state: { email:user.email } });
+        const result = JSON.parse(responseText); // Now safe to parse
+        navigate('/dashboard', { state: { email: user.email } });
         setSuccessMessage(result.message);
 
     } catch (error) {
@@ -227,11 +239,14 @@ const handleRegister = async (e) => {
                 </form>
                 {successMessage && <p className="success-message">{successMessage}</p>}
                 <div className="googleSignInContainer">
-                <div className="googleSignInText">Sign Up With</div>
-                    <img src={Googlelogo} onClick={() => handleGoogleSignUp(navigate)} alt="GoogleLogo" className="google-logo" />
+                    <div className="googleSignInText">Sign Up With</div>
+                        <img src={Googlelogo} onClick={() => handleGoogleSignUp(navigate)} alt="GoogleLogo" className="google-logo" />
+                    </div>
+                    <div className="alreadyHaveAnAccount"> Already have an account? <span className="clickableRegister" onClick={handleAccountLogin}>
+                        Sign in 
+                        </span>
+                    </div>
                 </div>
-
-            </div>
             <Footer />
         </div>
     );

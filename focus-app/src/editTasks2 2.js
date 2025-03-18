@@ -2,23 +2,21 @@ import React, { useState } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate} from 'react-router-dom';
-import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
+import { useNavigate,useLocation } from 'react-router-dom';
+import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import { addTask } from './Api/createTask';
+import { addTask} from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
-import { useUser } from './Components/context';
 
-const AddTask = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
-  //const email = user?.email;
-  const uid = user?.uid;
+const EditTask = ({ loggedIn, logout }) => {
+  const location = useLocation();
+  const email = location.state?.email;
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-  //console.log("email,",email)
+
+  const navigate = useNavigate();
   const [task, setTask] = useState({
     title: '',
     description: '',
@@ -34,30 +32,6 @@ const AddTask = () => {
       [name]: value,
     }));
   };
-  
-  const TaskDialog = ({ open, onClose }) => {
-    return (
-      <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Task Creation</DialogTitle>
-        <DialogContent>
-              A New Task has been successfully created!
-        </DialogContent>
-        <DialogActions>
-          <Button 
-          sx={{
-            padding: '8px 1px',
-            backgroundColor: '#8AAEC6',
-            cursor: 'pointer',
-            color: 'white',
-            width: '10px',
-            fontSize: '16px',
-            }}
-          onClick={onClose}>
-          Ok</Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
 
   const handleCancel = () => {
     setTask({
@@ -69,10 +43,6 @@ const AddTask = () => {
     });
     setErrors({});
   };
-  
-  const handleDialogClose = () => {
-    setIsOpen(false); 
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -85,44 +55,52 @@ const AddTask = () => {
     if (!task.title) {
       newErrors.title = 'Title is required.';
     }
-    if (task.title && task.title.length > 75) {
-        newErrors.title = 'Title must be less than 75 characters';
-    }
+    if (task.title && task.title.length > 20) {
+        newErrors.title = 'Title must be at less than 20 characters';
+      }
     if (task.description && task.description.length > 150) {
         newErrors.description = 'Description must be less than 150 characters';
-    }
+      }
     if (!task.dueDate) {
       newErrors.dueDate = 'Due date is required.';
     }
 
+    // If there are errors, set them in state and prevent form submission
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; 
+      return; // Prevent the form submission if there are errors
     }
 
-    //addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-    addTask(uid, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
-      setTask({
-        title: '',
-        description: '',
-        dueDate: '',
-        category: '',
-        priority: '',
-      })
-      setIsOpen(true); 
+    setTask({
+      title: '',
+      description: '',
+      dueDate: '',
+      category: '',
+      priority: '',
+    });
+
+    // Add task to Firestore
+    EditTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
+    console.log("task.priority: " + task.priority)
+    console.log("task.dueDate: " + task.dueDate)
+    
+    // Navigate back to dashboard 
+    navigate('/dashboard');
+
+    // Add your task submission logic here
+    console.log('Task to be added:', task);
+    alert('Task has been successfully submitted');
   };
 
-
-  
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box sx={{ flexGrow: 1 }}>
       {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
-   
-      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
-        <form id="taskForm" onSubmit={handleSubmit}>
+  
+      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh">
+        <form onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
           <Grid2 xs={12} md={6} container direction="column" spacing={3}>
             {/* Heading and Buttons Row */}
@@ -240,12 +218,13 @@ const AddTask = () => {
                       </InputAdornment>
                     ),
                   }}
+                  margin-bottom={5}
                 />
                 {errors.title && <label className="errorLabel">{errors.title}</label>}
               </Box>
             </Grid2>
   
-            {/* Task Description Field */}
+            {/* Task Description Field with Floating Label */}
             <Grid2 xs={12}>
               <Box sx={{ position: 'relative' }}>
                 {(task.description || isFocused) && (
@@ -295,8 +274,23 @@ const AddTask = () => {
                       fontWeight: 'bold',
                     },
                   }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <i className="fa-regular fa-pen-to-square" style={{ fontSize: '24px' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setTask({ description: '' })}>
+                          <Clear sx={{ fontSize: '24px' }} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                   multiline
                   rows={4}
+                  margin-bottom={5}
                 />
                 {errors.description && <label className="errorLabel">{errors.description}</label>}
               </Box>
@@ -305,7 +299,7 @@ const AddTask = () => {
   
           {/* Column 2: Task Due Date */}
           <Grid2 xs={12} md={6} container direction="row" spacing={3}>
-          <Grid2 xs={12}>
+            <Grid2 xs={12}>
               {/* Due Date Field */}
               <TextField
                 fullWidth
@@ -352,28 +346,29 @@ const AddTask = () => {
             </Grid2>
             <Grid2 item container spacing={2} justifyContent="flex-end">
               <Grid2 item>
-                <ColorDropdown name="category" onChange={handleChange} />
-              </Grid2>
+                  <ColorDropdown
+                      name="category" 
+                      onChange={handleChange} 
+                  />
+                    </Grid2>
               <Grid2 item>
-                <PriorityDropdown name="priority" onChange={handleChange} />
+                  <PriorityDropdown  
+                      name="priority" 
+                      onChange={handleChange} 
+                  />
               </Grid2>
             </Grid2>
           </Grid2>
-        </form>
 
-        {isOpen && (
-          <TaskDialog
-            open={isOpen}
-            onClose={handleDialogClose}
-          />
-        )}
+        </form>
       </Grid2>
+  
       {/* Footer */}
-      <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
+      <Grid2 xs={12}>
         <Footer />
       </Grid2>
     </Box>
   );
 };
 
-export default AddTask;
+export default EditTask;

@@ -29,6 +29,7 @@ body, html {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    height: '100vh'
 }
 
 .register-form .heading {
@@ -91,6 +92,17 @@ body, html {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.alreadyHaveAnAccount {
+    display: flex;
+    align-items: center; /* Ensures vertical alignment */
+    gap: 5px; /* Adds space between text and "Sign in" */
+    color: #8AAEC6;
+    font-size: 18px;
+    flex-direction: column;
+    display: inline;
+
+}
+
 
 .googleSignInText::before,
 .googleSignInText::after {

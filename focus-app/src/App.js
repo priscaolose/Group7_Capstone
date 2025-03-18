@@ -3,12 +3,14 @@ import Homepage from "./Homepage";
 import Login from "./login";
 import Registration from "./Registration";
 import Dashboard from "./Components/Dashboard";
+import EditTask from './editTask'; // Import EditTask component
 import AddTask from "./addTask";
 import ManageAccount from "./ManageAccount"; // Import ManageAccount component
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { UserProvider } from "./Components/context";
-import TimerPage from "./Components/TimerPage";
+import TimerPage from "./Components/timerPage";
+import ViewTask from "./viewTask";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -55,8 +57,21 @@ function App() {
 
             {/* Add route for ManageAccount */}
             <Route path="/manageaccount" element={<ManageAccount />} />
-          </Routes>
 
+
+            {/* Add route for ManageAccount */}
+            <Route path="/manageaccount" element={<ManageAccount />} />
+
+            <Route path="/editTask/:id" 
+              element={< EditTask />} 
+            />
+            <Route path="/timer" element={<TimerPage />} />
+            <Route
+              path="/viewTask"
+              element={< ViewTask />}
+            />
+
+          </Routes>
         </BrowserRouter>
       </div>
     </UserProvider>

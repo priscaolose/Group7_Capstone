@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Import the hook for navigation
-import logo from "../Images/Focus-8.png"; // Import the logo image
+import logo from '../Images/logo.png'; 
 import Navbar from "./navBar"; // Import Navbar component
 import "../CSSFolders/Header.css";
 import Homepage from "../Homepage";
@@ -14,7 +14,6 @@ const Header2 = () => {
   const { setUser, setTasks } = useUser();
 
   const HandleLogout = async () => {
-    // Optional: Add any logout logic here (e.g., clearing auth tokens or session)
     try {
       await signOut(auth);
       const cookies = Cookies.get();
@@ -24,7 +23,7 @@ const Header2 = () => {
       setUser(null);
       setTasks(null);
       localStorage.removeItem("tasks");
-      navigate("/login"); // Redirect to the login page after logout
+      navigate("/login"); 
       console.log("User logged out");
     } catch (error) {
       console.error("Logout error:", error);

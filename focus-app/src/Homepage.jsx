@@ -1,7 +1,7 @@
 // HomePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import logo from './Images/Focus-8.png'; // Import the logo image
+import logo from './Images/Focus-8.png';
 import focusImage from './Images/focus.png';
 
 const HomePage = () => {
