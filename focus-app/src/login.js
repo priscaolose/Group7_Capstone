@@ -138,15 +138,26 @@ const Login = ({ login, loggedIn, logout }) => {
             },
           }
         );
+        const task = await fetch(
+          `/api/getTask?userID=${encodeURIComponent(email)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         setEmail("");
         setPassword("");
 
+        const taskList = await task.json();
+        setTasks(taskList);
         const data = await response.json();
 
         if (response.ok && data.name) {
-          const userData = { firstName: data.name, email: data.email};
+          const userData = { firstName: data.name };
           setUser(userData);
-          navigate("/viewTask");
+          navigate("/dashboard");
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
       } else {
