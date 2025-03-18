@@ -9,6 +9,7 @@ import Header2 from "./Header2";
 import Footer from "./Footer";
 import NoteSection from "./NoteSection"; 
 import { useUser } from "./context"; 
+import TimerPage from "./TimerPage";
 
 // Custom Theme
 const theme = createTheme({
@@ -208,7 +209,7 @@ function Dashboard() {
                   {currentTime}
                 </Typography>
                 <Box sx={{ mt: 3, gap: 3 }}> 
-                <Typography variant="body1" component={Link} to="/timerPage" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 4, gap: 2 }}>
+                <Typography variant="body1" component={Link} to="/TimerPage" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 4, gap: 2 }}>
                   Set Timer 
                 </Typography>
                 <Typography variant="body1" component={Link} to="/addTask" sx={{ color: theme.palette.primary.main, fontSize: "1rem", mt: 2 }}>

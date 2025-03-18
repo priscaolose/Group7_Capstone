@@ -8,7 +8,7 @@ import ManageAccount from "./ManageAccount"; // Import ManageAccount component
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { UserProvider } from "./Components/context";
-import TimerPage from "./Components/timerPage";
+import TimerPage from "./Components/TimerPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
