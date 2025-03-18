@@ -268,6 +268,20 @@ function Dashboard() {
                 >
                   {currentTime}  
                 </Typography>
+
+                <Typography
+                  variant="body1"
+                  component={Link} to = "/timer"
+                  sx={{
+                    color: theme.palette.primary.main,
+                    fontSize: '1.25rem',
+                    mt: 2,
+                  }}
+                >
+                  set timer
+                </Typography>
+
+
                 <Typography
                   variant="body1"
                   component={Link} to = "/addTask"

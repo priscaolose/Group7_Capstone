@@ -84,19 +84,22 @@ const styles = {
         backgroundColor: 'white',
     },
     header: {
-        backgroundColor: '#e2e9f1',
+        backgroundColor: '#ffffff',
         color: 'white',
-        padding: '10px 20px',
+        padding: '1px',
+        paddingLeft: '10px',
+        paddingRight: '0px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        boxShadow: '0 1px 10px rgba(0, 0, 0, 0.1)' /* Optional: Adds shadow for a dropdown effect */
     },
     logoContainer: {
         display: 'flex',
         alignItems: 'center'
     },
     logo: {
-        height: '40px',
+        height: '50px',
     },
     content: {
         flex: 1,

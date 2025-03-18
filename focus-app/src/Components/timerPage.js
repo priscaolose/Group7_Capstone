@@ -52,7 +52,7 @@ function TimerPage() {
         alignItems: "center",
         justifyContent: "center",
         height: "100vh",
-        background: "linear-gradient(to bottom, #FCEFEF, #E3EFFB)", // Soft gradient
+        background: "linear-gradient(to bottom, #FFFFFF, #FCEFEF, #E3EFFB, #FFFFFF)", // Soft gradient
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -65,7 +65,7 @@ function TimerPage() {
         <Typography
           variant="h1"
           sx={{
-            fontSize: "18rem",
+            fontSize: "10rem",
             fontWeight: "bold",
             color: "#1E4976",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
@@ -88,7 +88,7 @@ function TimerPage() {
           <Remove fontSize="large" />
         </IconButton>
 
-        <Typography variant="h6" sx={{ mx: 1, color: "#1E4976", fontSize: "2.5em"}}>Seconds</Typography>
+        <Typography variant="h6" sx={{ mx: 1, color: "#1E4976", fontSize: "1.5em"}}>Seconds</Typography>
 
         <IconButton onClick={() => adjustTime("seconds", 5)}>
           <Add fontSize="large" />
@@ -100,25 +100,42 @@ function TimerPage() {
 
       {/* Start/Pause Button */}
       <Button
-        variant="contained"
-        color="primary"
-        startIcon={isRunning ? <Pause /> : <PlayArrow />}
-        onClick={() => setIsRunning(!isRunning)}
-        sx={{ margin: "20px", fontSize: "1.5rem", padding: "10px 20px" }}
-      >
-        {isRunning ? "Pause" : "Start"}
-      </Button>
+  variant="contained"
+  sx={{
+    backgroundColor: isRunning ? "#C62828" : "#1565C0", // Red for Pause, Blue for Start
+    "&:hover": {
+      backgroundColor: isRunning ? "#B71C1C" : "#0D47A1", // Darker shades on hover
+    },
+    color: "white",
+    margin: "20px",
+    fontSize: "1rem",
+    padding: "10px 20px",
+    borderRadius: "15px"
+  }}
+  startIcon={isRunning ? <Pause /> : <PlayArrow />}
+  onClick={() => setIsRunning(!isRunning)}
+>
+  {isRunning ? "Pause" : "Start"}
+</Button>
 
-      {/* Reset Button */}
-      <Button
-          variant="contained"
-          color="secondary"
-          startIcon={<RestartAlt />}
-          onClick={resetTimer}
-          sx={{  margin: "20px", fontSize: "1.5rem", padding: "10px 20px" }}
-        >
-          Reset
-      </Button>
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: "#FF8F00", // Orange for Reset
+    "&:hover": {
+      backgroundColor: "#EF6C00", // Darker shade on hover
+    },
+    color: "white",
+    margin: "20px",
+    fontSize: "1rem",
+    padding: "10px 20px",
+    borderRadius: "15px"
+  }}
+  startIcon={<RestartAlt />}
+  onClick={resetTimer}
+>
+  Reset
+</Button>
     </Box>
     </Box>
     <Footer />

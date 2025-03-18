@@ -19,10 +19,11 @@ const Header = ({ loggedIn, logout }) => {
           src={logo}
           alt="Logo"
           className="header-logo"
-          onClick={handleLogoClick} // Add click handler for logo navigation
+          onClick={() => navigate("/")} // Navigate to the home page when logo is clicked
           style={{ cursor: 'pointer' }} // Optional: Show pointer cursor
           sizes='500px'
         />
+      
         <div className="navAndLogOut">
           <Navbar />
           <input
