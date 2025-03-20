@@ -28,7 +28,6 @@ import { db } from '../firebase/firebaseConfig';
  
     const q = query(userCollection, where("email", "==", user.email));
 
-
     try {
         const querySnapshot = await getDocs(q);
 

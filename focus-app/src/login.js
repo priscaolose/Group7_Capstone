@@ -29,7 +29,7 @@ const Login = ({ login, loggedIn, logout }) => {
   console.log("setUser", setUser);
   console.log("loggedin:", loggedIn);
   console.log("logout:", logout);
-
+  
   const navigate = useNavigate();
 
   const onButtonClick = () => {
@@ -114,6 +114,7 @@ const Login = ({ login, loggedIn, logout }) => {
         );
         const taskList = await task.json();
         setTasks(taskList);
+        console.log("email,",result.user.email)
         // Existing user - proceed to home
         navigate("/dashboard", { state: { email: result.user.email } });
       } else {
@@ -155,6 +156,7 @@ const Login = ({ login, loggedIn, logout }) => {
       );
       const user = userCredential.user;
       console.log("user",user)
+      console.log("EMail",email)
       if (user) {
         const response = await fetch(
           `/api/login?email=${encodeURIComponent(email)}`,
