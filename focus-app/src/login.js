@@ -184,7 +184,7 @@ const Login = ({ login, loggedIn, logout }) => {
         const taskList = await task.json();
         setTasks(taskList);
         const data = await response.json();
-
+        console.log("data",data)
         if (response.ok && data.name) {
           const userData = { firstName: data.name, email: data.email };
           setUser(userData);
