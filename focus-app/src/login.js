@@ -115,7 +115,7 @@ const Login = ({ login, loggedIn, logout }) => {
         const taskList = await task.json();
         setTasks(taskList);
         // Existing user - proceed to home
-        navigate("/viewTask", { state: { email: result.user.email } });
+        navigate("/dashboard", { state: { email: result.user.email } });
       } else {
         // New user - create account first
         if (

@@ -21,7 +21,13 @@ import { db } from '../firebase/firebaseConfig';
  async function extractUsersData(user) {
     console.log("user in extractData", user);
     const userCollection = collection(db, "Users");
+    if (!user || !user.email) {
+        console.error("Error: user.email is undefined or null", user);
+        return null; 
+    }
+ 
     const q = query(userCollection, where("email", "==", user.email));
+
 
     try {
         const querySnapshot = await getDocs(q);

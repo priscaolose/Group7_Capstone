@@ -2,20 +2,44 @@ import React, { useState } from 'react';
 import Header2 from './Components/Header2';
 import { updateUserInfo,extractUsersData } from './Api/accountManagement';
 import { useUser } from './Components/context';
-
+import { useEffect } from 'react';
 const ManageAccountPage = () => {
     const { user } = useUser();
     console.log("user",user)
-    const originalFormData = extractUsersData(user);
-
     const [formData, setFormData] = useState({
-        firstName: originalFormData.firstName || '',
-        lastName: originalFormData.lastName || '',
-        phoneNumber:originalFormData.phoneNumber || '',
-        email: originalFormData.email || '',
-        password: originalFormData.password || '',
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
     });
-    
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!user) return; 
+
+            try {
+                const originalFormData = await extractUsersData(user);
+                console.log("originalFormData", originalFormData);
+                
+                if (originalFormData) {
+                    setFormData({
+                        firstName: originalFormData.firstName || '',
+                        lastName: originalFormData.lastName || '',
+                        phoneNumber: originalFormData.phoneNumber || '',
+                        email: originalFormData.email || '',
+                        password: originalFormData.password || '',
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUserData();
+    },[] ); 
+
+
     const [message, setSuccessMessage] = useState('');
     const [selectedSection, setSelectedSection] = useState('profile'); // Track selected section
 
