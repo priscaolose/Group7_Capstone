@@ -26,6 +26,8 @@ const Login = ({ login, loggedIn, logout }) => {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const { setUser, setTasks } = useUser();
+
+
   console.log("setUser", setUser);
   console.log("loggedin:", loggedIn);
   console.log("logout:", logout);
@@ -184,7 +186,7 @@ const Login = ({ login, loggedIn, logout }) => {
         const data = await response.json();
 
         if (response.ok && data.name) {
-          const userData = { firstName: data.name };
+          const userData = { firstName: data.name, email: data.email };
           setUser(userData);
           navigate("/dashboard");
           login(); // Call the login function passed as a prop to set loggedIn to true
