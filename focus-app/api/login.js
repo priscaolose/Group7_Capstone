@@ -1,7 +1,6 @@
 import { db } from "../src/firebase/firebaseConfig.js";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import express from "express";
-
 const app = express();
 app.use(express.json());
 

@@ -133,9 +133,11 @@ const handleRegister = async (e) => {
                 password,
             }),
         });
-
+        localStorage.setItem('uid', user.uid);
+        console.log("localStorage.getItem('userName')",localStorage.getItem('userName'));
         const userData = { firstName: firstName, email: email};
         setUser(userData);
+
 
         // Log the raw response text
         const responseText = await response.text();

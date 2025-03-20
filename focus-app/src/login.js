@@ -4,6 +4,7 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import "./CSSFolders/Login.css";
 import Googlelogo from "./Images/googleLogo.png";
+import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
 import {
   signInWithGoogle,
   checkIfEmailExists,
@@ -18,6 +19,8 @@ import { Link } from "react-router-dom";
 import { useUser } from "./Components/context";
 const Login = ({ login, loggedIn, logout }) => {
   const [email, setEmail] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   const [password, setPassword] = useState("");
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
@@ -30,10 +33,8 @@ const Login = ({ login, loggedIn, logout }) => {
   const navigate = useNavigate();
 
   const onButtonClick = () => {
-    // Clear previous error messages
     setErrors({});
 
-    // Create an errors object
     const newErrors = {};
 
     if (email === "") {
@@ -54,6 +55,30 @@ const Login = ({ login, loggedIn, logout }) => {
       return;
     }
     handleLogin(email, password);
+  };
+
+  const TaskDialog = ({ open, onClose }) => {
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogTitle sx ={{ color: "red"}}>Failed Sign In</DialogTitle>
+        <DialogContent >
+          Sign in failed. Please try again.
+        </DialogContent>
+        <DialogActions>
+          <Button 
+          sx={{
+            padding: '8px 1px',
+            backgroundColor: '#8AAEC6',
+            cursor: 'pointer',
+            color: 'white',
+            width: '10px',
+            fontSize: '16px',
+            }}
+          onClick={onClose}>
+          Ok</Button>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   const handleForgotPassword = () => {
@@ -103,10 +128,13 @@ const Login = ({ login, loggedIn, logout }) => {
       }
       login(); // Call the login function passed as a prop to set loggedIn to true
     } catch (error) {
-      alert("Sign in failed. Please try again.");
+      setIsOpen(true); 
       console.log(error);
     }
   };
+  const handleDialogClose = () => {
+    setIsOpen(false); 
+  }
 
   const handleAccountRegistration = () => {
     navigate("/registration");
@@ -128,7 +156,6 @@ const Login = ({ login, loggedIn, logout }) => {
       const user = userCredential.user;
       console.log("user",user)
       if (user) {
-        alert("Signed In Successfully");
         const response = await fetch(
           `/api/login?email=${encodeURIComponent(email)}`,
           {
@@ -254,6 +281,12 @@ const Login = ({ login, loggedIn, logout }) => {
           </p>
         </form>
 
+        {isOpen && (
+          <TaskDialog
+            open={isOpen}
+            onClose={handleDialogClose}
+          />
+        )}
         {successMessage && <p className="success-message">{successMessage}</p>}
 
         <div className="googleSignInContainer">

@@ -1,7 +1,7 @@
 import { collection, query, where, getFirestore,getDocs} from "firebase/firestore";
 import { useEffect,useState } from 'react';
 import { useLocation } from "react-router-dom";
-const useTasks = (userEmail) => {
+const useTasks = (username) => {
     const [loading, setLoading] = useState(true);  
     const [error, setError] = useState(null);  
     const [tasks, setTasks] = useState([]);  
@@ -9,11 +9,11 @@ const useTasks = (userEmail) => {
     const db = getFirestore();
     const Tasks = collection(db, "tasks");
     console.log("function was called")
-    console.log("user email",userEmail);
+    console.log("user id",username);
     useEffect(() => {
       const fetchTasks = async () => {
-        const nameQuery = query(Tasks, where("userId", "==", userEmail));
-        
+        const nameQuery = query(Tasks, where("userId", "==", username));
+        console.log("name query",nameQuery);
         try {
           const querySnapshot = await getDocs(nameQuery);
           const tasksArray = [];
@@ -31,10 +31,10 @@ const useTasks = (userEmail) => {
         }
       };
     
-      if (userEmail) {
+      if (username) {
         fetchTasks();
       }
-    }, [useLocation(),userEmail]); 
+    }, [useLocation(),username]); 
     return { tasks, error,loading };
 };
 
