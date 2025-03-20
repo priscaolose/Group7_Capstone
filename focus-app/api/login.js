@@ -26,10 +26,11 @@ app.get("/api/login", async (req, res) => {
     let userData;
     emailSnapshot.forEach((doc) => {
       userData = doc.data();
+      console.log("User data: " + userData)
     });
     // Return user first name
     console.log("Name: " + userData.firstName);
-    res.status(200).json({ name: userData.firstName });
+    res.status(200).json({ name: userData.firstName,email: userData.email });
   } catch (error) {
     res.json({ error: "Failed to sign in:" + error });
   }
