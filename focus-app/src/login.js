@@ -188,7 +188,7 @@ const Login = ({ login, loggedIn, logout }) => {
         if (response.ok && data.name) {
           const userData = { firstName: data.name, email: data.email };
           setUser(userData);
-          navigate("/dashboard");
+          navigate('/dashboard', { state: { email: user.email } });
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
       } else {
