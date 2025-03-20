@@ -5,7 +5,7 @@ import { db } from '../firebase/firebaseConfig';
  
  async function updateUserInfo(user, formData) {
      const userCollection = collection(db, 'Users');
-     const q = query(userCollection, where('username', '==', user.uid));
+     const q = query(userCollection, where("email", "==", user.email));
      const querySnapshot = await getDocs(q);
      if (!querySnapshot.empty) {
          const userDoc = querySnapshot.docs[0];
