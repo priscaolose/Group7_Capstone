@@ -190,7 +190,7 @@ const Login = ({ login, loggedIn, logout }) => {
           setUser(userData);
           console.log("userData");
           console.log("data.email",data.email)
-          navigate('/dashboard', { state: { email: data.email } });
+          navigate('/dashboard', { state: { email: email } });
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
       } else {
