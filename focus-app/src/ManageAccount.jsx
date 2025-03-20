@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import logo from './Images/logo.png';
-
+import Header2 from './Components/Header2';
+import { updateUserInfo,extractUsersData } from './Api/accountManagement';
+import { useUser } from './Components/context';
 
 const ManageAccountPage = () => {
+    const { user } = useUser();
+    console.log("user",user)
+    const originalFormData = extractUsersData(user);
+
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        email: '',
-        password: '',
+        firstName: originalFormData.firstName || '',
+        lastName: originalFormData.lastName || '',
+        phoneNumber:originalFormData.phoneNumber || '',
+        email: originalFormData.email || '',
+        password: originalFormData.password || '',
     });
+    
     const [message, setSuccessMessage] = useState('');
     const [selectedSection, setSelectedSection] = useState('profile'); // Track selected section
 
@@ -21,7 +27,16 @@ const ManageAccountPage = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        setSuccessMessage('Your account details have been successfully updated!');
+        console.log("user",user)
+        console.log("berfore",user.firstName)
+        try{
+            updateUserInfo (user,formData);
+            setSuccessMessage('Your account details have been successfully updated!');
+        }catch (error) {
+            console.error("Error updating user info:", error);
+            setSuccessMessage('Failed to update account details. Please try again.');
+        }
+        console.log("after",user.firstName)
     };
 
     const handleSidebarClick = (section) => {
@@ -49,11 +64,8 @@ const ManageAccountPage = () => {
     
     return (
         <div style={styles.pageContainer}>
-            <header style={styles.header}>
-                <div style={styles.logoContainer}>
-                    <a href='homepage.html'><img className="logo" src={logo} alt="Logo" style={styles.logo} /></a>
-                </div>
-            </header>
+                  <Header2 />
+
             <div style={styles.mainContainer}>
                 <aside style={styles.sidebar}>
                     <h2 style={styles.sidebarTitle}>Account Settings</h2>
