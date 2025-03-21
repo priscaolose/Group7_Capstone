@@ -42,8 +42,8 @@ const Navbar = () => {
       
       <div className={`navbar-menu ${isOpen ? "is-active" : ""}`}>
         <div className="navbar-end">
-          <Link to="/account" className="navbar-item" onClick={closeNav}>
-            <i className="fa-solid fa-user"></i> Account
+          <Link to="/timer" className="navbar-item" onClick={closeNav}>
+            <i className="fa-solid fa-user"></i> Set Timer
           </Link>
           
           <Link to="/manageaccount" className="navbar-item" onClick={closeNav}>

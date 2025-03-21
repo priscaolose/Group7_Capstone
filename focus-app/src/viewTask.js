@@ -173,8 +173,11 @@ const ViewTask = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { user } = useUser();
   const location = useLocation();
-  const userEmail = user?.email;
-  const { tasks, loading, error } = useTasks(userEmail);
+  const uid = localStorage.getItem('uid')
+  console.log("uid in viewTasks", uid);
+  //const userEmail = user?.email;
+  const { tasks, loading, error } = useTasks(uid);
+  
 
   useEffect(() => {
     setFilteredTasks(tasks);

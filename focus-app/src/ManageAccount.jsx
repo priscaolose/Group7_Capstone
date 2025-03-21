@@ -1,15 +1,45 @@
 import React, { useState } from 'react';
-import logo from './Images/logo.png';
-
-
+import Header2 from './Components/Header2';
+import { updateUserInfo,extractUsersData } from './Api/accountManagement';
+import { useUser } from './Components/context';
+import { useEffect } from 'react';
 const ManageAccountPage = () => {
+    const { user } = useUser();
+    console.log("user",user)
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        phoneNumber: '',
+        phonenumber: '',
         email: '',
         password: '',
     });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!user) return; 
+
+            try {
+                const originalFormData = await extractUsersData(user);
+                console.log("originalFormData", originalFormData);
+                
+                if (originalFormData) {
+                    setFormData({
+                        firstName: originalFormData.firstName || '',
+                        lastName: originalFormData.lastName || '',
+                        phonenumber: originalFormData.phonenumber || '',
+                        email: originalFormData.email || '',
+                        password: originalFormData.password || '',
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUserData();
+    },[] ); 
+
+
     const [message, setSuccessMessage] = useState('');
     const [selectedSection, setSelectedSection] = useState('profile'); // Track selected section
 
@@ -21,7 +51,16 @@ const ManageAccountPage = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        setSuccessMessage('Your account details have been successfully updated!');
+        console.log("user",user)
+        console.log("berfore",user.firstName)
+        try{
+            updateUserInfo (user,formData);
+            setSuccessMessage('Your account details have been successfully updated!');
+        }catch (error) {
+            console.error("Error updating user info:", error);
+            setSuccessMessage('Failed to update account details. Please try again.');
+        }
+        console.log("after",user.firstName)
     };
 
     const handleSidebarClick = (section) => {
@@ -49,11 +88,8 @@ const ManageAccountPage = () => {
     
     return (
         <div style={styles.pageContainer}>
-            <header style={styles.header}>
-                <div style={styles.logoContainer}>
-                    <a href='homepage.html'><img className="logo" src={logo} alt="Logo" style={styles.logo} /></a>
-                </div>
-            </header>
+                  <Header2 />
+
             <div style={styles.mainContainer}>
                 <aside style={styles.sidebar}>
                     <h2 style={styles.sidebarTitle}>Account Settings</h2>
@@ -94,7 +130,7 @@ const ManageAccountPage = () => {
                             </div>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Phone Number</label>
-                                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} style={styles.input} />
+                                <input type="text" name="phonenumber" value={formData.phonenumber} onChange={handleInputChange} style={styles.input} />
                             </div>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Email</label>

@@ -14,7 +14,9 @@ const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   //const email = user?.email;
-  const uid = user?.uid;
+  const uid = localStorage.getItem('uid')
+  console.log("local storage",localStorage)
+  console.log("Uid",uid)
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);

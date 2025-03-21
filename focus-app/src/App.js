@@ -9,7 +9,7 @@ import ManageAccount from "./ManageAccount"; // Import ManageAccount component
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { UserProvider } from "./Components/context";
-import TimerPage from "./Components/TimerPage";
+import TimerPage from "./Components/timerPage";
 import ViewTask from "./viewTask";
 
 function App() {
