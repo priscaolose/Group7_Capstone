@@ -130,7 +130,7 @@ const ManageAccountPage = () => {
                             </div>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Phone Number</label>
-                                <input type="text" name="phoneNumber" value={formData.phonenumber} onChange={handleInputChange} style={styles.input} />
+                                <input type="text" name="phonenumber" value={formData.phonenumber} onChange={handleInputChange} style={styles.input} />
                             </div>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Email</label>
