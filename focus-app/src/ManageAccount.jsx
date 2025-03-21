@@ -9,7 +9,7 @@ const ManageAccountPage = () => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        phoneNumber: '',
+        phonenumber: '',
         email: '',
         password: '',
     });
@@ -26,7 +26,7 @@ const ManageAccountPage = () => {
                     setFormData({
                         firstName: originalFormData.firstName || '',
                         lastName: originalFormData.lastName || '',
-                        phoneNumber: originalFormData.phonenumber || '',
+                        phonenumber: originalFormData.phonenumber || '',
                         email: originalFormData.email || '',
                         password: originalFormData.password || '',
                     });
@@ -130,7 +130,7 @@ const ManageAccountPage = () => {
                             </div>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Phone Number</label>
-                                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} style={styles.input} />
+                                <input type="text" name="phoneNumber" value={formData.phonenumber} onChange={handleInputChange} style={styles.input} />
                             </div>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Email</label>
