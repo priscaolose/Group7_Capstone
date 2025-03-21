@@ -46,24 +46,24 @@ function NoteSection() {
     fetchNotes();
   }, [user]);
 
-const formatTimestamp = (timestamp) => {
-  if (!timestamp) return "No date";
+// const formatTimestamp = (timestamp) => {
+//   if (!timestamp) return "No date";
 
-  const now = new Date(); // Current time
-  const noteDate = new Date(timestamp); // Convert Firestore timestamp to Date
-  const isToday = format(noteDate, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
-  const isYesterday =
-    format(noteDate, "yyyy-MM-dd") ===
-    format(new Date(now.setDate(now.getDate() - 1)), "yyyy-MM-dd");
+//   const now = new Date(); // Current time
+//   const noteDate = new Date(timestamp); // Convert Firestore timestamp to Date
+//   const isToday = format(noteDate, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
+//   const isYesterday =
+//     format(noteDate, "yyyy-MM-dd") ===
+//     format(new Date(now.setDate(now.getDate() - 1)), "yyyy-MM-dd");
 
-  if (isToday) {
-    return `Today at ${format(noteDate, "h:mm a")}`; // Example: "Today at 3:45 PM"
-  } else if (isYesterday) {
-    return `Yesterday at ${format(noteDate, "h:mm a")}`; // Example: "Yesterday at 11:30 AM"
-  } else {
-    return `${format(noteDate, "MMM d, yyyy")} at ${format(noteDate, "h:mm a")}`; // Example: "Feb 10, 2024 at 8:00 PM"
-  }
-};
+//   if (isToday) {
+//     return `Today at ${format(noteDate, "h:mm a")}`; // Example: "Today at 3:45 PM"
+//   } else if (isYesterday) {
+//     return `Yesterday at ${format(noteDate, "h:mm a")}`; // Example: "Yesterday at 11:30 AM"
+//   } else {
+//     return `${format(noteDate, "MMM d, yyyy")} at ${format(noteDate, "h:mm a")}`; // Example: "Feb 10, 2024 at 8:00 PM"
+//   }
+// };
 
   // Save a new note to Firebase
   const handleNote = async () => {
@@ -201,7 +201,7 @@ const formatTimestamp = (timestamp) => {
                   <Typography variant="body1">{note.note}</Typography>
                 )}
                 <Typography variant="caption" sx={{ color: "gray" }}>
-                  {formatTimestamp(note.timestamp)}
+                  {/* {formatTimestamp(note.timestamp)} */}
                 </Typography>
               </Box>
 
