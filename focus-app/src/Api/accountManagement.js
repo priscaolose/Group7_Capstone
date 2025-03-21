@@ -10,6 +10,9 @@ import { db } from '../firebase/firebaseConfig';
      const querySnapshot = await getDocs(q);
      if (!querySnapshot.empty) {
          const userDoc = querySnapshot.docs[0];
+         console.log("user email",userDoc.email);
+         console.log("formData.email",formData.email)
+         console.log("User in the updates user information",user)
          await updateEmail(user, formData.email);
          if (formData.password) {
              await updatePassword(user, formData.password);
