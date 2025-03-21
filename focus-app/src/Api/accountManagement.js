@@ -4,22 +4,25 @@ import { db } from '../firebase/firebaseConfig';
  import { doc, updateDoc } from 'firebase/firestore';
  
  async function updateUserInfo(user, formData) {
-     const userCollection = collection(db, 'Users');
-     const q = query(userCollection, where("email", "==", user.email));
-     console.log("form data,")
-     const querySnapshot = await getDocs(q);
-     if (!querySnapshot.empty) {
-         const userDoc = querySnapshot.docs[0];
-         console.log("user email",userDoc.email);
-         console.log("formData.email",formData.email)
-         console.log("User in the updates user information",user)
-         await updateEmail(user, formData.email);
-         if (formData.password) {
-             await updatePassword(user, formData.password);
-         }
-         delete formData.password;
-         await updateDoc(userDoc.ref, formData);
-     }
+    try{
+        const userCollection = collection(db, 'Users');
+        const q = query(userCollection, where("email", "==", user.email));
+        console.log("form data,")
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];  // Assuming one user per email
+            console.log("User found, updating:", userDoc.id);
+
+            await updateDoc(userDoc.ref, formData);
+            console.log("User info updated successfully!");
+        } else {
+            console.log("No user found with email:", user.email);
+        }
+    }
+    catch(error){
+        console.error("Error updating user info:", error);
+    }
+
  }
 
  async function extractUsersData(user) {
