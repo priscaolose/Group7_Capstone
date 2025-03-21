@@ -22,7 +22,7 @@ const useUpdateTask = () => {
       }
     };
   
-    return updateTask; // ✅ Return the function
+    return updateTask;
   };
   
 

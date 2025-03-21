@@ -9,7 +9,7 @@ const ManageAccountPage = () => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        phoneNumber: '',
+        phonenumber: '',
         email: '',
         password: '',
     });
@@ -26,7 +26,7 @@ const ManageAccountPage = () => {
                     setFormData({
                         firstName: originalFormData.firstName || '',
                         lastName: originalFormData.lastName || '',
-                        phoneNumber: originalFormData.phonenumber || '',
+                        phonenumber: originalFormData.phonenumber || '',
                         email: originalFormData.email || '',
                         password: originalFormData.password || '',
                     });

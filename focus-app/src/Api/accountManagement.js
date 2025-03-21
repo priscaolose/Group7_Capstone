@@ -10,7 +10,7 @@ import { db } from '../firebase/firebaseConfig';
         console.log("form data,")
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
-            const userDoc = querySnapshot.docs[0];  // Assuming one user per email
+            const userDoc = querySnapshot.docs[0]; 
             console.log("User found, updating:", userDoc.id);
 
             await updateDoc(userDoc.ref, formData);
