@@ -70,11 +70,11 @@ function Dashboard() {
     const tEndTime = task.dueDate;
     if(!tEndTime) return false;
     if(tabIndex === 0) {
-      return tEndTime < dayStart;
+      return tEndTime > eD;
     } else if(tabIndex === 1) {
       return tEndTime >= dayStart && tEndTime <= eD;
     } else if(tabIndex === 2) {
-      return tEndTime > eD;
+      return tEndTime < dayStart;
     }
     return false;
   });
