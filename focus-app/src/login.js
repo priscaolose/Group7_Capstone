@@ -170,7 +170,7 @@ const Login = ({ login, loggedIn, logout }) => {
           }
         );
         const task = await fetch(
-          `/api/getTask?userID=${encodeURIComponent(email)}`,
+          `/api/getTask?userID=${email}`,
           {
             method: "GET",
             headers: {
