@@ -91,9 +91,29 @@ const TaskDialog = ({ open, onClose, title, taskID, handleDelete }) => {
   );
 };
 
-const TaskTable = ({ filteredTasks, onDelete }) => {
+const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
+  const [completed, setCompleted] = useState();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  console.log("Before the toggle or whatever",filteredTasks);
+  const handleToggleCompleted = (Completed,taskId) => {
+   // console.log("comepleted",Completed);
+    // console.log("completed tag",completed);
+    console.log("Fileted tasks",filteredTasks)
+    console.log("Completed",Completed);
+    console.log("taskId",taskId);
+      setFilteredTasks((prevFilteredTasks) =>
+      prevFilteredTasks.map((t) => 
+        t.id === taskId ? { ...t, completed: !t.completed } : t
+      )
+    );
+
+  }
+  useEffect(() => {
+    console.log("Updated Filtered Tasks:", filteredTasks);
+  }, [filteredTasks]); 
+  
+  
   return (
     <TableContainer component={Paper} sx={{ marginTop: 5, borderRadius: '8px', maxHeight: '600px', maxWidth: '1000px', overflow: 'auto', margin: '0 auto', boxShadow: '2px 2px 5px rgba(0,0,0,0.1)' }}>
       {filteredTasks.length === 0 ? (
@@ -114,7 +134,7 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
                 },
               }}>
                 <TableCell padding="checkbox">
-                  <Checkbox />
+                  <Checkbox onChange={() =>handleToggleCompleted(task.completed,task.id)} checked ={completed}  />
                 </TableCell>
                 <TableCell component="th" scope="row">
                   <Typography fontWeight="bold">{task.title}</Typography>
@@ -170,15 +190,11 @@ const TaskTable = ({ filteredTasks, onDelete }) => {
 
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
   const { user } = useUser();
-  const location = useLocation();
   const uid = localStorage.getItem('uid')
   console.log("uid in viewTasks", uid);
-  //const userEmail = user?.email;
   const { tasks, loading, error } = useTasks(uid);
   
-
   useEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
@@ -187,9 +203,6 @@ const ViewTask = () => {
     setFilteredTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
   };
 
-  const toggleDropDown = () => {
-    setShowDropdown((prev) => !prev);
-  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -239,7 +252,7 @@ const ViewTask = () => {
 
         </Grid2>
         <Grid2 item xs={12} sx={{ marginTop: 3 }}>
-          <TaskTable filteredTasks={filteredTasks} onDelete={handleDeleteTask} />
+          <TaskTable filteredTasks={filteredTasks}  setFilteredTasks={setFilteredTasks}  onDelete={handleDeleteTask} />
         </Grid2>
       </Box>
       <Grid2 xs={12}>

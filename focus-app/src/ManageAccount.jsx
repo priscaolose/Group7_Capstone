@@ -23,9 +23,11 @@ const ManageAccountPage = () => {
                 console.log("originalFormData", originalFormData);
                 
                 if (originalFormData) {
+                    console.log("originalFormData", originalFormData);
+        
                     setFormData({
-                        firstName: originalFormData.firstName || '',
-                        lastName: originalFormData.lastName || '',
+                        firstName: originalFormData.firstName ||originalFormData.displayName.split(' ')[0] ||'',
+                        lastName: originalFormData.lastName || originalFormData.displayName.split(' ')[1]||'',
                         phonenumber: originalFormData.phonenumber || '',
                         email: originalFormData.email || '',
                         password: originalFormData.password || '',

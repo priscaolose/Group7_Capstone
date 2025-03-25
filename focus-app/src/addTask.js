@@ -146,7 +146,7 @@ const AddTask = () => {
                     sx={{
                       padding: '8px 1px',
                       borderRadius: '10px',
-                      backgroundColor: '#8AAEC6',
+                      backgroundColor: '#2E8B57',
                       cursor: 'pointer',
                       width: '200px',
                       fontSize: '16px',
@@ -161,7 +161,7 @@ const AddTask = () => {
                     sx={{
                       padding: '8px 1px',
                       borderRadius: '10px',
-                      backgroundColor: '#8AAEC6',
+                      backgroundColor: '#DC143C',
                       cursor: 'pointer',
                       width: '200px',
                       fontSize: '16px',

@@ -155,7 +155,7 @@ const EditTask = () => {
                     sx={{
                       padding: '8px 1px',
                       borderRadius: '10px',
-                      backgroundColor: '#006400',
+                      backgroundColor: '#2E8B57',
                       cursor: 'pointer',
                       width: '200px',
                       fontSize: '16px',
@@ -170,7 +170,7 @@ const EditTask = () => {
                     sx={{
                       padding: '8px 1px',
                       borderRadius: '10px',
-                      backgroundColor: '#8B0000',
+                      backgroundColor: '#DC143C',
                       cursor: 'pointer',
                       width: '200px',
                       fontSize: '16px',
