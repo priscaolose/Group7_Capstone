@@ -128,7 +128,7 @@ const handleRegister = async (e) => {
                 firstName,
                 lastName,
                 email,
-                userName: user.uid,
+                userName: user.uid || user.username,
                 phonenumber: phone,
                 password,
             }),
