@@ -185,6 +185,7 @@ const Login = ({ login, loggedIn, logout }) => {
         );
         const data = await response.json();
         const userData = { firstName: data.name, email: data.email };
+        setUser(userData);
         const task = await fetch(
           `/api/getTask?userID=${user.uid}`,
           {
