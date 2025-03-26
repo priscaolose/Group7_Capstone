@@ -170,8 +170,9 @@ const Login = ({ login, loggedIn, logout }) => {
         password
       );
       const user = userCredential.user;
-      console.log("user", user);
-      console.log("EMail", email);
+      console.log("Uid",user.uid)
+      console.log("user",user)
+      console.log("EMail",email)
       if (user) {
         const response = await fetch(
           `/api/login?email=${encodeURIComponent(email)}`,
@@ -182,19 +183,9 @@ const Login = ({ login, loggedIn, logout }) => {
             },
           }
         );
-        setEmail("");
-        setPassword("");
-
-        const data = await response.json();
-        console.log("data", data);
-        if (response.ok && data.name) {
-          const userData = {
-            firstName: data.name,
-            email: data.email,
-            uid: data.uid,
-          };
-          setUser(userData);
-          const task = await fetch(`/api/getTask?userID=${data.uid}`, {
+        const task = await fetch(
+          `/api/getTask?userId=${email}`,
+          {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -212,7 +203,10 @@ const Login = ({ login, loggedIn, logout }) => {
           navigate("/dashboard", { state: { email: email } });
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
-      }
+        else{
+          console.log("It did not get in here")
+        }
+      } 
     } catch (error) {
       if (error.code === "auth/user-not-found") {
         alert("No account found with this email.");
