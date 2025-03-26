@@ -49,8 +49,6 @@ function Dashboard() {
   const { user, tasks } = useUser();
   const [tabIndex, setTabIndex] = useState(1);
 
-  console.log("User", user);
-
   const [currentTime, setCurrentTime] = useState("00:00:00");
   const [randomQuote, setRandomQuote] = useState("");
   let count = 0;
@@ -66,7 +64,6 @@ function Dashboard() {
   endDay.setHours(23, 59, 59, 999);
   const eD = Timestamp.fromDate(endDay);
   let filterTasks;
-
     filterTasks = tasks.filter((task) => {
       const tEndTime = task.dueDate;
       if (!tEndTime) return false;

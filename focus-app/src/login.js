@@ -183,8 +183,10 @@ const Login = ({ login, loggedIn, logout }) => {
             },
           }
         );
+        const data = await response.json();
+        const userData = { firstName: data.name, email: data.email };
         const task = await fetch(
-          `/api/getTask?userId=${email}`,
+          `/api/getTask?userId=${user.uid}`,
           {
             method: "GET",
             headers: {
@@ -206,8 +208,7 @@ const Login = ({ login, loggedIn, logout }) => {
         else{
           console.log("It did not get in here")
         }
-      } 
-    } catch (error) {
+      } catch (error) {
       if (error.code === "auth/user-not-found") {
         alert("No account found with this email.");
       } else if (error.code === "auth/wrong-password") {
