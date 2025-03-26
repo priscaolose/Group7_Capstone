@@ -157,6 +157,7 @@ const Login = ({ login, loggedIn, logout }) => {
         password
       );
       const user = userCredential.user;
+      console.log("Uid",user.uid)
       console.log("user",user)
       console.log("EMail",email)
       if (user) {
