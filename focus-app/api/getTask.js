@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/getTask", async (req, res) => {
-  const { userID, time } = req.query;
+  const { userID } = req.query;
   if (!userID) {
     return res.status(400).json({ error: "Missing userID" });
   }
