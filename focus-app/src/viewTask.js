@@ -190,7 +190,7 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
 
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const { user } = useUser();
+  const { user } = useUser() || "bernice";
   console.log("User",user)
   const uid = localStorage.getItem('uid')
   console.log("uid in viewTasks", uid);
