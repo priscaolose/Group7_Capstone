@@ -93,7 +93,7 @@ const Register = () => {
         }
     };
     */
-    const handleGoogleSignUp = async () => {
+    const handleGoogleSignUp = async (navigate) => {
         try {
             const result = await signUpWithGoogle();
             const emailExists = await checkIfEmailExists(result.user.email);
