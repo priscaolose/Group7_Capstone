@@ -50,7 +50,7 @@ export const checkIfEmailExists = async (email) => {
   }
 };
 
-const storeUserInDatabase = async (user) => {
+export const storeUserInDatabase = async (user) => {
   const usersRef = collection(db, "Users");
   const q = query(usersRef, where("displayName", "==", user.displayName));
 

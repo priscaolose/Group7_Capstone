@@ -205,8 +205,13 @@ function Dashboard() {
                   <Tab label="Future" />
                 </Tabs>
 
-                <Typography>
-                  <h2>Your Tasks</h2>
+                <Typography
+                variant="h6"
+                sx={{
+                  color: theme.palette.primary.main,
+                }}
+                >
+                  Your Tasks
                 </Typography>
 
                 {filterTasks.length > 0 ? (
