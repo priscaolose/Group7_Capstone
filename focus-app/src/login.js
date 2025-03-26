@@ -177,7 +177,7 @@ const Login = ({ login, loggedIn, logout }) => {
               "Content-Type": "application/json",
             },
           }
-        );
+        );if(task){console.log("tasks",task)}else{console.log("no tasks")}
         setEmail("");
         setPassword("");
 
@@ -188,14 +188,12 @@ const Login = ({ login, loggedIn, logout }) => {
         if (response.ok && data.name) {
           const userData = { firstName: data.name, email: data.email };
           setUser(userData);
-          console.log("userData");
+          console.log("userData",userData);
           console.log("data.email",data.email)
           navigate('/dashboard', { state: { email: email } });
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
-      } else {
-        //if user does not have an account, I want them to be redirected to the registration page
-      }
+      } 
     } catch (error) {
       if (error.code === "auth/user-not-found") {
         alert("No account found with this email.");
