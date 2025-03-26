@@ -24,7 +24,7 @@ app.get("/api/getTask", async (req, res) => {
     taskSnapshot.docs.forEach((doc) => console.log(doc.data()));
 
     if (taskSnapshot.empty) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(200).json([]);
     }
     const tasks = taskSnapshot.docs.map((doc) => ({
       taskName: doc.data().taskName,

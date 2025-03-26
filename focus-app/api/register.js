@@ -26,7 +26,7 @@ app.post("/api/register", async (req, res) => {
       email,
       phonenumber,
       password: await bcrypt.hash(password, saltRounds),
-      username: userName,
+      uid: userName,
     });
 
     res.status(200).json({ message: "User registered successfully!" });

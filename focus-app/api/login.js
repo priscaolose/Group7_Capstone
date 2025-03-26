@@ -30,7 +30,7 @@ app.get("/api/login", async (req, res) => {
     });
     // Return user first name
     console.log("Name: " + userData.firstName);
-    res.status(200).json({ name: userData.firstName,email: userData.email });
+    res.status(200).json({ name: userData.firstName,email: userData.email, uid: userData.uid });
   } catch (error) {
     res.json({ error: "Failed to sign in:" + error });
   }

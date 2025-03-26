@@ -4,11 +4,24 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import "./CSSFolders/Login.css";
 import Googlelogo from "./Images/googleLogo.png";
-import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
+import {
+  Grid2,
+  Box,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import {
   signInWithGoogle,
   checkIfEmailExists,
   getUsersName,
+  getUID,
 } from "./firebase/firebaseAuth";
 import { auth } from "./firebase/firebaseConfig";
 import {
@@ -27,11 +40,10 @@ const Login = ({ login, loggedIn, logout }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const { setUser, setTasks } = useUser();
 
-
   console.log("setUser", setUser);
   console.log("loggedin:", loggedIn);
   console.log("logout:", logout);
-  
+
   const navigate = useNavigate();
 
   const onButtonClick = () => {
@@ -62,22 +74,22 @@ const Login = ({ login, loggedIn, logout }) => {
   const TaskDialog = ({ open, onClose }) => {
     return (
       <Dialog open={open} onClose={onClose}>
-        <DialogTitle sx ={{ color: "red"}}>Failed Sign In</DialogTitle>
-        <DialogContent >
-          Sign in failed. Please try again.
-        </DialogContent>
+        <DialogTitle sx={{ color: "red" }}>Failed Sign In</DialogTitle>
+        <DialogContent>Sign in failed. Please try again.</DialogContent>
         <DialogActions>
-          <Button 
-          sx={{
-            padding: '8px 1px',
-            backgroundColor: '#8AAEC6',
-            cursor: 'pointer',
-            color: 'white',
-            width: '10px',
-            fontSize: '16px',
+          <Button
+            sx={{
+              padding: "8px 1px",
+              backgroundColor: "#8AAEC6",
+              cursor: "pointer",
+              color: "white",
+              width: "10px",
+              fontSize: "16px",
             }}
-          onClick={onClose}>
-          Ok</Button>
+            onClick={onClose}
+          >
+            Ok
+          </Button>
         </DialogActions>
       </Dialog>
     );
@@ -102,21 +114,22 @@ const Login = ({ login, loggedIn, logout }) => {
       console.log("emailExists", emailExists);
       if (emailExists) {
         const firstName = await getUsersName(result.user.email);
-        const userData = { firstName: firstName , email: result.user.email};
+        const userData = {
+          firstName: firstName,
+          email: result.user.email,
+        };
         console.log("userData", userData);
         setUser(userData);
-        const task = await fetch(
-          `/api/getTask?userID=${userData.email}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+
+        const task = await fetch(`/api/getTask?userID=${result.user.uid}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const taskList = await task.json();
         setTasks(taskList);
-        console.log("email,",result.user.email)
+        console.log("email,", result.user.email);
         // Existing user - proceed to home
         navigate("/dashboard", { state: { email: result.user.email } });
       } else {
@@ -131,13 +144,13 @@ const Login = ({ login, loggedIn, logout }) => {
       }
       login(); // Call the login function passed as a prop to set loggedIn to true
     } catch (error) {
-      setIsOpen(true); 
+      setIsOpen(true);
       console.log(error);
     }
   };
   const handleDialogClose = () => {
-    setIsOpen(false); 
-  }
+    setIsOpen(false);
+  };
 
   const handleAccountRegistration = () => {
     navigate("/registration");
@@ -157,8 +170,8 @@ const Login = ({ login, loggedIn, logout }) => {
         password
       );
       const user = userCredential.user;
-      console.log("user",user)
-      console.log("EMail",email)
+      console.log("user", user);
+      console.log("EMail", email);
       if (user) {
         const response = await fetch(
           `/api/login?email=${encodeURIComponent(email)}`,
@@ -169,31 +182,37 @@ const Login = ({ login, loggedIn, logout }) => {
             },
           }
         );
-        const task = await fetch(
-          `/api/getTask?userID=${email}`,
-          {
+        setEmail("");
+        setPassword("");
+
+        const data = await response.json();
+        console.log("data", data);
+        if (response.ok && data.name) {
+          const userData = {
+            firstName: data.name,
+            email: data.email,
+            uid: data.uid,
+          };
+          setUser(userData);
+          const task = await fetch(`/api/getTask?userID=${data.uid}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
+          });
+          if (task) {
+            console.log("tasks", task);
+          } else {
+            console.log("no tasks");
           }
-        );if(task){console.log("tasks",task)}else{console.log("no tasks")}
-        setEmail("");
-        setPassword("");
-
-        const taskList = await task.json();
-        setTasks(taskList);
-        const data = await response.json();
-        console.log("data",data)
-        if (response.ok && data.name) {
-          const userData = { firstName: data.name, email: data.email };
-          setUser(userData);
-          console.log("userData",userData);
-          console.log("data.email",data.email)
-          navigate('/dashboard', { state: { email: email } });
+          const taskList = await task.json();
+          setTasks(taskList);
+          console.log("userData", userData);
+          console.log("data.email", data.email);
+          navigate("/dashboard", { state: { email: email } });
           login(); // Call the login function passed as a prop to set loggedIn to true
         }
-      } 
+      }
     } catch (error) {
       if (error.code === "auth/user-not-found") {
         alert("No account found with this email.");
@@ -285,12 +304,7 @@ const Login = ({ login, loggedIn, logout }) => {
           </p>
         </form>
 
-        {isOpen && (
-          <TaskDialog
-            open={isOpen}
-            onClose={handleDialogClose}
-          />
-        )}
+        {isOpen && <TaskDialog open={isOpen} onClose={handleDialogClose} />}
         {successMessage && <p className="success-message">{successMessage}</p>}
 
         <div className="googleSignInContainer">
