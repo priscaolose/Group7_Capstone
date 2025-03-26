@@ -5,9 +5,10 @@ import './CSSFolders/Registration.css';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Googlelogo from './Images/googleLogo.png';
-import {  handleGoogleSignUp  } from './firebase/firebaseAuth'; 
+import {  signUpWithGoogle, checkIfEmailExists, storeUserInDatabase, getUsersName  } from './firebase/firebaseAuth'; 
 import { useNavigate } from 'react-router-dom';
 import { useUser } from './Components/context';
+import { multiSectionDigitalClockClasses } from '@mui/x-date-pickers/MultiSectionDigitalClock/multiSectionDigitalClockClasses';
 
 
 const Register = () => {
@@ -19,7 +20,7 @@ const Register = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errors, setErrors] = useState({}); // Single object to hold all error messages
     const [isLocked, setIsLocked] = useState(true);
-    const { setUser } = useUser();
+    const { setUser, setTasks } = useUser();
 
     const navigate = useNavigate();
     const handleAccountLogin = () => {
@@ -92,7 +93,6 @@ const Register = () => {
         }
     };
     */
-    /*
     const handleGoogleSignUp = async () => {
         try {
             const result = await signUpWithGoogle();
@@ -104,13 +104,19 @@ const Register = () => {
             if (result.user) {
                 console.log('Signed Up With Google Clicked',result.user.email);
                 await storeUserInDatabase(result.user);
-                navigate('/addTask', { state: { email: result.user.email } });
+                const firstName = await getUsersName(result.user.email);
+                const userData = {
+                    firstName: firstName,
+                    email: result.user.email,
+                };
+                setUser(userData);
+                setTasks([]);
+                navigate('/dashboard', { state: { email: result.user.email } });
             }
         } catch (error) {
             console.error("Error during Google Sign-Up:", error);
         }
     };
-   */
 
 // Update your client-side handler to match
 const handleRegister = async (e) => {
@@ -137,6 +143,7 @@ const handleRegister = async (e) => {
         console.log("localStorage.getItem('userName')",localStorage.getItem('userName'));
         const userData = { firstName: firstName, email: email};
         setUser(userData);
+        setTasks([]);
 
 
         // Log the raw response text
