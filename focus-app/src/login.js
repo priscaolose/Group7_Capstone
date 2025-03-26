@@ -170,7 +170,7 @@ const Login = ({ login, loggedIn, logout }) => {
           }
         );
         const task = await fetch(
-          `/api/getTask?userID=${email}`,
+          `/api/getTask?userId=${email}`,
           {
             method: "GET",
             headers: {
@@ -192,6 +192,9 @@ const Login = ({ login, loggedIn, logout }) => {
           console.log("data.email",data.email)
           navigate('/dashboard', { state: { email: email } });
           login(); // Call the login function passed as a prop to set loggedIn to true
+        }
+        else{
+          console.log("It did not get in here")
         }
       } 
     } catch (error) {
