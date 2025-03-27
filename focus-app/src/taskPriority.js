@@ -66,6 +66,8 @@ const PriorityDropdown = ({ name, onChange }) => {
       backgroundImage: selectedValue
     ? "none"
     : "linear-gradient(to bottom, #FFF1F1, #E2EAF1)",
+      maxHeight: "200px", 
+      overflowY: "auto",
     }),
   };
   return (

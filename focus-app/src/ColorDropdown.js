@@ -36,7 +36,7 @@ const ColorDropdown = ({ name, onChange }) => {
 
   const formatOptionLabel = ({ label, icon, color }) => (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <FontAwesomeIcon icon={icon} style={{ marginRight: "8px", color }} /> {/* Dynamic color */}
+      <FontAwesomeIcon icon={icon} style={{ marginRight: "8px", color }} /> 
       {label}
     </div>
   );
@@ -71,6 +71,9 @@ const ColorDropdown = ({ name, onChange }) => {
       backgroundImage: selectedValue
         ? "none"
         : "linear-gradient(to bottom, #FFF1F1, #E2EAF1)",
+        overflowY: "auto", 
+        maxHeight: "200px", 
+        overflowY: "auto",
     }),
   };
 
