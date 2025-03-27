@@ -277,7 +277,9 @@ const Login = ({ login, loggedIn, logout }) => {
             </div>
             <div className="errorMessage">{errors.password}</div>
             <p className="forgotPasswordText" onClick={handleForgotPassword}>
-              Forgot Password?
+              <span className="forgotPasswordCursor">
+                Forgot Password?
+              </span>
             </p>
           </div>
 

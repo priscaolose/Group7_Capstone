@@ -117,6 +117,10 @@
     text-align: right;            /* Align text to the left */
 }
 
+.forgotPasswordCursor {
+    cursor: pointer;
+}
+
 .inputButtonContainer {
     margin-top: 0px;         /* Adjust to reduce space */
     display: flex;
@@ -125,6 +129,7 @@
 
 .clickableRegister {
     text-decoration: underline;  /* Adds the underline */
+    cursor: pointer;
 }
 
 .googleSignInContainer {
