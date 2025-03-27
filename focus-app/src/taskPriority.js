@@ -14,9 +14,9 @@ const PriorityDropdown = ({ name, onChange }) => {
 
   const options = [
     { value: "high", label: "High", color: "#FF6666", icon: faExclamationCircle },
-    { value: "medium", label: "Medium", color: "#FFB266", icon: faExclamationTriangle },
-    { value: "low", label: "Low", color: "#FFFF99", icon: faInfoCircle },
-    { value: "none", label: "None", color: "#C8FACD", icon: faCircle },
+    { value: "medium", label: "Medium", color: "#FF6666", icon: faExclamationTriangle },
+    { value: "low", label: "Low", color: "#FF6666", icon: faInfoCircle },
+    { value: "none", label: "None", color:"#FF6666", icon: faCircle },
   ];
   const formatOptionLabel = ({ label, icon, color }) => (
     <div style={{ display: "flex", alignItems: "center" }}>
