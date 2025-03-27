@@ -10,13 +10,12 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { TableContainer, Table, TableBody, TableRow, TableCell, Paper, Checkbox } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 import SortByDropDown from './sortByDropdown.js';
-import { useLocation } from 'react-router-dom';
 import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
 import { useUser } from './Components/context';
 import FilterByIcon from './Components/filterByIcon.js';
 
-/**viewTask  page*/
+
 const SearchBox = ({ setFilteredTasks, tasks }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,7 +71,7 @@ const handleDelete = async (taskId, onDelete) => {
     console.error('Error deleting task:', error);
   }
 };
-;
+
 
 const TaskDialog = ({ open, onClose, title, taskID, handleDelete }) => {
   return (
@@ -139,7 +138,7 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
                   <Typography variant="body3" color="text.secondary">
                     {task.description}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{color: "red"}}>
                     Task DueDate: {task.dueDate}
                   </Typography>
                 </TableCell>
@@ -161,7 +160,6 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
                       onClick={() => {
                         setIsOpen(true);
                       }}    
-                      //onClick={() => handleDelete(task.id,task.title)}
                     >
                       delete
                     </Button>
@@ -189,7 +187,6 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const { user } = useUser() ;
-  // const user = "Bernice"
   console.log("User",user)
   const uid = localStorage.getItem('uid')
   console.log("uid in viewTasks", uid);
@@ -202,7 +199,6 @@ const ViewTask = () => {
   const handleDeleteTask = (taskId) => {
     setFilteredTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
   };
-
 
   if (loading) {
     return <div>Loading...</div>;
