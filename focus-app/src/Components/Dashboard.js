@@ -8,6 +8,9 @@ import {
   useMediaQuery,
   Tabs,
   Tab,
+  Grid,
+  Button,
+  Grid2,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,6 +20,10 @@ import { Link } from "react-router-dom";
 import { useUser } from "./context";
 import NoteSection from "./NoteSection";
 import { Timestamp } from "firebase/firestore";
+// Import Material UI icons
+import TimerIcon from "@mui/icons-material/Timer";
+import AddTaskIcon from "@mui/icons-material/AddTask";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
 // Custom Theme
 const theme = createTheme({
@@ -44,14 +51,11 @@ const theme = createTheme({
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery("(max-width: 900px)");
-  //const [userFirstName, setUserFirstName] = useState(null);
-  //const [user, setUser] = useState(null);
   const { user, tasks } = useUser();
   const [tabIndex, setTabIndex] = useState(1);
 
   const [currentTime, setCurrentTime] = useState("00:00:00");
   const [randomQuote, setRandomQuote] = useState("");
-  let count = 0;
 
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
@@ -79,14 +83,14 @@ function Dashboard() {
 
   const quotes = [
     "Its always a great time to take the first step.",
-    "Believe you can and you’re halfway there. – Theodore Roosevelt",
+    "Believe you can and you're halfway there. – Theodore Roosevelt",
     "The only way to do great work is to love what you do. – Steve Jobs",
     "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
     "Do what you can, with what you have, where you are. – Theodore Roosevelt",
-    "Your limitation—it’s only your imagination.",
+    "Your limitation—it's only your imagination.",
     "Push yourself, because no one else is going to do it for you.",
-    "Hard work beats talent when talent doesn’t work hard.",
-    "It’s not whether you get knocked down, it’s whether you get up. – Vince Lombardi",
+    "Hard work beats talent when talent doesn't work hard.",
+    "It's not whether you get knocked down, it's whether you get up. – Vince Lombardi",
     "Dream big and dare to fail. – Norman Vaughan",
     "Act as if what you do makes a difference. It does. – William James",
     "Keep on going, and the chances are that you will stumble on something, perhaps when you are least expecting it. I never heard of anyone ever stumbling on something sitting down. – Charles F. Kettering",
@@ -184,7 +188,6 @@ function Dashboard() {
                     textAlign: "left",
                   }}
                 >
-                  {/* display user's first name */}
                   {user?.firstName || "Guest"}
                 </Typography>
               </Paper>
@@ -252,6 +255,7 @@ function Dashboard() {
             </Box>
 
             {/* Center Column (Timer Section*/}
+            
             <Box sx={{ display: "grid", gap: 4 }}>
               <Paper
                 sx={{
@@ -271,49 +275,91 @@ function Dashboard() {
                   sx={{
                     color: "#333",
                     fontWeight: "bold",
+                    mb: 3
                   }}
                 >
                   {currentTime}
                 </Typography>
-
-                <Typography
-                  variant="body1"
-                  component={Link}
-                  to="/timer"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: "1.25rem",
-                    mt: 2,
-                  }}
-                >
-                  set timer
-                </Typography>
-
-                <Typography
-                  variant="body1"
-                  component={Link}
-                  to="/addTask"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: "1.25rem",
-                    mt: 2,
-                  }}
-                >
-                  add task
-                </Typography>
-
-                <Typography
-                  variant="body1"
-                  component={Link}
-                  to="/viewTask"
-                  sx={{
-                    color: theme.palette.primary.main,
-                    fontSize: "1.25rem",
-                    mt: 2,
-                  }}
-                >
-                  view tasks
-                </Typography>
+                
+                {/* Action Buttons with Icons - Using Flexbox instead of Grid */}
+                <Box sx={{ 
+                  display: "flex", 
+                  width: "100%", 
+                  justifyContent: "space-between", 
+                  gap: 2 
+                }}>
+                  <Button
+                    component={Link}
+                    to="/timer"
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<TimerIcon sx={{color: "#ff7866"}}/>}
+                    sx={{
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      py: 1,
+                      px: 2
+                    }}
+                  >
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
+                        Set Timer
+                      </Typography>
+                    </Box>
+                  </Button>
+                  
+                  <Button
+                    component={Link}
+                    to="/addTask"
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<AddTaskIcon sx={{color: "#ff7866"}}/>}
+                    sx={{
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      py: 1,
+                      px: 2
+                    }}
+                  >
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
+                        Add Task
+                      </Typography>
+                    </Box>
+                  </Button>
+                  
+                  <Button
+                    component={Link}
+                    to="/viewTask"
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<FormatListBulletedIcon sx={{color: "#ff7866"}}/>}
+                    sx={{
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      py: 1,
+                      px: 2
+                    }}
+                  >
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
+                        View Tasks
+                      </Typography>
+                    </Box>
+                  </Button>
+                </Box>
               </Paper>
               <Paper
                 sx={{
