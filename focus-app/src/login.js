@@ -5,13 +5,7 @@ import Footer from "./Components/Footer";
 import "./CSSFolders/Login.css";
 import Googlelogo from "./Images/googleLogo.png";
 import {
-  Grid2,
-  Box,
-  TextField,
   Button,
-  InputAdornment,
-  IconButton,
-  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -21,12 +15,10 @@ import {
   signInWithGoogle,
   checkIfEmailExists,
   getUsersName,
-  getUID,
 } from "./firebase/firebaseAuth";
 import { auth } from "./firebase/firebaseConfig";
 import {
   signInWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useUser } from "./Components/context";
@@ -39,10 +31,6 @@ const Login = ({ login, loggedIn, logout }) => {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const { setUser, setTasks } = useUser();
-
-  console.log("setUser", setUser);
-  console.log("loggedin:", loggedIn);
-  console.log("logout:", logout);
 
   const navigate = useNavigate();
 
@@ -107,11 +95,8 @@ const Login = ({ login, loggedIn, logout }) => {
         alert("Failed to get user email");
         return;
       }
-      console.log("calling the check if email exists");
-      console.log("result?.user?.email", result?.user?.email);
-      // Check if email exists in your system
+     
       const emailExists = await checkIfEmailExists(result.user.email);
-      console.log("emailExists", emailExists);
       if (emailExists) {
         const firstName = await getUsersName(result.user.email);
         const userData = {
@@ -129,7 +114,6 @@ const Login = ({ login, loggedIn, logout }) => {
         });
         const taskList = await task.json();
         setTasks(taskList);
-        console.log("email,", result.user.email);
         // Existing user - proceed to home
         navigate("/dashboard", { state: { email: result.user.email } });
       } else {
@@ -145,7 +129,6 @@ const Login = ({ login, loggedIn, logout }) => {
       login(); // Call the login function passed as a prop to set loggedIn to true
     } catch (error) {
       setIsOpen(true);
-      console.log(error);
     }
   };
   const handleDialogClose = () => {
@@ -170,9 +153,6 @@ const Login = ({ login, loggedIn, logout }) => {
         password
       );
       const user = userCredential.user;
-      console.log("Uid",user.uid)
-      console.log("user",user)
-      console.log("EMail",email)
       if (user) {
         const response = await fetch(
           `/api/login?email=${encodeURIComponent(email)}`,
