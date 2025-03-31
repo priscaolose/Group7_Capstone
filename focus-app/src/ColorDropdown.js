@@ -16,12 +16,12 @@ const ColorDropdown = ({ name, onChange }) => {
   const [selectedValue, setSelectedValue] = useState(null);
 
   const options = [
-    { value: "personal", label: "Personal", color: "#FF6666", icon: faUser },
-    { value: "academic", label: "Academic", color:"#FF6666", icon: faGraduationCap },
-    { value: "career", label: "Career", color: "#FF6666", icon: faBriefcase },
-    { value: "social", label: "Social", color: "#FF6666", icon: faUsers },
-    { value: "household", label: "Household Activities", color:"#FF6666", icon: faHome },
-    { value: "miscellaneous", label: "Miscellaneous", color:"#FF6666", icon: faEllipsisH },
+    { value: "personal", label: "Personal", color:  "#d166ff", icon: faUser },
+    { value: "academic", label: "Academic", color: "#d166ff", icon: faGraduationCap },
+    { value: "career", label: "Career", color:  "#d166ff", icon: faBriefcase },
+    { value: "social", label: "Social", color:  "#d166ff", icon: faUsers },
+    { value: "household", label: "Household Activities", color: "#d166ff", icon: faHome },
+    { value: "miscellaneous", label: "Miscellaneous", color: "#d166ff", icon: faEllipsisH },
   ];
 
   const handleChange = (selectedOption) => {
@@ -89,7 +89,7 @@ const ColorDropdown = ({ name, onChange }) => {
             <FontAwesomeIcon
               icon={faTags}
               size="sm"
-              style={{ marginRight: "8px", color: selectedValue ? selectedValue.color : "red" }}
+              style={{ marginRight: "8px", color: selectedValue ? selectedValue.color :  "#d166ff" }}
             />
             <span style={{ fontSize: "20px", fontWeight: "bold" }}>Task Category</span>
           </div>
