@@ -138,7 +138,7 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
                   <Typography variant="body3" color="text.secondary">
                     {task.description}
                   </Typography>
-                  <Typography variant="body2" sx={{color: "red"}}>
+                  <Typography variant="body2" sx={{color: "#ff7866"}}>
                     Task DueDate: {task.dueDate}
                   </Typography>
                 </TableCell>
