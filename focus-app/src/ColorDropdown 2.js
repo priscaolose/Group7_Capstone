@@ -16,12 +16,12 @@ const ColorDropdown = ({ name, onChange }) => {
   const [selectedValue, setSelectedValue] = useState(null); // Initialize to `null`
 
   const options = [
-    { value: "personal", label: "Personal", color: "#FFC1E3", icon: faUser },
-    { value: "academic", label: "Academic", color: "#FFD966", icon: faGraduationCap },
-    { value: "career", label: "Career", color: "#FFF4B5", icon: faBriefcase },
-    { value: "social", label: "Social", color: "#C8FACD", icon: faUsers },
-    { value: "household", label: "Household Activities", color: "#B8E6FF", icon: faHome },
-    { value: "miscellaneous", label: "Miscellaneous", color: "#D8B8FF", icon: faEllipsisH },
+    { value: "personal", label: "Personal", color:  "#ff7866", icon: faUser },
+    { value: "academic", label: "Academic", color:  "#ff7866", icon: faGraduationCap },
+    { value: "career", label: "Career", color:  "#ff7866", icon: faBriefcase },
+    { value: "social", label: "Social", color:  "#ff7866", icon: faUsers },
+    { value: "household", label: "Household Activities", color: "#ff7866", icon: faHome },
+    { value: "miscellaneous", label: "Miscellaneous", color: "#ff7866", icon: faEllipsisH },
   ];
 
   const handleChange = (selectedOption) => {

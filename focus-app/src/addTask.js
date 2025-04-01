@@ -2,25 +2,23 @@ import React, { useState } from 'react';
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
-import { useNavigate} from 'react-router-dom';
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 import { addTask } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
-import { useUser } from './Components/context';
+import { Link } from "react-router-dom";
 
+import { useUser } from './Components/context';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCalOpen, setIsCalOpen] = useState(false);
   const { user } = useUser();
-  //const email = user?.email;
   const uid = localStorage.getItem('uid')||localStorage.getItem('username')
-  console.log("local storage",localStorage)
-  console.log("Uid",uid)
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
-  //console.log("email,",email)
   const [task, setTask] = useState({
     title: '',
     description: '',
@@ -36,7 +34,17 @@ const AddTask = () => {
       [name]: value,
     }));
   };
-  
+  const handleYesOnCancel = (onClose) =>{
+    setTask({
+      title: '',
+      description: '',
+      dueDate: '',
+      category: '',
+      priority: '',
+    });
+    setIsOpen(false);
+    onClose();
+  }
   const TaskDialog = ({ open, onClose }) => {
     return (
       <Dialog open={open} onClose={onClose}>
@@ -60,20 +68,51 @@ const AddTask = () => {
       </Dialog>
     );
   };
+  const TaskCancellationDialog = ({ open, onClose }) => {
+    return (
+      <Dialog open={open} onClose={onClose}>
+        <DialogTitle>Task Creation Cancellation</DialogTitle>
+        <DialogContent>
+             Are you sure you want to cancel the task creation?
+        </DialogContent>
+        <DialogActions>
+          <Button 
+          sx={{
+            padding: '8px 1px',
+            backgroundColor: '#8AAEC6',
+            cursor: 'pointer',
+            color: 'white',
+            width: '10px',
+            fontSize: '16px',
+            }}
+          onClick={() => {
+            handleYesOnCancel(onClose)
+          }}>
+          Yes</Button>
+          <Button 
+          sx={{
+            padding: '8px 1px',
+            backgroundColor: '#8AAEC6',
+            cursor: 'pointer',
+            color: 'white',
+            width: '10px',
+            fontSize: '16px',
+            }}
+          onClick={onClose}>
+          No</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
 
   const handleCancel = () => {
-    setTask({
-      title: '',
-      description: '',
-      dueDate: '',
-      category: '',
-      priority: '',
-    });
+    setIsCalOpen(true);
     setErrors({});
   };
   
   const handleDialogClose = () => {
     setIsOpen(false); 
+    setIsCalOpen(false);
   }
 
   const handleSubmit = (e) => {
@@ -102,7 +141,6 @@ const AddTask = () => {
       return; 
     }
 
-    //addTask(email, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
     addTask(uid, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
       setTask({
         title: '',
@@ -125,19 +163,24 @@ const AddTask = () => {
    
       <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
         <form id="taskForm" onSubmit={handleSubmit}>
-          {/* Column 1: Task Title and Description */}
-          <Grid2 xs={12} md={6} container direction="column" spacing={3}>
-            {/* Heading and Buttons Row */}
+          <Grid2 xs={12} md={6} container direction="column" spacing={3} >
             <Grid2 container alignItems="center" justifyContent="space-between">
-              {/* "Add New Task" Heading */}
-              <Grid2 item>
-                <h4 className="task-title">Add New Task</h4>
-              </Grid2>
-  
-              {/* Buttons Container */}
+            <Grid2 container direction="column" spacing={1} alignItems="flex-start">
+       
+        <Grid2 item>
+          <h4 className="task-title" style={{ margin: 0 }}>Add New Task</h4>
+        </Grid2>
+
+        <Grid2 item>
+          <Link to="/dashboard" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: '#1059a2' }}>
+            <ExitToAppIcon style={{ marginRight: 5 }} />
+            Return to dashboard
+          </Link>
+        </Grid2>
+      </Grid2>
+
+            
               <Grid2 item container spacing={2} justifyContent="flex-end">
-                {/* Cancel Button */}
-                {/* Add Task Button */}
                 <Grid2 item>
                   <Button
                     fullWidth
@@ -366,6 +409,12 @@ const AddTask = () => {
         {isOpen && (
           <TaskDialog
             open={isOpen}
+            onClose={handleDialogClose}
+          />
+        )}
+        {isCalOpen &&(
+          <TaskCancellationDialog
+            open={isCalOpen}
             onClose={handleDialogClose}
           />
         )}

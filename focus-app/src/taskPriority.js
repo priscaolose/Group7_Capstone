@@ -13,14 +13,14 @@ const PriorityDropdown = ({ name, onChange }) => {
   const [selectedValue, setSelectedValue] = useState(null);
 
   const options = [
-    { value: "high", label: "High", color: "#FF6666", icon: faExclamationCircle },
-    { value: "medium", label: "Medium", color: "#FF6666", icon: faExclamationTriangle },
-    { value: "low", label: "Low", color: "#FF6666", icon: faInfoCircle },
-    { value: "none", label: "None", color:"#FF6666", icon: faCircle },
+    { value: "high", label: "High", color: "#d166ff", icon: faExclamationCircle },
+    { value: "medium", label: "Medium", color: "#d166ff", icon: faExclamationTriangle },
+    { value: "low", label: "Low", color: "#d166ff", icon: faInfoCircle },
+    { value: "none", label: "None", color:"#d166ff", icon: faCircle },
   ];
   const formatOptionLabel = ({ label, icon, color }) => (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <FontAwesomeIcon icon={icon} style={{ marginRight: "8px", color }} /> {/* Dynamic color */}
+      <FontAwesomeIcon icon={icon} style={{ marginRight: "8px", color:"#d166ff" }} />
       {label}
     </div>
   );
@@ -46,7 +46,7 @@ const PriorityDropdown = ({ name, onChange }) => {
       padding: "15px",
       boxShadow: "none",
       borderRadius: "10px",
-      color: "#1059a2",
+      color: "#d166ff",
       backgroundImage: !selectedValue // Apply gradient if no option is selected
         ? "linear-gradient(to bottom, #FFF1F1, #E2EAF1)"
         : "none",
@@ -79,7 +79,7 @@ const PriorityDropdown = ({ name, onChange }) => {
         options={options}
         placeholder={
         <div style={{ display: "flex", alignItems: "center" }}>
-            <FontAwesomeIcon  icon={faFlag}   size="sm" style={{ marginRight: "8px",color: selectedValue ? selectedValue.color : "red" }} />
+            <FontAwesomeIcon  icon={faFlag}   size="sm" style={{ marginRight: "8px",color: selectedValue ? selectedValue.color :  "#d166ff" }} />
             <span style={{ fontSize: "20px",fontWeight: "bold",}}>Task Priority</span> {/* Reduced font size */}
         </div>
         }
