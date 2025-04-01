@@ -96,9 +96,6 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
   const [isOpen, setIsOpen] = useState(false);
   console.log("Before the toggle or whatever",filteredTasks);
   const handleToggleCompleted = (Completed,taskId) => {
-    console.log("Fileted tasks",filteredTasks)
-    console.log("Completed",Completed);
-    console.log("taskId",taskId);
       setFilteredTasks((prevFilteredTasks) =>
       prevFilteredTasks.map((t) => 
         t.id === taskId ? { ...t, completed: !t.completed } : t
@@ -187,9 +184,7 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
   const { user } = useUser() ;
-  console.log("User",user)
   const uid = localStorage.getItem('uid')
-  console.log("uid in viewTasks", uid);
   const { tasks, loading, error } = useTasks(uid);
   
   useEffect(() => {
