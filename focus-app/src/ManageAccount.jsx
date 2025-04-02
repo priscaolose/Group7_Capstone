@@ -44,7 +44,8 @@ const ManageAccountPage = () => {
 
     const [message, setSuccessMessage] = useState('');
     const [selectedSection, setSelectedSection] = useState('profile'); // Track selected section
-
+    const today = new Date();
+    const year = today.getFullYear();
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -287,7 +288,7 @@ const ManageAccountPage = () => {
                 </main>
             </div>
             <footer style={styles.footer}>
-                <p>&copy; 2024 Focus. All rights reserved.</p>
+                <p>&copy; {year} Focus. All rights reserved.</p>
             </footer>
         </div>
     );

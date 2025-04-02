@@ -10,7 +10,8 @@ const HomePage = () => {
     const [headerVisible, setHeaderVisible] = useState(false);
     const [textVisible, setTextVisible] = useState(false);
     const [buttonVisible, setButtonVisible] = useState(false);
-
+    const today = new Date();
+    const year = today.getFullYear();
     const navigate = useNavigate(); // Initialize the navigation hook
 
     useEffect(() => {
@@ -70,7 +71,7 @@ const HomePage = () => {
                 {showMessage && <p style={styles.messageText}>Great choice! Let’s make progress together.</p>}
             </main>
             <footer style={styles.footer}>
-                <p>&copy; 2024 Focus. All rights reserved.</p>
+                <p>&copy; {year} Focus. All rights reserved.</p>
             </footer>
         </div>
     );

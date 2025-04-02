@@ -2,9 +2,12 @@ import React from 'react';
 import '../CSSFolders/Footer.css'; 
 
 const Footer = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+
   return (
     <footer className="footer">
-      <p>&copy; 2024 Focus. All rights reserved.</p>
+      <p>&copy; {year} Focus. All rights reserved.</p>
     </footer> 
   );
 };
