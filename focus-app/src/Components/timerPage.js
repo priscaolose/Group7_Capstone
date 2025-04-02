@@ -127,6 +127,7 @@ function TimerPage() {
           alignItems: "center",
           justifyContent: "center",
           height: "100vh",
+          width: "100%",
           background: "linear-gradient(to bottom, #FFFFFF, #FCEFEF, #E3EFFB, #FFFFFF)",
         }}
       >
