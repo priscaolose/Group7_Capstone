@@ -20,6 +20,7 @@ const Tutorial = () => {
     {
       target: ".MuiBox-root.css-l3g0az",
       content: "Welcome to Focus, this is your dashboard.",
+      disableBeacon: true,
     },
     {
       target: ".MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-n1x4gb:nth-of-type(2)",
