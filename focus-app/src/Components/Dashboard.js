@@ -24,6 +24,7 @@ import { Timestamp } from "firebase/firestore";
 import TimerIcon from "@mui/icons-material/Timer";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import Tutorial from './Tutorial';
 
 // Custom Theme
 const theme = createTheme({
@@ -132,287 +133,290 @@ function Dashboard() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className="mainContainer">
-        <Header2 />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            minHeight: "auto",
-            px: isSmallScreen ? 2 : 4,
-            py: 1,
-            backgroundColor: "white",
-            overflowY: "auto",
-          }}
-        >
+    <>
+      <Tutorial />
+      <ThemeProvider theme={theme}>
+        <div className="mainContainer">
+          <Header2 />
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
-              gap: 4,
-              maxWidth: "1200px",
-              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              minHeight: "auto",
+              px: isSmallScreen ? 2 : 4,
+              py: 1,
+              backgroundColor: "white",
+              overflowY: "auto",
             }}
           >
-            {/* Left Column */}
-            <Box sx={{ display: "grid", gap: 4 }}>
-              {/* Welcome Section */}
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: "16px",
-                  background: "white",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  borderColor: theme.palette.primary.main,
-                }}
-              >
-                <Typography
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+                gap: 4,
+                maxWidth: "1200px",
+                width: "100%",
+              }}
+            >
+              {/* Left Column */}
+              <Box sx={{ display: "grid", gap: 4 }}>
+                {/* Welcome Section */}
+                <Paper
+                  sx={{
+                    p: 3,
+                    borderRadius: "16px",
+                    background: "white",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                    borderColor: theme.palette.primary.main,
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: theme.palette.primary.main,
+                      fontWeight: "bold",
+                      textAlign: "left",
+                    }}
+                  >
+                    Welcome Back
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      mt: 1,
+                      color: "#333",
+                      fontWeight: "bold",
+                      textAlign: "left",
+                    }}
+                  >
+                    {user?.firstName || "Guest"}
+                  </Typography>
+                </Paper>
+  
+                {/* Today's Tasks Section */}
+                <Paper
+                  sx={{
+                    p: 3,
+                    borderRadius: "16px",
+                    background: "white",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                    minHeight: "50vh",
+                  }}
+                >
+                  <Tabs value={tabIndex} onChange={handleTabChange} centered>
+                    <Tab label="Past" />
+                    <Tab label="Today" />
+                    <Tab label="Future" />
+                  </Tabs>
+  
+                  <Typography
                   variant="h6"
                   sx={{
                     color: theme.palette.primary.main,
-                    fontWeight: "bold",
-                    textAlign: "left",
                   }}
-                >
-                  Welcome Back
-                </Typography>
-                <Typography
-                  variant="h5"
+                  >
+                    Your Tasks
+                  </Typography>
+  
+                  {filterTasks.length > 0 ? (
+                    filterTasks.map((task, index) => (
+                      <Box key={index} sx={{ mb: 2 }}>
+                        <Typography
+                          variant="body1"
+                          sx={{ fontWeight: "bold", color: "#1059a2" }}
+                          textAlign={"left"}
+                        >
+                          {task.taskName}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#333" }}
+                          textAlign={"left"}
+                        >
+                          {task.taskDescription}
+                        </Typography>
+                        <hr
+                          style={{
+                            backgroundColor: "gray",
+                            height: "1px",
+                            border: "none",
+                          }}
+                        />
+                      </Box>
+                    ))
+                  ) : (
+                    <Typography
+                      variant="body1"
+                      sx={{ color: "#666", textAlign: "center", mt: 2 }}
+                    >
+                      You have no tasks. Click on Add Task to add some!
+                    </Typography>
+                  )}
+                </Paper>
+              </Box>
+  
+              {/* Center Column (Timer Section*/}
+              
+              <Box sx={{ display: "grid", gap: 4 }}>
+                <Paper
                   sx={{
-                    mt: 1,
-                    color: "#333",
-                    fontWeight: "bold",
-                    textAlign: "left",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "16px",
+                    background: "white",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                    p: 4,
+                    textDecoration: "none",
                   }}
                 >
-                  {user?.firstName || "Guest"}
-                </Typography>
-              </Paper>
-
-              {/* Today's Tasks Section */}
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: "16px",
-                  background: "white",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  minHeight: "50vh",
-                }}
-              >
-                <Tabs value={tabIndex} onChange={handleTabChange} centered>
-                  <Tab label="Past" />
-                  <Tab label="Today" />
-                  <Tab label="Future" />
-                </Tabs>
-
-                <Typography
-                variant="h6"
-                sx={{
-                  color: theme.palette.primary.main,
-                }}
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      color: "#333",
+                      fontWeight: "bold",
+                      mb: 3
+                    }}
+                  >
+                    {currentTime}
+                  </Typography>
+                  
+                  {/* Action Buttons with Icons - Using Flexbox instead of Grid */}
+                  <Box sx={{ 
+                    display: "flex", 
+                    width: "100%", 
+                    justifyContent: "space-between", 
+                    gap: 2 
+                  }}>
+                    <Button
+                      component={Link}
+                      to="/timer"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<TimerIcon sx={{color: "#ff7866"}}/>}
+                      sx={{
+                        borderRadius: "8px",
+                        textTransform: "none",
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        py: 1,
+                        px: 2
+                      }}
+                    >
+                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
+                          Set Timer
+                        </Typography>
+                      </Box>
+                    </Button>
+                    
+                    <Button
+                      component={Link}
+                      to="/addTask"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<AddTaskIcon sx={{color: "#ff7866"}}/>}
+                      sx={{
+                        borderRadius: "8px",
+                        textTransform: "none",
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        py: 1,
+                        px: 2
+                      }}
+                    >
+                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
+                          Add Task
+                        </Typography>
+                      </Box>
+                    </Button>
+                    
+                    <Button
+                      component={Link}
+                      to="/viewTask"
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<FormatListBulletedIcon sx={{color: "#ff7866"}}/>}
+                      sx={{
+                        borderRadius: "8px",
+                        textTransform: "none",
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        py: 1,
+                        px: 2
+                      }}
+                    >
+                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
+                          View Tasks
+                        </Typography>
+                      </Box>
+                    </Button>
+                  </Box>
+                </Paper>
+                <Paper
+                  sx={{
+                    p: 3,
+                    borderRadius: "16px",
+                    background: "white",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                  }}
                 >
-                  Your Tasks
-                </Typography>
-
-                {filterTasks.length > 0 ? (
-                  filterTasks.map((task, index) => (
-                    <Box key={index} sx={{ mb: 2 }}>
-                      <Typography
-                        variant="body1"
-                        sx={{ fontWeight: "bold", color: "#1059a2" }}
-                        textAlign={"left"}
-                      >
-                        {task.taskName}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#333" }}
-                        textAlign={"left"}
-                      >
-                        {task.taskDescription}
-                      </Typography>
-                      <hr
-                        style={{
-                          backgroundColor: "gray",
-                          height: "1px",
-                          border: "none",
-                        }}
-                      />
-                    </Box>
-                  ))
-                ) : (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateCalendar />
+                  </LocalizationProvider>
+                </Paper>
+              </Box>
+  
+              {/* Right Column */}
+              <Box sx={{ display: "grid", gap: 4 }}>
+                <Paper
+                  sx={{
+                    p: 3,
+                    borderRadius: "16px",
+                    background: "white",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: theme.palette.primary.main,
+                    }}
+                  >
+                    Reminder:
+                  </Typography>
                   <Typography
                     variant="body1"
-                    sx={{ color: "#666", textAlign: "center", mt: 2 }}
+                    sx={{
+                      color: "#333",
+                      mt: 1,
+                      lineHeight: 1.5,
+                    }}
                   >
-                    You have no tasks. Click on Add Task to add some!
+                    {randomQuote}
                   </Typography>
-                )}
-              </Paper>
-            </Box>
-
-            {/* Center Column (Timer Section*/}
-            
-            <Box sx={{ display: "grid", gap: 4 }}>
-              <Paper
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "16px",
-                  background: "white",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                  p: 4,
-                  textDecoration: "none",
-                }}
-              >
-                <Typography
-                  variant="h3"
-                  sx={{
-                    color: "#333",
-                    fontWeight: "bold",
-                    mb: 3
-                  }}
-                >
-                  {currentTime}
-                </Typography>
-                
-                {/* Action Buttons with Icons - Using Flexbox instead of Grid */}
-                <Box sx={{ 
-                  display: "flex", 
-                  width: "100%", 
-                  justifyContent: "space-between", 
-                  gap: 2 
-                }}>
-                  <Button
-                    component={Link}
-                    to="/timer"
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<TimerIcon sx={{color: "#ff7866"}}/>}
-                    sx={{
-                      borderRadius: "8px",
-                      textTransform: "none",
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      py: 1,
-                      px: 2
-                    }}
-                  >
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
-                        Set Timer
-                      </Typography>
-                    </Box>
-                  </Button>
-                  
-                  <Button
-                    component={Link}
-                    to="/addTask"
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<AddTaskIcon sx={{color: "#ff7866"}}/>}
-                    sx={{
-                      borderRadius: "8px",
-                      textTransform: "none",
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      py: 1,
-                      px: 2
-                    }}
-                  >
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
-                        Add Task
-                      </Typography>
-                    </Box>
-                  </Button>
-                  
-                  <Button
-                    component={Link}
-                    to="/viewTask"
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<FormatListBulletedIcon sx={{color: "#ff7866"}}/>}
-                    sx={{
-                      borderRadius: "8px",
-                      textTransform: "none",
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      py: 1,
-                      px: 2
-                    }}
-                  >
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
-                        View Tasks
-                      </Typography>
-                    </Box>
-                  </Button>
+                </Paper>
+                <Box sx={{ display: "grid", gap: 4 }}>
+                  <NoteSection /> {/* Uses the NoteSection component */}
                 </Box>
-              </Paper>
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: "16px",
-                  background: "white",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar />
-                </LocalizationProvider>
-              </Paper>
-            </Box>
-
-            {/* Right Column */}
-            <Box sx={{ display: "grid", gap: 4 }}>
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: "16px",
-                  background: "white",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  Reminder:
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: "#333",
-                    mt: 1,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {randomQuote}
-                </Typography>
-              </Paper>
-              <Box sx={{ display: "grid", gap: 4 }}>
-                <NoteSection /> {/* Uses the NoteSection component */}
               </Box>
             </Box>
           </Box>
-        </Box>
-        <Footer />
-      </div>
-    </ThemeProvider>
+          <Footer />
+        </div>
+      </ThemeProvider>
+    </>
   );
 }
 

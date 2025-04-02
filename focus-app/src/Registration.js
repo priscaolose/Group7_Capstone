@@ -111,6 +111,7 @@ const Register = () => {
                 };
                 setUser(userData);
                 setTasks([]);
+                localStorage.setItem('newUser', 'true');
                 navigate('/dashboard', { state: { email: result.user.email } });
             }
         } catch (error) {
@@ -157,6 +158,7 @@ const handleRegister = async (e) => {
         }
 
         const result = JSON.parse(responseText); // Now safe to parse
+        localStorage.setItem('newUser', 'true');
         navigate('/dashboard', { state: { email: user.email } });
         setSuccessMessage(result.message);
 
