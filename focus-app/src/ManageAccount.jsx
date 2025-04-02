@@ -109,12 +109,7 @@ const ManageAccountPage = () => {
                         >
                             Security
                         </li>
-                        <li 
-                            style={styles.sidebarItem} 
-                            onClick={() => handleSidebarClick('notifications')}
-                        >
-                            Notifications
-                        </li>
+    
                     </ul>
                 </aside>
                 <main style={styles.content}>
@@ -234,54 +229,6 @@ const ManageAccountPage = () => {
                     </form>
                     )}
                     
-                    {selectedSection === 'notifications' && (
-                            <form style={styles.form} onSubmit={handleFormSubmit}>
-                                <p>Choose your notification preferences.</p>
-                                <div style={styles.inputGroup}>
-                                    <label style={styles.label}>Email Notifications</label>
-                                    <div style={styles.checkboxContainer}>
-                                        <input
-                                            type="checkbox"
-                                            name="emailNotifications"
-                                            style={styles.checkbox}
-                                        />
-                                        <span style={styles.checkboxLabel}>Receive notifications via email</span>
-                                    </div>
-                                </div>
-
-                                <div style={styles.inputGroup}>
-                                    <label style={styles.label}>SMS Notifications</label>
-                                    <div style={styles.checkboxContainer}>
-                                        <input
-                                            type="checkbox"
-                                            name="smsNotifications"
-                                            style={styles.checkbox}
-                                        />
-                                        <span style={styles.checkboxLabel}>Receive notifications via SMS</span>
-                                    </div>
-                                </div>
-
-                                <div style={styles.inputGroup}>
-                                    <label style={styles.label}>Push Notifications</label>
-                                    <div style={styles.checkboxContainer}>
-                                        <input
-                                            type="checkbox"
-                                            name="pushNotifications"
-                                            style={styles.checkbox}
-                                        />
-                                        <span style={styles.checkboxLabel}>Receive push notifications</span>
-                                    </div>
-                                </div>
-
-                                <button 
-                                type="submit" 
-                                style={styles.submitButton}
-                            >
-                                    Save Changes
-                            </button>                           
-                             </form>
-                        
-                    )}
 
                     {message && <p style={styles.messageText}>{message}</p>}
                     
