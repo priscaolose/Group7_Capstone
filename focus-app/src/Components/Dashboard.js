@@ -25,6 +25,7 @@ import TimerIcon from "@mui/icons-material/Timer";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import Tutorial from './Tutorial';
+import { getUID } from "../firebase/firebaseAuth";
 
 // Custom Theme
 const theme = createTheme({
@@ -52,7 +53,8 @@ const theme = createTheme({
 
 function Dashboard() {
   const isSmallScreen = useMediaQuery("(max-width: 900px)");
-  const { user, tasks } = useUser();
+  const { user } = useUser();
+  const [tasks, setTasks] = useState([]);
   const [tabIndex, setTabIndex] = useState(1);
 
   const [currentTime, setCurrentTime] = useState("00:00:00");
@@ -62,25 +64,52 @@ function Dashboard() {
     setTabIndex(newIndex);
   };
 
-  const t = new Date();
-  t.setHours(0, 0, 0, 0);
-  const dayStart = Timestamp.fromDate(t);
-  const endDay = new Date();
-  endDay.setHours(23, 59, 59, 999);
-  const eD = Timestamp.fromDate(endDay);
-  let filterTasks;
-    filterTasks = tasks.filter((task) => {
-      const tEndTime = task.dueDate;
-      if (!tEndTime) return false;
-      if (tabIndex === 0) {
-        return tEndTime > eD;
-      } else if (tabIndex === 1) {
-        return tEndTime >= dayStart && tEndTime <= eD;
-      } else if (tabIndex === 2) {
-        return tEndTime < dayStart;
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const uid = await getUID(user?.email)
+        console.log("UID: " + uid);
+        const task = await fetch(`/api/getTask?userID=${uid}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await task.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
       }
-      return false;
-    });
+    };
+  
+    fetchTasks();
+  }, [user]);
+
+  const now = new Date();
+  const dayStart = new Date(now);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(now);
+  dayEnd.setHours(23, 59, 59, 999);
+  
+  const filterTasks = tasks.filter((task) => {
+    if (!task.dueDate) return false;
+  
+    const taskDate = new Date(task.dueDate);
+    taskDate.setHours(0, 0, 0, 0); // Normalize to just the date for consistency
+  
+    const start = new Date(dayStart);
+    start.setHours(0, 0, 0, 0);
+  
+    if (tabIndex === 2) {
+      return taskDate > dayEnd; // Future
+    } else if (tabIndex === 1) {
+      return taskDate.getTime() === start.getTime(); // Today
+    } else if (tabIndex === 0) {
+      return taskDate < start; // Past
+    }
+  
+    return false;
+  });
 
   const quotes = [
     "Its always a great time to take the first step.",

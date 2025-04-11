@@ -29,10 +29,14 @@ export const getTasks = async (userId) => {
   const tasks = [];
   const querySnapshot = await getDocs(collection(db, "tasks"));
   querySnapshot.forEach((doc => {
-    if(doc.data().userId == userId) {
+    if(doc.data().uid === userId) {
       tasks.push({ id: doc.id, ...doc.data() });
     }
   }));
+  if(querySnapshot.empty)
+  {
+    tasks.push([]);
+  }
   return tasks;
 };
 

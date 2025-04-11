@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Timestamp } from "firebase/firestore";
 import Header2 from './Components/Header2';
 import Footer from './Components/Footer';
 import './CSSFolders/AddTask.css'; 
 import { Grid2, Box, TextField, Button, InputAdornment, IconButton, Typography,Dialog,DialogTitle,DialogContent,DialogActions } from '@mui/material';
 import { Clear } from '@mui/icons-material';
-import { addTask } from './Api/createTask';
+import { addTask, getTasks } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
 import { Link } from "react-router-dom";
 
 import { useUser } from './Components/context';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { getUID } from './firebase/firebaseAuth';
 const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCalOpen, setIsCalOpen] = useState(false);
-  const { user } = useUser();
-  const uid = localStorage.getItem('uid')||localStorage.getItem('username')
+  const { setTasks, user } = useUser();
+  const [uid, setUid] = useState(null);
   const [errors, setErrors] = useState({}); // Single object to hold all error messages
   const [isFocused, setIsFocused] = useState(false);
   const [titleIsFocused, setTitleIsFocused] = useState(false);
@@ -26,6 +28,20 @@ const AddTask = () => {
     category: '',
     priority: '',
   });
+
+  useEffect(() => {
+    const fetchUID = async () => {
+      if (user?.email) {
+        const resolvedUID = await getUID(user.email);
+        if (resolvedUID !== "error") {
+          setUid(resolvedUID);
+          console.log("UID: " + resolvedUID);
+        }
+      }
+    };
+
+    fetchUID();
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,7 +131,7 @@ const AddTask = () => {
     setIsCalOpen(false);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Clear previous error messages
@@ -141,7 +157,8 @@ const AddTask = () => {
       return; 
     }
 
-    addTask(uid, task.title, task.description, task.dueDate, new Date(), task.category, task.priority);
+    const dueDateTimestamp = Timestamp.fromDate(new Date(task.dueDate));
+    await addTask(uid, task.title, task.description, dueDateTimestamp, task.category, task.priority);
       setTask({
         title: '',
         description: '',

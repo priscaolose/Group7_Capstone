@@ -17,19 +17,19 @@ app.get("/api/getTask", async (req, res) => {
     const q = query(
       tasksRef,
       where("userId", "==", userID),
-      orderBy("endTime", "desc")
+      orderBy("dueDate", "desc")
     );
     const taskSnapshot = await getDocs(q);
-    taskSnapshot.forEach((doc) => console.log(doc.data().userID));
+    taskSnapshot.forEach((doc) => console.log(doc.data().userId));
     taskSnapshot.docs.forEach((doc) => console.log(doc.data()));
 
     if (taskSnapshot.empty) {
       return res.status(200).json([]);
     }
     const tasks = taskSnapshot.docs.map((doc) => ({
-      taskName: doc.data().taskName,
-      taskDescription: doc.data().taskDescription,
-      dueDate: doc.data().endTime,
+      taskName: doc.data().title,
+      taskDescription: doc.data().description,
+      dueDate: doc.data().dueDate.toDate(),
     }));
     console.log("task info:" + tasks);
     res.status(200).json(tasks);
