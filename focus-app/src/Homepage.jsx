@@ -164,7 +164,7 @@ const styles = {
         fontSize: '20px',
         opacity: 0,
         transform: 'translateY(50px)',
-        animation: 'button-slide-in 1s forwards 2s' 
+        animation: 'button-slide-in 1s forwards 1.7s' 
     },
     messageText: {
         marginTop: '20px',
