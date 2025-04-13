@@ -6,21 +6,24 @@ import {
   TextField,
   Button,
   IconButton,
+  InputAdornment,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; 
+import EditIcon from "@mui/icons-material/Edit";
+import SearchIcon from "@mui/icons-material/Search";
 import { useUser } from "./context";
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
-import { format } from "date-fns";  
-
+import { format } from "date-fns";
 
 function NoteSection() {
   const { user } = useUser();
   const [note, setNote] = useState("");
   const [notesList, setNotesList] = useState([]);
-  const [editingNoteId, setEditingNoteId] = useState(null); 
-  const [editedNote, setEditedNote] = useState(""); 
+  const [filteredNotes, setFilteredNotes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [editingNoteId, setEditingNoteId] = useState(null);
+  const [editedNote, setEditedNote] = useState("");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
@@ -36,6 +39,7 @@ function NoteSection() {
           .map((doc) => ({ id: doc.id, ...doc.data() }));
 
         setNotesList(fetchedNotes);
+        setFilteredNotes(fetchedNotes); // Initialize filtered notes with all notes
       } catch (error) {
         console.error("Error fetching notes:", error);
       } finally {
@@ -46,24 +50,46 @@ function NoteSection() {
     fetchNotes();
   }, [user]);
 
-// const formatTimestamp = (timestamp) => {
-//   if (!timestamp) return "No date";
+  // Function to format timestamps
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return "No date";
 
-//   const now = new Date(); // Current time
-//   const noteDate = new Date(timestamp); // Convert Firestore timestamp to Date
-//   const isToday = format(noteDate, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
-//   const isYesterday =
-//     format(noteDate, "yyyy-MM-dd") ===
-//     format(new Date(now.setDate(now.getDate() - 1)), "yyyy-MM-dd");
+    // Handle both Firestore timestamp objects and Date objects
+    const noteDate = timestamp instanceof Date 
+      ? timestamp 
+      : new Date(timestamp.seconds * 1000);
+    
+    const now = new Date(); // Current time
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    const noteDay = new Date(noteDate.getFullYear(), noteDate.getMonth(), noteDate.getDate());
+    
+    const isToday = noteDay.getTime() === today.getTime();
+    const isYesterday = noteDay.getTime() === yesterday.getTime();
 
-//   if (isToday) {
-//     return `Today at ${format(noteDate, "h:mm a")}`; // Example: "Today at 3:45 PM"
-//   } else if (isYesterday) {
-//     return `Yesterday at ${format(noteDate, "h:mm a")}`; // Example: "Yesterday at 11:30 AM"
-//   } else {
-//     return `${format(noteDate, "MMM d, yyyy")} at ${format(noteDate, "h:mm a")}`; // Example: "Feb 10, 2024 at 8:00 PM"
-//   }
-// };
+    if (isToday) {
+      return `Today at ${format(noteDate, "h:mm a")}`; // Example: "Today at 3:45 PM"
+    } else if (isYesterday) {
+      return `Yesterday at ${format(noteDate, "h:mm a")}`; // Example: "Yesterday at 11:30 AM"
+    } else {
+      return `${format(noteDate, "MMM d, yyyy")} at ${format(noteDate, "h:mm a")}`; // Example: "Feb 10, 2024 at 8:00 PM"
+    }
+  };
+
+  // Handle search functionality
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredNotes(notesList);
+    } else {
+      const lowercaseQuery = searchQuery.toLowerCase();
+      const filtered = notesList.filter(note => 
+        note.note.toLowerCase().includes(lowercaseQuery)
+      );
+      setFilteredNotes(filtered);
+    }
+  }, [searchQuery, notesList]);
 
   // Save a new note to Firebase
   const handleNote = async () => {
@@ -73,13 +99,17 @@ function NoteSection() {
     }
 
     try {
+      const timestamp = new Date();
       const newNoteRef = await addDoc(collection(db, "Notes"), {
         userName: user?.firstName || "Guest",
         note: note,
-        timestamp: new Date(),
+        timestamp: timestamp,
       });
 
-      setNotesList([...notesList, { id: newNoteRef.id, note }]);
+      setNotesList([
+        ...notesList, 
+        { id: newNoteRef.id, note, userName: user?.firstName || "Guest", timestamp }
+      ]);
       setNote("");
       setMessage("Note added successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -89,29 +119,53 @@ function NoteSection() {
     }
   };
 
-  //  Delete a note from Firebase
+  // Delete a note from Firebase
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, "Notes", id));
-      setNotesList(notesList.filter((note) => note.id !== id));
+      const updatedNotes = notesList.filter((note) => note.id !== id);
+      setNotesList(updatedNotes);
+      
+      // Also update filtered notes
+      setFilteredNotes(
+        searchQuery.trim() === "" 
+          ? updatedNotes 
+          : updatedNotes.filter(note => 
+              note.note.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+      );
     } catch (error) {
       console.error("Error deleting note:", error);
     }
   };
 
-  //  Enable edit mode for a note
+  // Enable edit mode for a note
   const handleEdit = (note) => {
     setEditingNoteId(note.id);
     setEditedNote(note.note); // Set existing note text in the input
   };
 
-  //  Save edited note to Firebase
+  // Save edited note to Firebase
   const handleSaveEdit = async (id) => {
     try {
       await updateDoc(doc(db, "Notes", id), { note: editedNote });
 
-      //  Update the note in UI
-      setNotesList(notesList.map((n) => (n.id === id ? { ...n, note: editedNote } : n)));
+      // Update the note in UI
+      const updatedNotes = notesList.map((n) => 
+        n.id === id ? { ...n, note: editedNote } : n
+      );
+      
+      setNotesList(updatedNotes);
+      
+      // Also update filtered notes
+      setFilteredNotes(
+        searchQuery.trim() === "" 
+          ? updatedNotes 
+          : updatedNotes.filter(note => 
+              note.note.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+      );
+      
       setEditingNoteId(null); // Exit edit mode
       setMessage("Note updated successfully!");
       setTimeout(() => setMessage(""), 3000);
@@ -134,6 +188,23 @@ function NoteSection() {
       <Typography variant="h6" sx={{ color: "#1059a2", mb: 2 }}>
         Notes
       </Typography>
+
+      {/* Search Bar */}
+      <TextField
+        fullWidth
+        variant="outlined"
+        placeholder="Search notes..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        sx={{ mb: 2 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
 
       {/* Input Field */}
       <Box sx={{ mb: 2 }}>
@@ -168,12 +239,14 @@ function NoteSection() {
       {/* Show Loading Indicator */}
       {loading ? (
         <Typography sx={{ color: "gray", mt: 2 }}>Loading notes...</Typography>
-      ) : notesList.length === 0 ? (
-        <Typography sx={{ color: "gray", mt: 2 }}>No notes available.</Typography>
+      ) : filteredNotes.length === 0 ? (
+        <Typography sx={{ color: "gray", mt: 2 }}>
+          {searchQuery.trim() !== "" ? "No matching notes found." : "No notes available."}
+        </Typography>
       ) : (
         // Display Notes List
         <Box sx={{ mt: 2, maxHeight: "40vh", overflowY: "auto" }}>
-          {notesList.map((note) => (
+          {filteredNotes.map((note) => (
             <Paper
               key={note.id}
               sx={{
@@ -181,10 +254,10 @@ function NoteSection() {
                 mt: 1,
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
+                alignItems: "flex-start",
               }}
             >
-              <Box>
+              <Box sx={{ width: "80%" }}>
                 {editingNoteId === note.id ? (
                   <TextField
                     fullWidth
@@ -198,10 +271,12 @@ function NoteSection() {
                     }}
                   />
                 ) : (
-                  <Typography variant="body1">{note.note}</Typography>
+                  <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
+                    {note.note}
+                  </Typography>
                 )}
-                <Typography variant="caption" sx={{ color: "gray" }}>
-                  {/* {formatTimestamp(note.timestamp)} */}
+                <Typography variant="caption" sx={{ color: "gray", display: "block", mt: 1 }}>
+                  {formatTimestamp(note.timestamp)}
                 </Typography>
               </Box>
 
@@ -232,4 +307,5 @@ function NoteSection() {
     </Paper>
   );
 }
+
 export default NoteSection;
