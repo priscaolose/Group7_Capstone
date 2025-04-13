@@ -140,7 +140,7 @@ const styles = {
         animation: 'text-fade-in 1s forwards 1s'
     },
     centerImage: {
-        width: '900px',
+        maxWidth: '90%',
         height: 'auto',
         marginBottom: '20px',
         opacity: 0,
