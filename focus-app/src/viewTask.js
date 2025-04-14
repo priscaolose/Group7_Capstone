@@ -14,6 +14,7 @@ import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
 import { useUser } from './Components/context';
 import FilterByIcon from './Components/filterByIcon.js';
+import { getUID } from "../firebase/firebaseAuth";
 
 
 const SearchBox = ({ setFilteredTasks, tasks }) => {
@@ -183,10 +184,12 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
 
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const { user,tasks } = useUser() ;
-  console.log("tasks",tasks)
-  const uid = localStorage.getItem('uid')
-  const {  loading, error } = useTasks(uid);
+  const { user } = useUser();
+  const uid =  getUID(user?.email)
+  console.log("uid",uid)
+  // const uid = localStorage.getItem('uid')
+  
+  const { tasks, loading, error } = useTasks(uid);
   
   useEffect(() => {
     setFilteredTasks(tasks);
