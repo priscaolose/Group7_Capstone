@@ -183,9 +183,10 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
 
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const { user } = useUser() ;
+  const { user,tasks } = useUser() ;
+  console.log("tasks",tasks)
   const uid = localStorage.getItem('uid')
-  const { tasks, loading, error } = useTasks(uid);
+  const {  loading, error } = useTasks(uid);
   
   useEffect(() => {
     setFilteredTasks(tasks);
