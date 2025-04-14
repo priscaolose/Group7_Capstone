@@ -13,6 +13,7 @@ const useTasks = (username) => {
     useEffect(() => {
       const fetchTasks = async () => {
         const nameQuery = query(Tasks, where("userId", "==", username));
+        console.log("username",username)
         console.log("name query",nameQuery);
         try {
           const querySnapshot = await getDocs(nameQuery);
