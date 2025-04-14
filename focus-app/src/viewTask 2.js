@@ -174,6 +174,7 @@ const ViewTask = () => {
   const { user } = useUser();
   const location = useLocation();
   const userEmail = user?.email;
+  console.log("userEmail",userEmail)
   const { tasks, loading, error } = useTasks(userEmail);
 
   useEffect(() => {
