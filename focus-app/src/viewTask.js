@@ -14,7 +14,7 @@ import useTasks from './Api/extractTasks.js';
 import { deleteTask } from './Api/createTask.js';
 import { useUser } from './Components/context';
 import FilterByIcon from './Components/filterByIcon.js';
-import { getUID } from "../firebase/firebaseAuth";
+import { getUID } from "./firebase/firebaseAuth";
 
 
 const SearchBox = ({ setFilteredTasks, tasks }) => {
