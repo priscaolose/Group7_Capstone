@@ -15,7 +15,7 @@ import { deleteTask } from './Api/createTask.js';
 import { useUser } from './Components/context';
 import FilterByIcon from './Components/filterByIcon.js';
 import { getUID } from "./firebase/firebaseAuth";
-
+import moment from 'moment'; 
 
 const SearchBox = ({ setFilteredTasks, tasks }) => {
 
@@ -72,7 +72,13 @@ const handleDelete = async (taskId, onDelete) => {
     console.error('Error deleting task:', error);
   }
 };
+const convertingDueDate = (dueDate) => {
+  const momentDueDate = moment.unix(dueDate.seconds);
 
+  const formattedDate = momentDueDate.format('MMMM Do YYYY, h:mm:ss a');
+
+  return formattedDate; 
+}
 
 const TaskDialog = ({ open, onClose, title, taskID, handleDelete }) => {
   return (
@@ -137,7 +143,8 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
                     {task.description}
                   </Typography>
                   <Typography variant="body2" sx={{color: "#ff7866"}}>
-                    Task DueDate: {task.dueDate}
+          
+                    Task DueDate: {convertingDueDate(task.dueDate)}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
@@ -181,31 +188,26 @@ const TaskTable = ({ filteredTasks, onDelete,setFilteredTasks }) => {
     </TableContainer>
   );
 };
-
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const { user } = useUser();
-  const uid =  getUID(user?.email)
-  console.log("uid",uid)
-  // const uid = localStorage.getItem('uid')
-  
+  const { user } = useUser() ;
+  const uid = localStorage.getItem('uid')
+  console.log("MYUId",uid)
   const { tasks, loading, error } = useTasks(uid);
-  
   useEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
 
-  const handleDeleteTask = (taskId) => {
-    setFilteredTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
   if (error) {
     return <div>{error}</div>;
   }
 
+  const handleDeleteTask = (taskId) => {
+    setFilteredTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
+  };
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Grid2 xs={12}>
