@@ -91,54 +91,33 @@ const TaskDialog = ({ open, onClose, title, taskID, handleDelete }) => {
   );
 };
 
-const TaskTable = ({ filteredTasks, onDelete, completedTasks, onTaskCompletion }) => {
+const TaskTable = ({ filteredTasks, onDelete }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTaskId, setSelectedTaskId] = useState(null);
-  
-  const handleCheckboxChange = (taskId, isCompleted) => {
-    onTaskCompletion(taskId, !isCompleted);
-  };
-
-  const openDeleteDialog = (taskId) => {
-    setSelectedTaskId(taskId);
-    setIsOpen(true);
-  };
-
-  // Separate tasks section rendering function
-  const renderTasksSection = (tasks, sectionTitle, isCompleted) => {
-    if (tasks.length === 0) {
-      return null;
-    }
-    
-    return (
-      <>
-        <Typography variant="h6" sx={{ padding: 2, color: '#2E3B55', fontWeight: 'bold' }}>
-          {sectionTitle}
+  return (
+    <TableContainer component={Paper} sx={{ marginTop: 5, borderRadius: '8px', maxHeight: '600px', maxWidth: '1000px', overflow: 'auto', margin: '0 auto', boxShadow: '2px 2px 5px rgba(0,0,0,0.1)' }}>
+      {filteredTasks.length === 0 ? (
+        <Typography variant="h6" sx={{ textAlign: 'center', padding: 2, color: 'red' }}>
+          No tasks matching that description.
         </Typography>
+      ) : (
         <Table sx={{ minWidth: 650, borderRadius: '8px' }} aria-label="task table">
           <TableBody>
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <TableRow key={task.id} sx={{
                 borderBottom: '1.5px solid #2E3B55',
                 boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
                 paddingBottom: '10px',
-                backgroundColor: isCompleted ? '#f5f5f5' : 'inherit',
                 '&:hover': {
                   backgroundImage: 'linear-gradient(to bottom, #E2EAF1, #FFF1F1)',
                   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
                 },
               }}>
                 <TableCell padding="checkbox">
-                  <Checkbox 
-                    checked={isCompleted} 
-                    onChange={() => handleCheckboxChange(task.id, isCompleted)}
-                  />
+                  <Checkbox />
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  <Typography fontWeight="bold" sx={{ textDecoration: isCompleted ? 'line-through' : 'none' }}>
-                    {task.title}
-                  </Typography>
+                  <Typography fontWeight="bold">{task.title}</Typography>
                   <Typography variant="body3" color="text.secondary">
                     {task.description}
                   </Typography>
@@ -161,42 +140,29 @@ const TaskTable = ({ filteredTasks, onDelete, completedTasks, onTaskCompletion }
                       size="small"
                       color="error"
                       sx={{ textTransform: 'none' }}
-                      onClick={() => openDeleteDialog(task.id)}    
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}    
+                      //onClick={() => handleDelete(task.id,task.title)}
                     >
                       delete
                     </Button>
+                    <TaskDialog
+                          open={isOpen}
+                          onClose={() => setIsOpen(false)}
+                          handleDelete={() => {
+                            handleDelete(task.id, onDelete);
+                            setIsOpen(false);
+                          }}                        
+                          title={task.title}
+                          taskID={task.id}
+                    />
                   </Box>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </>
-    );
-  };
-
-  return (
-    <TableContainer component={Paper} sx={{ marginTop: 5, borderRadius: '8px', maxHeight: '600px', maxWidth: '1000px', overflow: 'auto', margin: '0 auto', boxShadow: '2px 2px 5px rgba(0,0,0,0.1)' }}>
-      {filteredTasks.length === 0 && completedTasks.length === 0 ? (
-        <Typography variant="h6" sx={{ textAlign: 'center', padding: 2, color: 'red' }}>
-          No tasks matching that description.
-        </Typography>
-      ) : (
-        <>
-          {renderTasksSection(filteredTasks, "Active Tasks", false)}
-          {renderTasksSection(completedTasks, "Completed", true)}
-          
-          <TaskDialog
-            open={isOpen}
-            onClose={() => setIsOpen(false)}
-            handleDelete={() => {
-              handleDelete(selectedTaskId, onDelete);
-              setIsOpen(false);
-            }}                        
-            title={[...filteredTasks, ...completedTasks].find(task => task.id === selectedTaskId)?.title || ""}
-            taskID={selectedTaskId}
-          />
-        </>
       )}
     </TableContainer>
   );
@@ -204,7 +170,6 @@ const TaskTable = ({ filteredTasks, onDelete, completedTasks, onTaskCompletion }
 
 const ViewTask = () => {
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const [completedTasks, setCompletedTasks] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { user } = useUser();
   const location = useLocation();
@@ -213,36 +178,11 @@ const ViewTask = () => {
   const { tasks, loading, error } = useTasks(userEmail);
 
   useEffect(() => {
-    // Initialize tasks with completion status
-    if (tasks && tasks.length > 0) {
-      const completed = tasks.filter(task => task.completed);
-      const active = tasks.filter(task => !task.completed);
-      setCompletedTasks(completed);
-      setFilteredTasks(active);
-    }
+    setFilteredTasks(tasks);
   }, [tasks]);
 
   const handleDeleteTask = (taskId) => {
     setFilteredTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
-    setCompletedTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
-  };
-
-  const handleTaskCompletion = (taskId, isCompleted) => {
-    if (isCompleted) {
-      // Move task from active to completed
-      const taskToMove = filteredTasks.find(task => task.id === taskId);
-      if (taskToMove) {
-        setFilteredTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-        setCompletedTasks(prevTasks => [...prevTasks, {...taskToMove, completed: true}]);
-      }
-    } else {
-      // Move task from completed to active
-      const taskToMove = completedTasks.find(task => task.id === taskId);
-      if (taskToMove) {
-        setCompletedTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-        setFilteredTasks(prevTasks => [...prevTasks, {...taskToMove, completed: false}]);
-      }
-    }
   };
 
   const toggleDropDown = () => {
@@ -286,41 +226,18 @@ const ViewTask = () => {
         >
        <Grid2 container sx={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
             <Grid2 item xs={12} sm={6} md={4}>
-              <SearchBox tasks={[...filteredTasks, ...completedTasks]} setFilteredTasks={(newTasks) => {
-                // Keep the separation between active and completed tasks when filtering
-                const completed = newTasks.filter(task => task.completed);
-                const active = newTasks.filter(task => !task.completed);
-                setCompletedTasks(completed);
-                setFilteredTasks(active);
-              }} />
+              <SearchBox tasks={tasks} setFilteredTasks={setFilteredTasks} />
             </Grid2>
 
             <Grid2 item xs={12} sm={6} md={4} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: "center", gap: 0.5 }}>
-              <FilterByIcon filteredTasks={[...filteredTasks, ...completedTasks]} setFilteredTasks={(newTasks) => {
-                // Keep the separation between active and completed tasks when filtering
-                const completed = newTasks.filter(task => task.completed);
-                const active = newTasks.filter(task => !task.completed);
-                setCompletedTasks(completed);
-                setFilteredTasks(active);
-              }} />
-              <SortByDropDown filteredTasks={[...filteredTasks, ...completedTasks]} setFilteredTasks={(newTasks) => {
-                // Keep the separation between active and completed tasks when sorting
-                const completed = newTasks.filter(task => task.completed);
-                const active = newTasks.filter(task => !task.completed);
-                setCompletedTasks(completed);
-                setFilteredTasks(active);
-              }} />
+              <FilterByIcon filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
+              <SortByDropDown filteredTasks={tasks} setFilteredTasks={setFilteredTasks} />
             </Grid2>
       </Grid2>
 
         </Grid2>
         <Grid2 item xs={12} sx={{ marginTop: 3 }}>
-          <TaskTable 
-            filteredTasks={filteredTasks} 
-            completedTasks={completedTasks}
-            onDelete={handleDeleteTask}
-            onTaskCompletion={handleTaskCompletion}
-          />
+          <TaskTable filteredTasks={filteredTasks} onDelete={handleDeleteTask} />
         </Grid2>
       </Box>
       <Grid2 xs={12}>
