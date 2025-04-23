@@ -163,7 +163,7 @@ function Dashboard() {
 
   
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>  
       <Tutorial />
       <ThemeProvider theme={theme}>
         <div className="mainContainer">

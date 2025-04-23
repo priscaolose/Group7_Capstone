@@ -10,7 +10,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Box,
+  createTheme,
+  useMediaQuery, // Import useMediaQuery
+  useTheme, // Import useTheme for accessing breakpoints
 } from "@mui/material";
+import {ThemeProvider} from "@mui/material/styles";
 import {
   signInWithGoogle,
   checkIfEmailExists,
@@ -22,10 +27,37 @@ import {
 } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useUser } from "./Components/context";
+
 const Login = ({ login, loggedIn, logout }) => {
+  // Add theme and responsive screen size detection
+  const theme = createTheme({
+    typography: {
+      fontFamily: '"Poppins", sans-serif',
+      h5: {
+        fontWeight: 600,
+      },
+      h6: {
+        fontWeight: 500,
+      },
+      body1: {
+        fontWeight: 400,
+      },
+    },
+    palette: {
+      primary: {
+        main: "#1059a2",
+      },
+      background: {
+        default: "#f4f6f8",
+      },
+    },
+  });
+  
+  // Define isSmallScreen using useMediaQuery
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [email, setEmail] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
   const [password, setPassword] = useState("");
   const [isLocked, setIsLocked] = useState(true);
   const [errors, setErrors] = useState({});
@@ -131,6 +163,7 @@ const Login = ({ login, loggedIn, logout }) => {
       setIsOpen(true);
     }
   };
+  
   const handleDialogClose = () => {
     setIsOpen(false);
   };
@@ -214,89 +247,107 @@ const Login = ({ login, loggedIn, logout }) => {
   }
 
   return (
-    <div className="mainContainer">
-      <Header loggedIn={loggedIn} logout={logout} />
-      <div className="loginForm">
-        <h1 className="loginFormHeading">Welcome Back</h1>
-        <form
-          onSubmit={(ev) => {
-            ev.preventDefault();
-            onButtonClick();
-          }}
-        >
-          <div className="inputContainer">
-            <div className="inputWrapper">
-              <input
-                value={email}
-                placeholder="Email"
-                onChange={(ev) => setEmail(ev.target.value)}
-                className={`inputBox ${errors.email ? "error" : ""}`}
-                required
-              />
-              <i className="fas fa-envelope icon"></i>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>  
+        <div className="mainContainer">
+          <Header loggedIn={loggedIn} logout={logout} />
+          <Box
+            sx={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              px: isSmallScreen ? 2 : 6,
+              py: isSmallScreen ? 5 : 5,
+              backgroundColor: "white",
+              overflow: "auto",
+              width: '100%'
+            }}
+          >
+            <div className="loginForm">
+              <h1 className="loginFormHeading">Welcome Back</h1>
+              <form
+                onSubmit={(ev) => {
+                  ev.preventDefault();
+                  onButtonClick();
+                }}
+              >
+                <div className="inputContainer">
+                  <div className="inputWrapper">
+                    <input
+                      value={email}
+                      placeholder="Email"
+                      onChange={(ev) => setEmail(ev.target.value)}
+                      className={`inputBox ${errors.email ? "error" : ""}`}
+                      required
+                    />
+                    <i className="fas fa-envelope icon"></i>
+                  </div>
+                  <div className="errorMessage">{errors.email}</div>
+                </div>
+
+                <div className="inputContainer">
+                  <div className="inputWrapper">
+                    <input
+                      value={password}
+                      placeholder="Password"
+                      onChange={(ev) => setPassword(ev.target.value)}
+                      className={`inputBox ${errors.password ? "error" : ""}`}
+                      type={isLocked ? "password" : "text"}
+                      required
+                    />
+                    <i
+                      className={`fa-solid ${
+                        isLocked ? "fa-eye-slash" : "fa-eye"
+                      } icon`}
+                      onClick={handlePasswordIconClick}
+                    ></i>
+                  </div>
+                  <div className="errorMessage">{errors.password}</div>
+                  <p className="forgotPasswordText" onClick={handleForgotPassword}>
+                    <span className="forgotPasswordCursor">
+                      Forgot Password?
+                    </span>
+                  </p>
+                </div>
+
+                {errors.login && (
+                  <div className="errorMessage loginError">{errors.login}</div>
+                )}
+
+                <div className="inputButtonContainer">
+                  <input className="inputButton" type="submit" value="Sign in" />
+                </div>
+
+                <p className="registerText">
+                  Don't have an account?{" "}
+                  <span
+                    className="clickableRegister"
+                    onClick={handleAccountRegistration}
+                  >
+                    Register
+                  </span>
+                </p>
+              </form>
+
+              {isOpen && <TaskDialog open={isOpen} onClose={handleDialogClose} />}
+              {successMessage && <p className="success-message">{successMessage}</p>}
+
+              <div className="googleSignInContainer">
+                <div className="googleSignInText">Sign In With</div>
+                <img
+                  src={Googlelogo}
+                  onClick={handleGoogleSignIn}
+                  alt="GoogleLogo"
+                  className="google-logo"
+                />
+              </div>
             </div>
-            <div className="errorMessage">{errors.email}</div>
-          </div>
-
-          <div className="inputContainer">
-            <div className="inputWrapper">
-              <input
-                value={password}
-                placeholder="Password"
-                onChange={(ev) => setPassword(ev.target.value)}
-                className={`inputBox ${errors.password ? "error" : ""}`}
-                type={isLocked ? "password" : "text"}
-                required
-              />
-              <i
-                className={`fa-solid ${
-                  isLocked ? "fa-eye-slash" : "fa-eye"
-                } icon`}
-                onClick={handlePasswordIconClick}
-              ></i>
-            </div>
-            <div className="errorMessage">{errors.password}</div>
-            <p className="forgotPasswordText" onClick={handleForgotPassword}>
-              <span className="forgotPasswordCursor">
-                Forgot Password?
-              </span>
-            </p>
-          </div>
-
-          {errors.login && (
-            <div className="errorMessage loginError">{errors.login}</div>
-          )}
-
-          <div className="inputButtonContainer">
-            <input className="inputButton" type="submit" value="Sign in" />
-          </div>
-
-          <p className="registerText">
-            Don't have an account?{" "}
-            <span
-              className="clickableRegister"
-              onClick={handleAccountRegistration}
-            >
-              Register
-            </span>
-          </p>
-        </form>
-
-        {isOpen && <TaskDialog open={isOpen} onClose={handleDialogClose} />}
-        {successMessage && <p className="success-message">{successMessage}</p>}
-
-        <div className="googleSignInContainer">
-          <div className="googleSignInText">Sign In With</div>
-          <img
-            src={Googlelogo}
-            onClick={handleGoogleSignIn}
-            alt="GoogleLogo"
-            className="google-logo"
-          />
+          </Box>
+          <Footer />
         </div>
-      </div>
-      <Footer />
-    </div>
+      </Box>
+    </ThemeProvider>
   );
 };
 
