@@ -182,7 +182,9 @@ function NoteSection() {
         borderRadius: "16px",
         background: "white",
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-        minHeight: "50vh",
+        height: "500px", // Fixed height
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <Typography variant="h6" sx={{ color: "#1059a2", mb: 2 }}>
@@ -211,7 +213,7 @@ function NoteSection() {
         <TextField
           fullWidth
           multiline
-          rows={4}
+          rows={3} // Reduced from 4 to 3 rows to save space
           label="Enter a note"
           variant="outlined"
           value={note}
@@ -223,7 +225,6 @@ function NoteSection() {
             "& .MuiOutlinedInput-root": { border: "none", "& fieldset": { border: "none" } },
             fontFamily: `"Comic Sans MS", cursive`,
             fontSize: "1rem",
-            padding: "auto",
           }}
         />
         <Button
@@ -236,26 +237,56 @@ function NoteSection() {
         </Button>
       </Box>
 
-      {/* Show Loading Indicator */}
-      {loading ? (
-        <Typography sx={{ color: "gray", mt: 2 }}>Loading notes...</Typography>
-      ) : filteredNotes.length === 0 ? (
-        <Typography sx={{ color: "gray", mt: 2 }}>
-          {searchQuery.trim() !== "" ? "No matching notes found." : "No notes available."}
+      {/* Status Message */}
+      {message && (
+        <Typography sx={{ color: "green", my: 1, fontSize: "0.875rem" }}>
+          {message}
         </Typography>
-      ) : (
-        // Display Notes List
-        <Box sx={{ mt: 2, maxHeight: "40vh", overflowY: "auto" }}>
-          {filteredNotes.map((note) => (
+      )}
+
+      {/* Notes List Container - This is scrollable with fixed height */}
+      <Box 
+        sx={{ 
+          flexGrow: 1,
+          overflowY: "auto",
+          // Add some styling for scrollbar
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#c1c1c1",
+            borderRadius: "4px",
+          },
+        }}
+      >
+        {/* Show Loading Indicator */}
+        {loading ? (
+          <Typography sx={{ color: "gray", textAlign: "center", py: 2 }}>
+            Loading notes...
+          </Typography>
+        ) : filteredNotes.length === 0 ? (
+          <Typography sx={{ color: "gray", textAlign: "center", py: 2 }}>
+            {searchQuery.trim() !== "" ? "No matching notes found." : "No notes available."}
+          </Typography>
+        ) : (
+          // Display Notes List
+          filteredNotes.map((note) => (
             <Paper
               key={note.id}
               sx={{
                 p: 2,
-                mt: 1,
+                mb: 2,
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "flex-start",
+                backgroundColor: "#F5F5F5",
+                borderLeft: "4px solid #1059a2",
               }}
+              elevation={1}
             >
               <Box sx={{ width: "80%" }}>
                 {editingNoteId === note.id ? (
@@ -289,21 +320,26 @@ function NoteSection() {
                     Save
                   </Button>
                 ) : (
-                  <IconButton onClick={() => handleEdit(note)} color="primary">
-                    <EditIcon />
+                  <IconButton 
+                    onClick={() => handleEdit(note)} 
+                    color="primary"
+                    size="small"
+                  >
+                    <EditIcon fontSize="small" />
                   </IconButton>
                 )}
-                <IconButton onClick={() => handleDelete(note.id)} color="error">
-                  <DeleteIcon />
+                <IconButton 
+                  onClick={() => handleDelete(note.id)} 
+                  color="error"
+                  size="small"
+                >
+                  <DeleteIcon fontSize="small" />
                 </IconButton>
               </Box>
             </Paper>
-          ))}
-        </Box>
-      )}
-
-      {/* Status Message */}
-      {message && <Typography sx={{ color: "green", mt: 2 }}>{message}</Typography>}
+          ))
+        )}
+      </Box>
     </Paper>
   );
 }

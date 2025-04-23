@@ -234,7 +234,7 @@ function Dashboard() {
                     borderRadius: "16px",
                     background: "white",
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                    height: "60vh",
+                    // height: "60vh",
                     overflowY: "auto",
                     display: "flex",
                     flexDirection: "column",
@@ -309,7 +309,7 @@ function Dashboard() {
 
               {/* Center Column (Timer Section*/}
 
-              <Box sx={{ display: "grid", gap: 4 }}>
+              <Box sx={{ display: "grid", gap: 4}}>
                 <Paper
                   sx={{
                     display: "flex",
@@ -321,6 +321,10 @@ function Dashboard() {
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                     p: 4,
                     textDecoration: "none",
+                    zIndex: 1,
+                    position: "relative",
+                    overflow: "hidden",
+    
                   }}
                 >
                   <Typography
