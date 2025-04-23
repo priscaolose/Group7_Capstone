@@ -57,7 +57,7 @@ function ThemeToggler({ mode, setMode }){ //this controls the toggle between the
 }
 
 function App() {
-  const [mode, setMode] = useState("dark"); // Default theme mode
+  const [mode, setMode] = useState("light"); // Default theme mode
   // Memoize theme so it updates dynamically
   const theme = useMemo(
     () =>

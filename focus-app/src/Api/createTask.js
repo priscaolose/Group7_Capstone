@@ -40,6 +40,20 @@ export const getTasks = async (userId) => {
   return tasks;
 };
 
+export const getTasks2 = async (userId) => {
+  const tasks = [];
+  const querySnapshot = await getDocs(collection(db, "tasks"));
+  querySnapshot.forEach((doc => {
+    if(doc.data().userId === userId) {
+      tasks.push({ id: doc.id, ...doc.data() });
+    }
+  }));
+  if(querySnapshot.empty)
+  {
+    tasks.push([]);
+  }
+  return tasks;
+};
 
 //update tasks (ex. mark complete)
 export const updateTask = async (taskId, updatedData) => {

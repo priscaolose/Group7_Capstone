@@ -24,7 +24,7 @@ import { Timestamp } from "firebase/firestore";
 import TimerIcon from "@mui/icons-material/Timer";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import Tutorial from './Tutorial';
+import Tutorial from "./Tutorial";
 import { getUID } from "../firebase/firebaseAuth";
 
 // Custom Theme
@@ -67,7 +67,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const uid = await getUID(user?.email)
+        const uid = await getUID(user?.email);
         console.log("UID: " + uid);
         const task = await fetch(`/api/getTask?userID=${uid}`, {
           method: "GET",
@@ -81,7 +81,7 @@ function Dashboard() {
         console.error("Error fetching tasks:", error);
       }
     };
-  
+
     fetchTasks();
   }, [user]);
 
@@ -90,16 +90,16 @@ function Dashboard() {
   dayStart.setHours(0, 0, 0, 0);
   const dayEnd = new Date(now);
   dayEnd.setHours(23, 59, 59, 999);
-  
+
   const filterTasks = tasks.filter((task) => {
     if (!task.dueDate) return false;
-  
+
     const taskDate = new Date(task.dueDate);
     taskDate.setHours(0, 0, 0, 0); // Normalize to just the date for consistency
-  
+
     const start = new Date(dayStart);
     start.setHours(0, 0, 0, 0);
-  
+
     if (tabIndex === 2) {
       return taskDate > dayEnd; // Future
     } else if (tabIndex === 1) {
@@ -107,7 +107,7 @@ function Dashboard() {
     } else if (tabIndex === 0) {
       return taskDate < start; // Past
     }
-  
+
     return false;
   });
 
@@ -226,7 +226,7 @@ function Dashboard() {
                     {user?.firstName || "Guest"}
                   </Typography>
                 </Paper>
-  
+
                 {/* Today's Tasks Section */}
                 <Paper
                   sx={{
@@ -234,63 +234,81 @@ function Dashboard() {
                     borderRadius: "16px",
                     background: "white",
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                    // minHeight: "50vh",
+                    height: "60vh",
+                    overflowY: "auto",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
                 >
-                  <Tabs value={tabIndex} onChange={handleTabChange} centered>
-                    <Tab label="Past" />
-                    <Tab label="Today" />
-                    <Tab label="Future" />
-                  </Tabs>
-  
-                  <Typography
-                  variant="h6"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
+                  <Box
+                    sx={{
+                      position: "sticky",
+                      top: 0,
+                      backgroundColor: "white",
+                      zIndex: 1,
+                      pb: 2,
+                    }}
                   >
-                    Your Tasks
-                  </Typography>
-  
-                  {filterTasks.length > 0 ? (
-                    filterTasks.map((task, index) => (
-                      <Box key={index} sx={{ mb: 2 }}>
-                        <Typography
-                          variant="body1"
-                          sx={{ fontWeight: "bold", color: "#1059a2" }}
-                          textAlign={"left"}
-                        >
-                          {task.taskName}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "#333" }}
-                          textAlign={"left"}
-                        >
-                          {task.taskDescription}
-                        </Typography>
-                        <hr
-                          style={{
-                            backgroundColor: "gray",
-                            height: "1px",
-                            border: "none",
-                          }}
-                        />
-                      </Box>
-                    ))
-                  ) : (
+                    <Tabs value={tabIndex} onChange={handleTabChange} centered>
+                      <Tab label="Past" />
+                      <Tab label="Today" />
+                      <Tab label="Future" />
+                    </Tabs>
                     <Typography
-                      variant="body1"
-                      sx={{ color: "#666", textAlign: "center", mt: 2 }}
+                      variant="h6"
+                      sx={{ color: theme.palette.primary.main, mt: 1 }}
                     >
-                      You have no tasks. Click on Add Task to add some!
+                      Your Tasks
                     </Typography>
-                  )}
+                  </Box>
+
+                  <Box
+                    sx={{
+                      overflowY: "auto",
+                      mt: 2,
+                      flex: 1,
+                    }}
+                  >
+                    {filterTasks.length > 0 ? (
+                      filterTasks.map((task, index) => (
+                        <Box key={index} sx={{ mb: 2 }}>
+                          <Typography
+                            variant="body1"
+                            sx={{ fontWeight: "bold", color: "#1059a2" }}
+                            textAlign={"left"}
+                          >
+                            {task.taskName}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "#333" }}
+                            textAlign={"left"}
+                          >
+                            {task.taskDescription}
+                          </Typography>
+                          <hr
+                            style={{
+                              backgroundColor: "gray",
+                              height: "1px",
+                              border: "none",
+                            }}
+                          />
+                        </Box>
+                      ))
+                    ) : (
+                      <Typography
+                        variant="body1"
+                        sx={{ color: "#666", textAlign: "center", mt: 2 }}
+                      >
+                        You have no tasks. Click on Add Task to add some!
+                      </Typography>
+                    )}
+                  </Box>
                 </Paper>
               </Box>
-  
+
               {/* Center Column (Timer Section*/}
-              
+
               <Box sx={{ display: "grid", gap: 4 }}>
                 <Paper
                   sx={{
@@ -310,25 +328,27 @@ function Dashboard() {
                     sx={{
                       color: "#333",
                       fontWeight: "bold",
-                      mb: 3
+                      mb: 3,
                     }}
                   >
                     {currentTime}
                   </Typography>
-                  
+
                   {/* Action Buttons with Icons - Using Flexbox instead of Grid */}
-                  <Box sx={{ 
-                    display: "flex", 
-                    width: "100%", 
-                    justifyContent: "space-between", 
-                    gap: 2 
-                  }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                      gap: 2,
+                    }}
+                  >
                     <Button
                       component={Link}
                       to="/timer"
                       variant="outlined"
                       color="primary"
-                      startIcon={<TimerIcon sx={{color: "#ff7866"}}/>}
+                      startIcon={<TimerIcon sx={{ color: "#ff7866" }} />}
                       sx={{
                         borderRadius: "8px",
                         textTransform: "none",
@@ -337,22 +357,28 @@ function Dashboard() {
                         flexDirection: "column",
                         alignItems: "center",
                         py: 1,
-                        px: 2
+                        px: 2,
                       }}
                     >
-                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
                         <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
                           Set Timer
                         </Typography>
                       </Box>
                     </Button>
-                    
+
                     <Button
                       component={Link}
                       to="/addTask"
                       variant="outlined"
                       color="primary"
-                      startIcon={<AddTaskIcon sx={{color: "#ff7866"}}/>}
+                      startIcon={<AddTaskIcon sx={{ color: "#ff7866" }} />}
                       sx={{
                         borderRadius: "8px",
                         textTransform: "none",
@@ -361,22 +387,30 @@ function Dashboard() {
                         flexDirection: "column",
                         alignItems: "center",
                         py: 1,
-                        px: 2
+                        px: 2,
                       }}
                     >
-                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
                         <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
                           Add Task
                         </Typography>
                       </Box>
                     </Button>
-                    
+
                     <Button
                       component={Link}
                       to="/viewTask"
                       variant="outlined"
                       color="primary"
-                      startIcon={<FormatListBulletedIcon sx={{color: "#ff7866"}}/>}
+                      startIcon={
+                        <FormatListBulletedIcon sx={{ color: "#ff7866" }} />
+                      }
                       sx={{
                         borderRadius: "8px",
                         textTransform: "none",
@@ -385,10 +419,16 @@ function Dashboard() {
                         flexDirection: "column",
                         alignItems: "center",
                         py: 1,
-                        px: 2
+                        px: 2,
                       }}
                     >
-                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
                         <Typography sx={{ fontSize: "0.9rem", mt: 1 }}>
                           View Tasks
                         </Typography>
@@ -409,7 +449,7 @@ function Dashboard() {
                   </LocalizationProvider>
                 </Paper>
               </Box>
-  
+
               {/* Right Column */}
               <Box sx={{ display: "grid", gap: 4 }}>
                 <Paper
