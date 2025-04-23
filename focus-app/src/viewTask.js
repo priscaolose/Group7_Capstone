@@ -269,8 +269,8 @@ const ViewTask = () => {
   };
   
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <Grid2 xs={12}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh',overflow:'auto' }}>
+      <Grid2 xs={12}>'
         <Header2 />
       </Grid2>
       <Box sx={{
