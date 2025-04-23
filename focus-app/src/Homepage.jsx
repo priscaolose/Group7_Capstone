@@ -1,6 +1,7 @@
 // HomePage.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
+import { Box, useMediaQuery, useTheme,Button as MuiButton } from '@mui/material'; // Added useMediaQuery and useTheme
 import logo from './Images/Focus-8.png';
 import focusImage from './Images/focus.png';
 
@@ -12,7 +13,11 @@ const HomePage = () => {
     const [buttonVisible, setButtonVisible] = useState(false);
     const today = new Date();
     const year = today.getFullYear();
-    const navigate = useNavigate(); // Initialize the navigation hook
+    const navigate = useNavigate();
+    
+    // Define theme and media query for responsive design
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -41,39 +46,96 @@ const HomePage = () => {
     };
 
     return (
-        <div style={styles.pageContainer}>
-            <header style={styles.header}>
-                <div style={styles.logoContainer}>
-                    <img className="logo" src={logo} alt="Logo" style={styles.logo} />
-                </div>
-            </header>
-            <main style={styles.content}>
-                {headerVisible && (
-                    <h2 style={styles.headerText}>Welcome to the Evolution of</h2>
-                )}
-                <img 
-                    className="FOCUS" 
-                    src={focusImage} 
-                    alt="Focus" 
-                    style={styles.centerImage} 
-                />
-                {textVisible && (
-                    <p style={styles.simplifyText}>Simplify Your Tasks, Achieve Your Goals.</p>
-                )}
-                {buttonVisible && (
-                    <button 
-                        style={styles.centerButton} 
-                        onClick={handleClick}
-                    >
-                        {buttonText}
-                    </button>
-                )}
-                {showMessage && <p style={styles.messageText}>Great choice! Let’s make progress together.</p>}
-            </main>
-            <footer style={styles.footer}>
-                <p>&copy; {year} Focus. All rights reserved.</p>
-            </footer>
-        </div>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+            <div style={styles.pageContainer}>
+                <header style={styles.header}>
+                    <div style={styles.logoContainer}>
+                        <img className="logo" src={logo} alt="Logo" style={styles.logo} />
+                    </div>
+                </header>
+                <Box
+                    sx={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        px: isSmallScreen ? 2 : 6,
+                        py: isSmallScreen ? 10 : 5,
+                        backgroundColor: "white",
+                        overflow: "auto",
+                        width: '100%'
+                    }}
+                >
+                    <main style={styles.content}>
+                        {headerVisible && (
+                            <h2 style={{
+                                ...styles.headerText,
+                                fontSize: isSmallScreen ? '32px' : '50px',
+                                letterSpacing: isSmallScreen ? '8px' : '12.8px'
+                            }}>
+                                Welcome to the Evolution of
+                            </h2>
+                        )}
+                        <img 
+                            className="FOCUS" 
+                            src={focusImage} 
+                            alt="Focus" 
+                            style={styles.centerImage} 
+                        />
+                        {textVisible && (
+                            <p style={{
+                                ...styles.simplifyText,
+                                fontSize: isSmallScreen ? '24px' : '32px',
+                                letterSpacing: isSmallScreen ? '4px' : '6.4px',
+                                marginTop: isSmallScreen ? '30px' : '60px'
+                            }}>
+                                Simplify Your Tasks, Achieve Your Goals.
+                            </p>
+                        )}
+                         {buttonVisible && (
+                            <MuiButton
+                                variant="contained"
+                                onClick={handleClick}
+                                sx={{
+                                    width: '281px',
+                                    height: '50px',
+                                    backgroundColor: '#e2eaf1',
+                                    borderRadius: '10px',
+                                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                                    color: 'black',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    fontFamily: 'Poppins, sans-serif',
+                                    fontSize: '20px',
+                                    textTransform: 'none',
+                                    opacity: 0,
+                                    transform: 'translateY(50px)',
+                                    animation: 'button-slide-in 1s forwards 1.7s',
+                                    '&:hover': {
+                                        backgroundColor: '#8AAEC6',
+                                        color: 'white',
+                                        transform: 'scale(1.05)',
+                                    },
+                                }}
+                            >
+                                {buttonText}
+                            </MuiButton>
+                        )}
+                        {showMessage && (
+                            <p style={{
+                                ...styles.messageText,
+                                fontSize: isSmallScreen ? '18px' : '24px'
+                            }}>
+                                Great choice! Let's make progress together.
+                            </p>
+                        )}
+                    </main>
+                </Box>
+                <footer style={styles.footer}>
+                    <p>&copy; {year} Focus. All rights reserved.</p>
+                </footer>
+            </div>
+        </Box>
     );
 };
 
@@ -83,6 +145,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: 'white',
+        width: '100%',
     },
     header: {
         backgroundColor: '#ffffff',
@@ -104,12 +167,12 @@ const styles = {
     },
     content: {
         flex: 1,
-        marginTop: '50px',
+        width: '100%',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     headerText: {
         color: '#093966',
@@ -147,25 +210,31 @@ const styles = {
         transform: 'translateX(50px)',
         animation: 'image-fade-in 1s forwards 1.5s'
     },
-    centerButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '281px',
-        height: '50px',
-        backgroundColor: '#e2eaf1',
-        borderRadius: '10px',
-        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-        color: 'black',
-        border: 'none',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s, transform 0.2s',
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '20px',
-        opacity: 0,
-        transform: 'translateY(50px)',
-        animation: 'button-slide-in 1s forwards 1.7s' 
-    },
+    // centerButton: {
+    //     display: 'flex',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     width: '281px',
+    //     height: '50px',
+    //     backgroundColor: '#e2eaf1',
+    //     borderRadius: '10px',
+    //     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+    //     color: 'black',
+    //     border: 'none',
+    //     cursor: 'pointer',
+    //     transition: 'background-color 0.3s, transform 0.2s',
+    //     fontFamily: 'Poppins, sans-serif',
+    //     fontSize: '20px',
+    //     opacity: 0,
+    //     transform: 'translateY(50px)',
+    //     animation: 'button-slide-in 1s forwards 1.7s' ,
+    //     '&:hover': {
+    //         backgroundColor: '#8AAEC6',
+    //         color: 'white',
+    //         transform: 'scale(1.05)',
+    //     },
+    // },
+      
     messageText: {
         marginTop: '20px',
         fontSize: '24px',
@@ -175,11 +244,34 @@ const styles = {
     footer: {
         backgroundColor: '#8AAEC6',
         color: 'black',
-        padding: '5px 0',
         textAlign: 'center',
         width: '100%',
-        position: 'fixed',
-        bottom: 0
+        position: 'sticky',
+        bottom: 0,
+        height: '30px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '5px 0',
+        marginTop: '5%',
+        flexShrink: 0,
+        boxShadow: '5px 5px 10px 0px rgba(0, 0, 0, 0.2)',
+        '@media (max-width: 600px)': {
+            backgroundColor: '#8AAEC6',
+            color: 'black',
+            textAlign: 'center',
+            width: '100%',
+            position: 'sticky',
+            bottom: -1,
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '5px 0',
+            marginTop: '5%',
+            flexShrink: 0,
+            boxShadow: '5px 5px 10px 0px rgba(0, 0, 0, 0.2)',
+          },
     }
 };
 
