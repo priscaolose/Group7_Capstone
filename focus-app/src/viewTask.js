@@ -96,13 +96,34 @@ const TaskTable = ({ filteredTasks, onDelete, setFilteredTasks }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   console.log("Before the toggle or whatever", filteredTasks);
 
-  const handleToggleCompleted = (completed, taskId) => {
-    setFilteredTasks((prevFilteredTasks) =>
-      prevFilteredTasks.map((t) =>
-        t.id === taskId ? { ...t, completed: !t.completed } : t
-      )
-    );
-  }
+  const handleToggleCompleted = async (completed, taskId) => {
+    try {
+      const response = await fetch(
+        `/api/completeTask?taskID=${encodeURIComponent(taskId)}&completed=${completed}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+  
+      if (response.ok) {
+        console.log("Task toggle completed:", data.message);
+        // Update local UI only if backend succeeds
+        setFilteredTasks((prevFilteredTasks) =>
+          prevFilteredTasks.map((t) =>
+            t.id === taskId ? { ...t, completed: !t.completed } : t
+          )
+        );
+      } else {
+        console.error("Failed to toggle task:", data.error);
+      }
+    } catch (error) {
+      console.error("Error calling completeTask API:", error);
+    }
+  };
 
   // Separate active and completed tasks
   const activeTasks = filteredTasks.filter(task => !task.completed);
