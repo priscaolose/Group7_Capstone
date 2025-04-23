@@ -118,7 +118,8 @@ function TimerPage() {
   // };
 
   return (
-    <div className="mainContainer">
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    {/* <div className="mainContainer"> */}
       <Header2 />
       <Box
         sx={{
@@ -134,10 +135,22 @@ function TimerPage() {
         <Typography
           variant="h1"
           sx={{
-            fontSize: "10rem",
-            fontWeight: "bold",
-            color: "#1E4976",
-            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
+            fontSize: {
+              xs: "2.2rem",     // Small mobile devices
+              sm: "2.5rem",     // Larger mobile/small tablets
+              md: "3rem",       // Tablets
+              lg: "3.5rem",     // Desktop
+              xl: "4rem"   
+            },
+            fontWeight: 700,    // More precise than "bold"
+            color: "#1E4976",   // Keep your brand color
+            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.15)",  // Subtle shadow
+            // letterSpacing: "-0.02em",  // Slight tightening for headings
+            lineHeight: 1,    // Improved line height for readability
+            // Optional accessibility improvement:
+            "@media (prefers-reduced-motion: reduce)": {
+              textShadow: "none"  // Remove shadow for users who prefer reduced motion
+            }
           }}
         >
           {String(time.minutes).padStart(2, "0")}:
@@ -147,26 +160,104 @@ function TimerPage() {
         {/* Minute Adjustment Row */}
         <Box sx={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
           <IconButton onClick={() => adjustTime("minutes", -1)}>
-            <Remove fontSize="large" />
+          <Remove fontSize = "medium"
+           sx={{
+            fontSize: {
+              xs: "2.2rem",     // Small mobile devices
+              sm: "2.5rem",     // Larger mobile/small tablets
+              md: "3rem",       // Tablets
+              lg: "3.5rem",     // Desktop
+              xl: "4rem"   
+            },
+            fontWeight: 700,    // More precise than "bold"
+            color: "#1E4976",   // Keep your brand color
+            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.15)",  // Subtle shadow
+            letterSpacing: "-0.02em",  // Slight tightening for headings
+            lineHeight: 1,    // Improved line height for readability
+           
+            // Optional accessibility improvement:
+            "@media (prefers-reduced-motion: reduce)": {
+              textShadow: "none"  // Remove shadow for users who prefer reduced motion
+            }
+          }}
+          />
           </IconButton>
-          <Typography variant="h6" sx={{ mx: 1, color: "#1E4976", fontSize: "1.3em" }}>
+          <Typography variant="h6" sx={{ mx: 1, color: "#1E4976", fontSize: "1em" }}>
             Minutes
           </Typography>
           <IconButton onClick={() => adjustTime("minutes", 1)}>
-            <Add fontSize="large" />
+          <Add fontSize = "medium"
+          sx={{
+            fontSize: {
+              xs: "2.2rem",     // Small mobile devices
+              sm: "2.5rem",     // Larger mobile/small tablets
+              md: "3rem",       // Tablets
+              lg: "3.5rem",     // Desktop
+              xl: "4rem"   
+            },
+            fontWeight: 700,    // More precise than "bold"
+            color: "#1E4976",   // Keep your brand color
+            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.15)",  // Subtle shadow
+            letterSpacing: "-0.02em",  // Slight tightening for headings
+            lineHeight: 1,    // Improved line height for readability
+           
+            // Optional accessibility improvement:
+            "@media (prefers-reduced-motion: reduce)": {
+              textShadow: "none"  // Remove shadow for users who prefer reduced motion
+            }
+          }}/>
           </IconButton>
         </Box>
 
         {/* Second Adjustment Row */}
         <Box sx={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
           <IconButton onClick={() => adjustTime("seconds", -1)}>
-            <Remove fontSize="large" />
+            <Remove fontSize = "medium"
+            sx={{
+              fontSize: {
+                xs: "2.2rem",     // Small mobile devices
+                sm: "2.5rem",     // Larger mobile/small tablets
+                md: "3rem",       // Tablets
+                lg: "3.5rem",     // Desktop
+                xl: "4rem"   
+              },
+              fontWeight: 700,    // More precise than "bold"
+              color: "#1E4976",   // Keep your brand color
+              textShadow: "1px 1px 3px rgba(0, 0, 0, 0.15)",  // Subtle shadow
+              letterSpacing: "-0.02em",  // Slight tightening for headings
+              lineHeight: 1,    // Improved line height for readability
+             
+              // Optional accessibility improvement:
+              "@media (prefers-reduced-motion: reduce)": {
+                textShadow: "none"  // Remove shadow for users who prefer reduced motion
+              }
+            }}/>
+    
           </IconButton>
-          <Typography variant="h6" sx={{ mx: 1, color: "#1E4976", fontSize: "1.3em" }}>
+          <Typography variant="h6" sx={{ mx: 1, color: "#1E4976", fontSize: "1em" }}>
             Seconds
           </Typography>
           <IconButton onClick={() => adjustTime("seconds", 1)}>
-            <Add fontSize="large" />
+          <Add fontSize = "small"
+           sx={{
+            fontSize: {
+              xs: "2.2rem",     // Small mobile devices
+              sm: "2.5rem",     // Larger mobile/small tablets
+              md: "3rem",       // Tablets
+              lg: "3.5rem",     // Desktop
+              xl: "4rem"   
+            },
+            fontWeight: 700,    // More precise than "bold"
+            color: "#1E4976",   // Keep your brand color
+            textShadow: "1px 1px 3px rgba(0, 0, 0, 0.15)",  // Subtle shadow
+            letterSpacing: "-0.02em",  // Slight tightening for headings
+            lineHeight: 1,    // Improved line height for readability
+            // marginBottom: "0.5em",  // Consistent spacing
+            // Optional accessibility improvement:
+            "@media (prefers-reduced-motion: reduce)": {
+              textShadow: "none"  // Remove shadow for users who prefer reduced motion
+            }
+          }}/>
           </IconButton>
         </Box>
 
@@ -292,7 +383,8 @@ function TimerPage() {
         </Dialog>
       </Box>
       <Footer />
-    </div>
+    {/* </div> */}
+    </Box>
   );
 }
 

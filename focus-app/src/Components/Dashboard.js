@@ -161,23 +161,26 @@ function Dashboard() {
     return hours > 12 ? hours - 12 : hours;
   }
 
+  
   return (
-    <>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Tutorial />
       <ThemeProvider theme={theme}>
         <div className="mainContainer">
           <Header2 />
           <Box
             sx={{
+              flex: 1,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "flex-start",
-              minHeight: "auto",
-              px: isSmallScreen ? 2 : 4,
-              py: 1,
+              px: isSmallScreen ? 2 : 6,
+              py: isSmallScreen ? 10: 5,
+             // marginTop: isSmallScreen ? 0 : 2,
+              // marginBottom: isSmallScreen ? 0 : 2,
               backgroundColor: "white",
-              overflowY: "auto",
+              overflow: "auto",
+              width: '100%'
             }}
           >
             <Box
@@ -190,7 +193,7 @@ function Dashboard() {
               }}
             >
               {/* Left Column */}
-              <Box sx={{ display: "grid", gap: 4 }}>
+              <Box sx={{ display: "grid", gap: 4}}>
                 {/* Welcome Section */}
                 <Paper
                   sx={{
@@ -231,7 +234,7 @@ function Dashboard() {
                     borderRadius: "16px",
                     background: "white",
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                    minHeight: "50vh",
+                    // minHeight: "50vh",
                   }}
                 >
                   <Tabs value={tabIndex} onChange={handleTabChange} centered>
@@ -445,7 +448,7 @@ function Dashboard() {
           <Footer />
         </div>
       </ThemeProvider>
-    </>
+     </Box>
   );
 }
 

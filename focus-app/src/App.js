@@ -65,7 +65,10 @@ function App() {
         palette: {
           mode, // Uses "light" or "dark" mode dynamically
           background: {
-            default: mode === "dark" ? "#121212" : "ffffff",
+            default: mode === "dark" ? "#121212" : "#ffffff",
+          },
+          text: {
+            primary: mode === "dark" ? "#ffffff" : "#000000", // Ensures white text in dark mode for better contrast
           },
         },
       }),
@@ -77,7 +80,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="App">
-          <ThemeToggler mode={mode} setMode={setMode} /> {/* ThemeToggler component to switch between light and dark mode */}
+          <ThemeToggler mode={mode} setMode={setMode} />
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Homepage />} />
