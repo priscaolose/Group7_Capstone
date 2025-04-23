@@ -172,13 +172,13 @@ const AddTask = () => {
 
   
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh',overflowY: 'auto' }}>
       {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
    
-      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
+      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop={{ xs: 2, md: "60px" }}paddingBottom={{ xs: 2, md: "40px" }}>
         <form id="taskForm" onSubmit={handleSubmit}>
           <Grid2 xs={12} md={6} container direction="column" spacing={3} >
             <Grid2 container alignItems="center" justifyContent="space-between">
@@ -195,8 +195,6 @@ const AddTask = () => {
           </Link>
         </Grid2>
       </Grid2>
-
-            
               <Grid2 item container spacing={2} justifyContent="flex-end">
                 <Grid2 item>
                   <Button
@@ -437,9 +435,7 @@ const AddTask = () => {
         )}
       </Grid2>
       {/* Footer */}
-      <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
         <Footer />
-      </Grid2>
     </Box>
   );
 };

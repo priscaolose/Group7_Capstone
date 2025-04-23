@@ -126,12 +126,13 @@ const EditTask = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh',overflowY: 'auto',
+  }}>
     {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
-    
+      
       <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop= "60px" paddingBottom= "40px">
         <form onSubmit={handleSubmit}>
           {/* Column 1: Task Title and Description */}
@@ -402,7 +403,6 @@ const EditTask = () => {
 )}
         </form>
       </Grid2>
-  
       {/* Footer */}
       <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
         <Footer />
