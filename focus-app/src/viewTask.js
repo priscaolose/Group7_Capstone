@@ -310,9 +310,7 @@ const ViewTask = () => {
           <TaskTable filteredTasks={filteredTasks} setFilteredTasks={setFilteredTasks} onDelete={handleDeleteTask} />
         </Grid2>
       </Box>
-      <Grid2 xs={12}>
         <Footer />
-      </Grid2>
     </Box>
   );
 };

@@ -437,9 +437,7 @@ const AddTask = () => {
         )}
       </Grid2>
       {/* Footer */}
-      <Grid2 xs={12} sx={{ marginTop: 'auto' }}>
         <Footer />
-      </Grid2>
     </Box>
   );
 };
