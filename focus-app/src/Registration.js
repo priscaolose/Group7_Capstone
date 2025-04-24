@@ -9,18 +9,6 @@ import {  signUpWithGoogle, checkIfEmailExists, storeUserInDatabase, getUsersNam
 import { useNavigate } from 'react-router-dom';
 import { useUser } from './Components/context';
 import { multiSectionDigitalClockClasses } from '@mui/x-date-pickers/MultiSectionDigitalClock/multiSectionDigitalClockClasses';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  createTheme,
-  useMediaQuery, // Import useMediaQuery
-  useTheme, // Import useTheme for accessing breakpoints
-} from "@mui/material";
-import {ThemeProvider} from "@mui/material/styles";
 
 
 const Register = () => {
@@ -93,7 +81,6 @@ const Register = () => {
         handleRegister(e);
     };
 
-     const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     /*
     // Separate function to check email
     const checkIfEmailExists = async (email) => {
@@ -182,24 +169,6 @@ const handleRegister = async (e) => {
 };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>  
-                <div className="mainContainer">
-                <Header loggedIn={loggedIn} logout={logout} />
-                <Box
-                    sx={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    px: isSmallScreen ? 2 : 6,
-                    py: isSmallScreen ? 5 : 5,
-                    backgroundColor: "white",
-                    overflow: "auto",
-                    width: '100%'
-                    }}
-                >
-       
         <div className="mainContainer">
             <Header />
             <div className='register-form'>
@@ -288,13 +257,9 @@ const handleRegister = async (e) => {
                         Sign in 
                         </span>
                     </div>
-                    </div>
                 </div>
-                </Box>
             <Footer />
         </div>
-        </Box>
-    </ThemeProvider>
     );
 };
 
