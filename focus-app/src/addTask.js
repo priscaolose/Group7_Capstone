@@ -9,10 +9,34 @@ import { addTask, getTasks } from './Api/createTask';
 import ColorDropdown from './ColorDropdown'; 
 import PriorityDropdown from './taskPriority';
 import { Link } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useUser } from './Components/context';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { getUID } from './firebase/firebaseAuth';
+// Custom Theme
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Poppins", sans-serif',
+    h5: {
+      fontWeight: 600,
+    },
+    h6: {
+      fontWeight: 500,
+    },
+    body1: {
+      fontWeight: 400,
+    },
+  },
+  palette: {
+    primary: {
+      main: "#1059a2",
+    },
+    background: {
+      default: "#f4f6f8",
+    },
+  },
+});
 const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isCalOpen, setIsCalOpen] = useState(false);
@@ -169,32 +193,47 @@ const AddTask = () => {
       setIsOpen(true); 
   };
 
-
-  
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh',overflowY: 'auto' }}>
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      minHeight: '100vh' 
+    }}>
+      <ThemeProvider theme={theme}>
       {/* Header */}
       <Grid2 xs={12}>
         <Header2 />
       </Grid2>
-   
-      <Grid2 container justifyContent="center" spacing={3} minHeight="74.8vh" paddingTop={{ xs: 2, md: "60px" }}paddingBottom={{ xs: 2, md: "40px" }}>
-        <form id="taskForm" onSubmit={handleSubmit}>
-          <Grid2 xs={12} md={6} container direction="column" spacing={3} >
-            <Grid2 container alignItems="center" justifyContent="space-between">
-            <Grid2 container direction="column" spacing={1} alignItems="flex-start">
-       
-        <Grid2 item>
-          <h4 className="task-title" style={{ margin: 0 }}>Add New Task</h4>
-        </Grid2>
 
-        <Grid2 item>
-          <Link to="/dashboard" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: '#1059a2' }}>
-            <ExitToAppIcon style={{ marginRight: 5 }} />
-            Return to dashboard
-          </Link>
-        </Grid2>
-      </Grid2>
+      {/* Main content  */}
+      <Grid2 
+        container 
+        justifyContent="center" 
+        spacing={3} 
+        sx={{ 
+          flexGrow: 1, 
+          paddingTop: { xs: 2, md: "60px" },
+          paddingBottom: { xs: 2, md: "40px" }
+        }}
+      >
+        <form id="taskForm" onSubmit={handleSubmit}>
+          <Grid2 xs={12} md={6} container direction="column" spacing={3}>
+            {/* Add Task form fields here */}
+            <Grid2 container alignItems="center" justifyContent="space-between">
+              <Grid2 container direction="column" spacing={1} alignItems="flex-start">
+                <Grid2 item>
+                  <h4 className="task-title" style={{ margin: 0 }}>Add New Task</h4>
+                </Grid2>
+
+                <Grid2 item>
+                  <Link to="/dashboard" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: '#1059a2' }}>
+                    <ExitToAppIcon style={{ marginRight: 5 }} />
+                    Return to dashboard
+                  </Link>
+                </Grid2>
+              </Grid2>
+
+              {/* Buttons */}
               <Grid2 item container spacing={2} justifyContent="flex-end">
                 <Grid2 item>
                   <Button
@@ -234,7 +273,7 @@ const AddTask = () => {
                 </Grid2> 
               </Grid2>
             </Grid2>
-  
+
             {/* Task Name Field */}
             <Grid2 xs={12}>
               <Box sx={{ position: 'relative' }}>
@@ -256,7 +295,7 @@ const AddTask = () => {
                     Task Name
                   </Typography>
                 )}
-  
+
                 <TextField
                   fullWidth
                   placeholder={!task.title && !titleIsFocused ? 'Task Name' : ''}
@@ -273,17 +312,6 @@ const AddTask = () => {
                     '& .MuiInputBase-input': {
                       padding: '10px',
                       fontSize: '30px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    },
-                    '& .MuiInputBase-input::placeholder': {
-                      textAlign: 'center',
-                      justifyContent: 'center',
-                      color: '#1059a2',
-                      fontWeight: 'bold',
-                      lineHeight: '3.7',
-                      paddingTop: '30px',
                     },
                   }}
                   InputProps={{
@@ -294,7 +322,7 @@ const AddTask = () => {
                     ),
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={() => setTask({ title: '' })}>
+                        <IconButton onClick={() => setTask({ ...task, title: '' })}>
                           <Clear sx={{ fontSize: '24px' }} />
                         </IconButton>
                       </InputAdornment>
@@ -304,7 +332,7 @@ const AddTask = () => {
                 {errors.title && <label className="errorLabel">{errors.title}</label>}
               </Box>
             </Grid2>
-  
+
             {/* Task Description Field */}
             <Grid2 xs={12}>
               <Box sx={{ position: 'relative' }}>
@@ -326,7 +354,7 @@ const AddTask = () => {
                     Task Description
                   </Typography>
                 )}
-  
+
                 <TextField
                   fullWidth
                   placeholder={!task.description && !isFocused ? 'Task Description' : ''}
@@ -344,15 +372,6 @@ const AddTask = () => {
                     '& .MuiInputBase-input': {
                       padding: '30px',
                       fontSize: '30px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    },
-                    '& .MuiInputBase-input::placeholder': {
-                      textAlign: 'center',
-                      color: '#1059a2',
-                      lineHeight: '3.7',
-                      fontWeight: 'bold',
                     },
                   }}
                   multiline
@@ -362,11 +381,11 @@ const AddTask = () => {
               </Box>
             </Grid2>
           </Grid2>
-  
+
           {/* Column 2: Task Due Date */}
           <Grid2 xs={12} md={6} container direction="row" spacing={3}>
-          <Grid2 xs={12}>
-              {/* Due Date Field */}
+            {/* Due Date Field */}
+            <Grid2 xs={12}>
               <TextField
                 fullWidth
                 label="Task DueDate"
@@ -401,15 +420,11 @@ const AddTask = () => {
                     </InputAdornment>
                   ),
                 }}
-                inputProps={{
-                  style: {
-                    appearance: 'none',
-                    WebkitAppearance: 'none',
-                    MozAppearance: 'none',
-                  },
-                }}
               />
+              {errors.dueDate && <label className="errorLabel">{errors.dueDate}</label>}
             </Grid2>
+
+            {/* Category and Priority Dropdowns */}
             <Grid2 item container spacing={2} justifyContent="flex-end">
               <Grid2 item>
                 <ColorDropdown name="category" onChange={handleChange} />
@@ -427,17 +442,23 @@ const AddTask = () => {
             onClose={handleDialogClose}
           />
         )}
-        {isCalOpen &&(
+
+        {isCalOpen && (
           <TaskCancellationDialog
             open={isCalOpen}
             onClose={handleDialogClose}
           />
         )}
       </Grid2>
-      {/* Footer */}
+          
+      <Box sx={{ mt: 'auto' }}>
         <Footer />
+      </Box>
+      </ThemeProvider>
+
     </Box>
-  );
+);
+
 };
 
 export default AddTask;
